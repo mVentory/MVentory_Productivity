@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <sampleapp_panel>
+        <reference name="content">
+            <block type="sampleapp/panel" name="admin_panel" after="-" template="sampleapp/panel.phtml" />
+        </reference>        
+    </sampleapp_panel>	
+    <catalog_category_default>
+        <update handle="sampleapp_panel" />
+    </catalog_category_default>
+
+    <catalog_category_layered>
+        <update handle="sampleapp_panel" />
+    </catalog_category_layered>
+    
+    <catalog_product_view>
+        <update handle="sampleapp_panel" />
+    </catalog_product_view>
+    
+    <cms_page>
+        <update handle="sampleapp_panel" />
+    </cms_page>
+    
+</layout>

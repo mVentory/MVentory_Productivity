@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Inheritx_Sampleapp>
+            <version>1.0.1</version>
+        </Inheritx_Sampleapp>
+    </modules>
+    <frontend>
+        <layout>
+            <updates>
+                <sampleapp>
+                    <file>sampleapp.xml</file>
+                </sampleapp>
+            </updates>
+        </layout>
+        <routers>
+            <sampleapp>
+                <use>standard</use>
+                <args>
+                    <module>Inheritx_Sampleapp</module>
+                    <frontName>sampleappf</frontName>
+                </args>
+            </sampleapp>
+            <!-- Catalog module controller rewrite start here -->
+            <catalog>
+                <args>
+                    <modules>
+                        <Inheritx_Sampleapp before="Mage_Catalog">Inheritx_Sampleapp</Inheritx_Sampleapp>
+                    </modules>
+                </args>
+            </catalog>
+            <!-- Catalog module controller rewrite end here -->
+            <!-- Cms module controller rewrite start here -->
+            <cms>
+                <args>
+                    <modules>
+                        <Inheritx_Sampleapp before="Mage_Cms">Inheritx_Sampleapp_Cms</Inheritx_Sampleapp>
+                    </modules>
+                </args>
+            </cms>
+            <!-- Cms module controller rewrite end here -->
+        </routers>
+    </frontend>
+    <admin>
+        <routers>
+            <sampleapp>
+                <use>admin</use>
+                <args>
+                    <module>Inheritx_Sampleapp</module>
+                    <frontName>sampleapp</frontName>
+                </args>
+            </sampleapp>
+        </routers>
+    </admin>
+    <global>
+        <blocks>
+            <sampleapp>
+                <class>Inheritx_Sampleapp_Block</class>
+            </sampleapp>
+            <adminhtml>
+                <rewrite>
+                    <catalog_category_tab_product>Inheritx_Sampleapp_Block_Adminhtml_Catalog_Category_Tab_Product</catalog_category_tab_product>
+                </rewrite>
+                <rewrite>
+                    <catalog_product_edit>Inheritx_Sampleapp_Block_Adminhtml_Catalog_Product_Edit</catalog_product_edit>
+                </rewrite>
+                <rewrite>
+                    <catalog_category_edit_form>Inheritx_Sampleapp_Block_Adminhtml_Catalog_Category_Edit_Form</catalog_category_edit_form>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+        <helpers>
+            <sampleapp>
+                <class>Inheritx_Sampleapp_Helper</class>
+            </sampleapp>
+        </helpers>
+    </global>
+</config>
