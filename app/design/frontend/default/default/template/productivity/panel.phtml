@@ -1,0 +1,27 @@
+<?php if ($this->isAdmin()): ?>
+<div class="admin-button">
+<?php
+// get page type
+$pageType = $this->getRequest()->getControllerName();
+
+
+if($pageType=='product'){
+	$currentProduct = Mage::registry('product');
+	echo "<a href = '" . Mage::helper("adminhtml")->getUrl("adminhtml/catalog_product/edit",array("id"=>$currentProduct->getId())) . "'>Product in admin</a>";
+	
+}
+if($pageType == 'page' || $pageType == 'index'){
+	$currentPage = $this->getHelper('cms/page')->getPage()->getData();
+	if ($currentPage) {
+		echo "<a href = '" . Mage::helper("adminhtml")->getUrl("productivity/adminhtml_index/index",array("page_id"=>$currentPage['page_id'])) . "'>CMS page in admin</a>";
+	}  
+}
+if($pageType=='category') {
+  $currentCategory = Mage::registry('current_category');
+  if($currentCategory) {
+  	echo "<a href = '" . Mage::helper("adminhtml")->getUrl("adminhtml/catalog_category/edit/",array("id"=>$currentCategory->getId())) . "'>Category in admin</a>";
+  }
+}
+?>
+</div>
+<?php endif ?>

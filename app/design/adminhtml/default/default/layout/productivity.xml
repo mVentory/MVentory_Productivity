@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <adminhtml_catalog_product_attribute_index>
+        <reference name="head">
+            <action method="addJs"><script>productivity/update_grid.js</script></action>
+        </reference>  
+    </adminhtml_catalog_product_attribute_index>
+    <adminhtml_catalog_product_set_index>
+        <reference name="head">
+            <action method="addJs"><script>productivity/update_grid.js</script></action>
+        </reference>
+    </adminhtml_catalog_product_set_index>
+    <adminhtml_catalog_product_edit>
+        <reference name="content">
+            <block name="product.edit.frontview.button" type="productivity/adminhtml_catalog_product_edit_button" before="-" template="productivity/catalog/product/edit/button.phtml" />
+        </reference>
+    </adminhtml_catalog_product_edit>
+    <adminhtml_catalog_category_edit>
+        <reference name="content">
+            <block name="category.edit.frontview.button" type="productivity/adminhtml_catalog_category_edit_button" before="-" template="productivity/catalog/category/edit/button.phtml" />
+        </reference>
+    </adminhtml_catalog_category_edit>
+</layout>
