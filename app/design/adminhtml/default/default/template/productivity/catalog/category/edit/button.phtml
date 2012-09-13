@@ -9,32 +9,18 @@ Event.observe(window, 'load', function() {
         window.open(url);   
       }
   }); 
+    $('category-edit-container').observe('mousedown', function(e) {
+      if(Event.isMiddleClick(e)) {
+        var tr = e.target.up('tr');
+        if(tr && e.target.up('table.data') && e.target.tagName == 'TD') {
+          var id = tr.down('input[type="checkbox"]').value;
+          window.open('/admin/catalog_product/edit/id/'+id+'/key/'+key+'/');
+        }
+      }
+      
+    });
 });
-function addEditLinks() {
-  $$('table.data thead tr').each(function(item) {
-    if(item.readAttribute('class') == 'headings') {
-      item.down('.last').removeClassName('last');
-      var th = new Element('th');
-      th.update('<span class="nobr">Action</span>');
-      th.className = 'no-link last';
-      th.setStyle({'width':'50px'});
-      item.insert(th);
-    } else {
-      item.down('.last').removeClassName('last');
-      var th = new Element('th');
-      th.className = 'no-link last'
-      item.insert(th);
-    }   
-  });
-  $$('table.data tbody tr').each(function(item) {
-    item.down('.last').removeClassName('last');
-    var id = item.down('input[type="checkbox"]').value;
-    var td = new Element('td');
-    td.update('<a href="/admin/catalog_product/edit/id/'+id+'/key/'+key+'/'+'">Edit</a>');
-    td.className = 'last';
-    item.insert(td);
-  }); 
-}
 </script>
-<button id="front-button" type="button" class="scalable " style=""><span>FrontShop Preview</span></button>
-<button id="add-edit-button" type="button" class="scalable " onclick="addEditLinks()" style=""><span>Add Edit Links</span></button>
+<div class="frontshop-button">
+  <button id="front-button" type="button" class="scalable frontshop"><span>FrontShop Preview</span></button>
+</div>

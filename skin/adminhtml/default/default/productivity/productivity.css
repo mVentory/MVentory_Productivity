@@ -1,0 +1,9 @@
+.frontshop-button{
+text-align:right;
+margin-bottom: 5px;
+}
+button.frontshop {
+opacity: .8;                             
+border-color: #777 #505050 #505050 #777; 
+background: #919191 url(images/btn_bg-disabled.gif) 0 0 repeat-x;
+}
