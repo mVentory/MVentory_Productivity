@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<layout>
+    <adminhtml_catalog_product_set_edit>
+        <reference name="js">
+            <block type="core/template" template="mvproductivitypack/catalog/product/attribute/set/edit/script.js.phtml" name="attribute.script.js" />
+        </reference>  
+    </adminhtml_catalog_product_set_edit>  
+    <adminhtml_catalog_product_attribute_index>
+        <reference name="head">
+            <action method="addJs"><script>mvproductivitypack/update_grid.js</script></action>
+            <action method="addCss"><name>mvproductivitypack/mvproductivitypack.css</name></action>
+        </reference>  
+    </adminhtml_catalog_product_attribute_index>
+    <adminhtml_catalog_product_set_index>
+        <reference name="head">
+            <action method="addJs"><script>mvproductivitypack/update_grid.js</script></action>
+        </reference>
+    </adminhtml_catalog_product_set_index>
+    <adminhtml_catalog_product_edit>
+        <reference name="head">
+            <action method="addCss"><name>mvproductivitypack/mvproductivitypack.css</name></action>
+        </reference>
+        <reference name="content">
+            <block name="product.edit.frontview.button" type="MvProductivityPack/adminhtml_catalog_product_edit_button" before="-" template="mvproductivitypack/catalog/product/edit/button.phtml" />
+        </reference>
+    </adminhtml_catalog_product_edit>
+    <adminhtml_catalog_category_edit>
+        <reference name="head">
+            <action method="addCss"><name>mvproductivitypack/mvproductivitypack.css</name></action>
+        </reference>
+        <reference name="content">
+            <block name="category.edit.frontview.button" type="MvProductivityPack/adminhtml_catalog_category_edit_button" before="-" template="mvproductivitypack/catalog/category/edit/button.phtml" />
+        </reference>
+    </adminhtml_catalog_category_edit>
+    <adminhtml_cms_page_edit>
+        <reference name="head">
+            <action method="addCss"><name>mvproductivitypack/mvproductivitypack.css</name></action>
+        </reference>
+        <reference name="content">
+            <block name="page.edit.frontview.button" type="MvProductivityPack/adminhtml_cms_page_edit_button" before="-" template="mvproductivitypack/cms/page/edit/button.phtml" />
+        </reference>
+    </adminhtml_cms_page_edit>
+</layout>

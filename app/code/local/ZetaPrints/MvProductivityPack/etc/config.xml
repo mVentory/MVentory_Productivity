@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZetaPrints_MvProductivityPack>
+            <version>1.0.1</version>
+        </ZetaPrints_MvProductivityPack>
+    </modules>
+    <frontend>
+        <layout>
+            <updates>
+                <MvProductivityPack>
+                    <file>zetaprints_mvproductivitypack.xml</file>
+                </MvProductivityPack>
+            </updates>
+        </layout>
+        <routers>
+            <MvProductivityPack>
+                <use>standard</use>
+                <args>
+                    <module>ZetaPrints_MvProductivityPack</module>
+                    <frontName>mvproductivitypackf</frontName>
+                </args>
+            </MvProductivityPack>
+            <!-- Catalog module controller rewrite start here -->
+            <catalog>
+                <args>
+                    <modules>
+                        <ZetaPrints_MvProductivityPack before="Mage_Catalog">ZetaPrints_MvProductivityPack</ZetaPrints_MvProductivityPack>
+                    </modules>
+                </args>
+            </catalog>
+            <!-- Catalog module controller rewrite end here -->
+            <!-- Cms module controller rewrite start here -->
+            <cms>
+                <args>
+                    <modules>
+                        <ZetaPrints_MvProductivityPack before="Mage_Cms">ZetaPrints_MvProductivityPack_Cms</ZetaPrints_MvProductivityPack>
+                    </modules>
+                </args>
+            </cms>
+            <!-- Cms module controller rewrite end here -->
+        </routers>
+    </frontend>
+    <admin>
+        <routers>
+            <MvProductivityPack>
+                <use>admin</use>
+                <args>
+                    <module>ZetaPrints_MvProductivityPack</module>
+                    <frontName>mvproductivitypack</frontName>
+                </args>
+            </MvProductivityPack>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <MvProductivityPack>
+                    <file>zetaprints_mvproductivitypack.xml</file>
+                </MvProductivityPack>
+            </updates>
+        </layout>
+    </adminhtml>   
+    <global>
+        <blocks>
+            <MvProductivityPack>
+                <class>ZetaPrints_MvProductivityPack_Block</class>
+            </MvProductivityPack>
+        </blocks>
+        <helpers>
+            <MvProductivityPack>
+                <class>ZetaPrints_MvProductivityPack_Helper</class>
+            </MvProductivityPack>
+        </helpers>
+    </global>
+</config>

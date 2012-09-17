@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZetaPrints_MvProductivityPack>
+            <active>true</active>
+            <codePool>local</codePool>
+        </ZetaPrints_MvProductivityPack>
+    </modules>
+</config>
