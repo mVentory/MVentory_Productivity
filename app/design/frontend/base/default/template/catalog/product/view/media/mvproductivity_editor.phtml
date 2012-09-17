@@ -1,0 +1,25 @@
+<?php
+
+$_image = $this->getImage();
+
+?>
+
+<div class="tm-image-editor-menu">
+  <input type="hidden" name="_tm_image_file" value="<?php echo $_image; ?>" />
+
+  <div class="set-main-image"
+       title="<?php echo $this->__('Set as main image'); ?>">
+  </div>
+
+  <div class="rotate-image rotate-left"
+       title="<?php echo $this->__('Rotate left'); ?>">
+  </div>
+
+  <div class="rotate-image rotate-right"
+       title="<?php echo $this->__('Rotate right'); ?>">
+  </div>
+
+  <div class="remove-image"
+       title="<?php echo $this->__('Remove'); ?>">
+  </div>
+</div>

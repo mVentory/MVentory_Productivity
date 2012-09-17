@@ -16,3 +16,77 @@ background:#fffafa;
 color:black;
 text-decoration:none;
 }
+
+/* Image options block */
+
+.box-store .store-map {
+  height: 300px;
+}
+
+.box-store pre.store-address {
+  margin: 0 0 10px;
+}
+
+.rotate-90 { 
+  -moz-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  -webkit-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+  filter: progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=6.123031769111886e-17, M12=1, M21=-1, M22=6.123031769111886e-17);
+  zoom: 1;
+}
+
+.rotate90 {
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+  filter: progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=6.123031769111886e-17, M12=-1, M21=1, M22=6.123031769111886e-17);
+  zoom: 1;
+}
+
+.tm-image-editor-menu {
+  display: none;
+  position: absolute;
+  background-color: white;
+  border: 1px solid #C4C6C8;
+  padding: 4px 2px;
+  width: 104px;
+  z-index: 10;
+}
+
+.tm-image-editor-menu .rotate-image,
+.tm-image-editor-menu .remove-image,
+.tm-image-editor-menu .set-main-image {
+  display: block;
+  float: left;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #C4C6C8;
+  margin: 0 2px;
+  cursor: pointer;
+}
+
+.tm-image-editor-menu .rotate-image:hover,
+.tm-image-editor-menu .remove-image:hover,
+.tm-image-editor-menu .set-main-image:hover {
+  border-color: #DE5400;
+}
+
+.tm-image-editor-menu .rotate-image.rotate-left {
+  background: url('../images/mvproductivitypack/rotate-left-icon.png') no-repeat center;
+}
+
+.tm-image-editor-menu .rotate-image.rotate-right {
+  background: url('../images/mvproductivitypack/rotate-right-icon.png') no-repeat center; 
+}
+
+.tm-image-editor-menu .remove-image {
+  background: url('../images/mvproductivitypack/remove-icon.png') no-repeat center;
+}
+
+.tm-image-editor-menu .set-main-image {
+  background: url('../images/mvproductivitypack/main-image-icon.png') no-repeat center;
+}

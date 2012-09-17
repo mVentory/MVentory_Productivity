@@ -66,11 +66,34 @@
             <MvProductivityPack>
                 <class>ZetaPrints_MvProductivityPack_Block</class>
             </MvProductivityPack>
+			<catalog>
+				<rewrite>
+					<product_view_media>ZetaPrints_MvProductivityPack_Block_Product_View_Media</product_view_media>
+				</rewrite>
+			</catalog>
         </blocks>
+
         <helpers>
             <MvProductivityPack>
                 <class>ZetaPrints_MvProductivityPack_Helper</class>
             </MvProductivityPack>
+			<catalog>
+				<rewrite>
+					<image>ZetaPrints_MvProductivityPack_Helper_Image</image>
+				</rewrite>
+			</catalog>
         </helpers>
+
+		<models>
+			<MvProductivityPack>
+				<class>ZetaPrints_MvProductivityPack_Model</class>
+				<resourceModel>ZetaPrints_MvProductivityPack_resources</resourceModel>
+			</MvProductivityPack>
+			<catalog>
+				<rewrite>
+					<product_image>ZetaPrints_MvProductivityPack_Model_Product_Image</product_image>
+				</rewrite>
+			</catalog>
+		</models>		
     </global>
 </config>
