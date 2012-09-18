@@ -1,29 +1,16 @@
-Event.observe(window,'load', function() {
-  Event.observe('content','change', function() {alert('1');});
-});
-function addColumnEdit() {
-  $$('table.data thead tr').each(function(item) {
-    if(item.readAttribute('class') == 'headings') {
-      item.down('.last').removeClassName('last');
-      var th = new Element('th');
-      th.update('<span class="nobr">Action</span>');
-      th.className = 'no-link last';
-      th.setStyle({'width':'50px'});
-      item.insert(th);
-    } else {
-      item.down('.last').removeClassName('last');
-      var th = new Element('th');
-      th.className = 'no-link last'
-      item.insert(th);
-    }   
-  });
+function addMiddleClick() {
   $$('table.data tbody tr').each(function(item) {
-    item.down('.last').removeClassName('last');
-    var td = new Element('td');
-    td.update('<a href="'+item.readAttribute('title')+'">Edit</a>');
-    td.className = 'last';
-    item.insert(td);
+    item.observe('mousedown', function(e) {
+      if(Event.isMiddleClick(e)) {
+        window.open(item.readAttribute('title'), '_blank');  
+      } 
+    });
+    item.observe('click', function(e) {
+      if(Event.isMiddleClick(e)) {
+        Event.stop(e);  
+      } 
+    });
   }); 
 }
 
-Event.observe(window, 'load', addColumnEdit); 
+Event.observe(window, 'load', addMiddleClick); 
