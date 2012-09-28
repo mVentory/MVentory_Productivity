@@ -7,16 +7,8 @@
  * @author     ZetaPrints <anemets1@gmail.com>
  */
 ?>
-<?php 
-  $a = array();
-  $collection = Mage::getResourceModel('catalog/product_attribute_collection');
-  foreach($collection as $attribute) {
-    $a[$attribute->getData('attribute_code')] = $attribute->getData('attribute_id');;
-  }
-  $a = json_encode($a);
-?>
 <script>
-var attribute = <?php echo $a ?>;
+var attribute = <?php echo $this->getJson() ?>;
 var key = '<?php echo Mage::getSingleton('adminhtml/url')->getSecretKey("catalog_product_attribute","edit");?>';
 Event.observe(window, 'load', function() { 
   $$('.x-tree-node-leaf').each(function(item) {

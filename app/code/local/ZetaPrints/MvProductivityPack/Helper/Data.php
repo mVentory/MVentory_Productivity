@@ -103,7 +103,14 @@ class ZetaPrints_MvProductivityPack_Helper_Data extends Mage_Core_Helper_Abstrac
 		return true;
 	}
 	
-  	public function isAdminLogged () {
+  public function isAdminLogged () {
 		return Mage::registry('is_admin_logged') === true;
 	}
+  
+  public function saveAdminState() {
+    Mage::getSingleton('core/session', array('name' => 'adminhtml'))->start();
+
+		Mage::register('is_admin_logged', 
+                   Mage::getSingleton('admin/session')->isLoggedIn());
+  }
 }

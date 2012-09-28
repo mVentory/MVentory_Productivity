@@ -2,7 +2,7 @@
 <layout>
     <adminhtml_catalog_product_set_edit>
         <reference name="js">
-            <block type="core/template" template="mvproductivitypack/catalog/product/attribute/set/edit/script.js.phtml" name="attribute.script.js" />
+            <block type="MvProductivityPack/adminhtml_catalog_product_attribute_set_edit_script" template="mvproductivitypack/catalog/product/attribute/set/edit/script.js.phtml" name="attribute.script.js" />
         </reference>  
     </adminhtml_catalog_product_set_edit>  
     <adminhtml_catalog_product_attribute_index>

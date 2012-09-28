@@ -18,6 +18,6 @@ class ZetaPrints_MvProductivityPack_Block_Adminhtml_Catalog_Category_Edit_Button
     foreach($collection as $category) {
       $categories_urls[$category->getId()] = $category->getUrl();
     }
-    return json_encode($categories_urls); 
+    return Zend_Json::encode($categories_urls); 
   }
 }

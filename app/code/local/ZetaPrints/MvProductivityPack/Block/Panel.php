@@ -8,8 +8,4 @@
  */ 
 class ZetaPrints_MvProductivityPack_Block_Panel extends Mage_Core_Block_Template {
    
-    public function isAdmin() {   
-		  return Mage::registry('is_admin_logged');
-    }
-
 }

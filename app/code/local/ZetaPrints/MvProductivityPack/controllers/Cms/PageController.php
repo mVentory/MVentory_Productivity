@@ -9,18 +9,14 @@
 require_once("Mage/Cms/controllers/PageController.php");
 class ZetaPrints_MvProductivityPack_Cms_PageController extends Mage_Cms_PageController
 {
-	/*
+	/**
 	 * Below preDispatch method will check whether admin is logged in or not on admin side and add the value in 
 	 * registry 
 	 */
 	public function preDispatch () {
-		Mage::getSingleton('core/session', array('name' => 'adminhtml'))
-		  ->start();
+		Mage::helper('MvProductivityPack')->saveAdminState();
 
-		Mage::register('is_admin_logged',
-					   Mage::getSingleton('admin/session')->isLoggedIn());
-
-		parent::preDispatch();
+		return parent::preDispatch();
 
 		return $this;
 	}
