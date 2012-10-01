@@ -77,11 +77,6 @@
             <MvProductivityPack>
                 <class>ZetaPrints_MvProductivityPack_Helper</class>
             </MvProductivityPack>
-			<catalog>
-				<rewrite>
-					<image>ZetaPrints_MvProductivityPack_Helper_Image</image>
-				</rewrite>
-			</catalog>
         </helpers>
 
 		<models>
