@@ -13,6 +13,6 @@ class ZetaPrints_MvProductivityPack_Block_Adminhtml_Catalog_Product_Edit_Button 
    */
   public function getProductUrl()
   {         
-    return Mage::registry('product')->getUrlInStore(); 
+    return Mage::registry('product')->getProductUrl(); 
   }
 }
