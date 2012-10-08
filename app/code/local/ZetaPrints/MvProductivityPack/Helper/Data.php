@@ -14,13 +14,13 @@ class ZetaPrints_MvProductivityPack_Helper_Data extends Mage_Core_Helper_Abstrac
 
 		$image
 		  ->setBaseFile($file)
-		  ->setNewFile($image->getBaseFile())
+		  //->setNewFile($image->getBaseFile())
 		  ->setQuality(100)
 		  ->setKeepFrame(false)
 		  ->rotate($angle)
 		  ->saveFile();
 
-		return true;
+		return $image->getNewFile();
 	}
 
 	public function remove ($file, $productId) {
@@ -102,6 +102,40 @@ class ZetaPrints_MvProductivityPack_Helper_Data extends Mage_Core_Helper_Abstrac
 
 		return true;
 	}
+  
+  public function updateImageInGallery($oldFile, $newFile, $productId, 
+                                       $mediaAttribute = null, $move = true, 
+                                       $exclude = false) {
+    Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+      
+    $product = Mage::getModel('catalog/product')->load($productId);
+
+  	if (!$product->getId())
+      return;
+      
+    $attributes = $product->getTypeInstance(true)->getSetAttributes($product);
+    
+    if (!isset($attributes[self::ATTRIBUTE_CODE]))
+      return;
+      
+    $mediaGalleryAttribute = $attributes[self::ATTRIBUTE_CODE];
+      
+    $mediaGalleryAttribute
+      ->getBackend()
+      ->removeImage($product, $oldFile);
+                
+    $file = $mediaGalleryAttribute
+              ->getBackend()
+              ->addImage($product, 
+                         $newFile, 
+                         $mediaAttribute, 
+                         $move, 
+                         $exclude);
+   
+    $product->save();
+      
+    return $file;
+  }
 	
   public function isAdminLogged () {
 		return Mage::registry('is_admin_logged') === true;

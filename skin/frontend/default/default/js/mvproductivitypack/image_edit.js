@@ -2,6 +2,7 @@ jQuery(document).ready(function ($) {
   var $form = $('#product_addtocart_form');
   var $menus = $form.find('.tm-image-editor-menu');
   var $updImage;
+  var $updImageEditor;
 
   $menus
     .parent()
@@ -10,13 +11,15 @@ jQuery(document).ready(function ($) {
 
       var offset = $this.offset();
 
-      $this
-        .children('.tm-image-editor-menu')
-        .css({
-          top: offset.top + $this.height() - 10,
-          left: offset.left + 10
-        })
-        .show();
+      if(!$this.children('.tm-image-editor-menu').hasClass('disabled')) {
+        $this
+          .children('.tm-image-editor-menu')
+          .css({
+            top: offset.top + $this.height() - 10,
+            left: offset.left + 10
+          })
+          .show();
+      }
     })
     .on('mouseleave', function () {
       $(this)
@@ -68,6 +71,8 @@ jQuery(document).ready(function ($) {
       },
       success: function (data, status, jqXHR) {
         $updImage.prop('src', data.image);
+        $updImage.parent('a').prop('href', '/media/catalog/product' + data.base);
+        $updImageEditor.children('input').val(data.base);
       },
       complete: complete
     });
@@ -152,6 +157,7 @@ jQuery(document).ready(function ($) {
     */
     $this
       .parent()
+      .addClass('disabled')
       .hide();
     event.preventDefault();
 
@@ -159,6 +165,7 @@ jQuery(document).ready(function ($) {
                   .parent()
                   .children('input')
                   .val();
+    $updImageEditor =  $this.parent();
     $updImage = $this.parent().parent().find('img');
     $updImage.css('opacity', '0.5');
     
@@ -171,10 +178,9 @@ jQuery(document).ready(function ($) {
     
     rotate_image(image, rotate, function () {
       //$this.on('click', { rotate: rotate }, rotate_button_click_handler);
-      $updImage.attr('src', $updImage.prop('src').split('?')[0]+'?t='+ new Date().getTime());
-      $updImage.parent('a').prop('href', '/media/catalog/product' + image);
       $updImage.css('opacity', '1');
       $('.image-editor-loader').remove();
+      $this.parent().removeClass('disabled');
     });              
     
     return false;
@@ -210,7 +216,11 @@ jQuery(document).ready(function ($) {
     var $this = $(this);
 
     /*$this.off('click', set_main_button_click_handler);*/
-
+    $this
+      .parent()
+      .addClass('disabled')
+      .hide();
+      
     event.preventDefault();
 
     var image = $this
@@ -227,6 +237,9 @@ jQuery(document).ready(function ($) {
                               .parent()
                               .find('input[name="_tm_image_file"]');
                               
+    var $mainImageEditor = $main_image_input.parent();
+    $mainImageEditor.addClass('disabled').hide();
+                              
     var mainImage = $main_image_input.val();
     
     var $mainImage = $form.find('.product-image img')
@@ -242,11 +255,8 @@ jQuery(document).ready(function ($) {
 
     set_main_image(image, mainImage, product_id, function () {  
       $('.image-editor-loader').remove();
-      /*
-      $this
-        .parent()
-        .remove();
-      */
+      $this.parent().removeClass('disabled');
+      $mainImageEditor.removeClass('disabled');
     });
 
     $thumbImage.parent('a').prop('href', '/media/catalog/product' + $main_image_input.val());
