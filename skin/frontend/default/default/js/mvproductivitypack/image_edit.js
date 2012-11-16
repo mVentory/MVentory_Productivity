@@ -44,24 +44,24 @@ jQuery(document).ready(function ($) {
     .on('click', set_main_button_click_handler);
 
   function rotate_image (file, rotate, complete) {
-    
+
     var imageWidth = $updImage.width();
     var imageHeight = $updImage.height();
-    
+
     var productId = $form.find('input[name="product"]').val();
-    
+
     if($updImage.parent().parent().is('li')) {
       var thumb = true;
     } else {
       var thumb = false;
     }
-    
+
     $.ajax({
       url: _tm_image_editor_rotate_url,
       type: 'POST',
       dataType: 'json',
-      data: { file: file, rotate:  rotate, 
-              imageWidth: imageWidth, imageHeight: imageHeight, 
+      data: { file: file, rotate:  rotate,
+              imageWidth: imageWidth, imageHeight: imageHeight,
               thumb: thumb, productId: productId},
       error: function (jqXHR, status, errorThrown) {
         var currentBorder = $updImage.css('border');
@@ -86,7 +86,7 @@ jQuery(document).ready(function ($) {
     }
     var imageWidth = $updImage.width();
     var imageHeight = $updImage.height();
-    
+
     $.ajax({
       url: _tm_image_editor_remove_url,
       type: 'POST',
@@ -119,13 +119,13 @@ jQuery(document).ready(function ($) {
     var $thumb = $form
                    .find('img')
                    .filter('[src$="' + thumbImage + '"]')
-                   
+
     var imageThumbWidth = $thumb.width();
     var imageThumbHeight = $thumb.height();
-    
+
     var imageWidth = $img.width();
     var imageHeight = $img.height();
-    
+
     $.ajax({
       url: _tm_image_editor_setmain_url,
       type: 'POST',
@@ -137,7 +137,7 @@ jQuery(document).ready(function ($) {
         alert('Product ID: ' + productId + '\nImage file: ' + file + '\nStatus: ' + status);
       },
       success: function (data, status, jqXHR) {
-        //console.log(data);  
+        //console.log(data);
         $thumb.prop('src', data.thumbImage);
         $img.prop('src', data.mainImage);
         $thumb.css('opacity', '1');
@@ -168,21 +168,21 @@ jQuery(document).ready(function ($) {
     $updImageEditor =  $this.parent();
     $updImage = $this.parent().parent().find('img');
     $updImage.css('opacity', '0.5');
-    
+
     $updImage.parent().append('<div class="image-editor-loader"></div>');
     if(!$updImage.parent().parent().is('li')) {
       $('.image-editor-loader').show();
     }
-    
+
     var rotate = event.data.rotate;
-    
+
     rotate_image(image, rotate, function () {
       //$this.on('click', { rotate: rotate }, rotate_button_click_handler);
       $updImage.css('opacity', '1');
       $('.image-editor-loader').remove();
       $this.parent().removeClass('disabled');
-    });              
-    
+    });
+
     return false;
   }
 
@@ -201,9 +201,9 @@ jQuery(document).ready(function ($) {
     var product_id = $form
                        .find('input[name="product"]')
                        .val();
-                       
+
     $updImage = $this.parent().parent().find('img');
-    
+
     remove_image(image, product_id, function () {
       $this
         .parent()
@@ -211,7 +211,7 @@ jQuery(document).ready(function ($) {
     });
   }
 
-  
+
   function set_main_button_click_handler (event) {
     var $this = $(this);
 
@@ -220,7 +220,7 @@ jQuery(document).ready(function ($) {
       .parent()
       .addClass('disabled')
       .hide();
-      
+
     event.preventDefault();
 
     var image = $this
@@ -231,17 +231,17 @@ jQuery(document).ready(function ($) {
     var product_id = $form
                        .find('input[name="product"]')
                        .val();
-                       
+
     var $main_image_input = $form
                               .find('.product-image')
                               .parent()
                               .find('input[name="_tm_image_file"]');
-                              
+
     var $mainImageEditor = $main_image_input.parent();
     $mainImageEditor.addClass('disabled').hide();
-                              
+
     var mainImage = $main_image_input.val();
-    
+
     var $mainImage = $form.find('.product-image img')
     var $thumbImage = $form
                         .find('img')
@@ -249,11 +249,11 @@ jQuery(document).ready(function ($) {
 
     $mainImage.css('opacity', '0.5');
     $thumbImage.css('opacity', '0.5');
-    
+
     $mainImage.parent().append('<div class="image-editor-loader"></div>');
     $('.image-editor-loader').show();
 
-    set_main_image(image, mainImage, product_id, function () {  
+    set_main_image(image, mainImage, product_id, function () {
       $('.image-editor-loader').remove();
       $this.parent().removeClass('disabled');
       $mainImageEditor.removeClass('disabled');
@@ -261,8 +261,8 @@ jQuery(document).ready(function ($) {
 
     $thumbImage.parent('a').prop('href', '/media/catalog/product' + $main_image_input.val());
     $mainImage.parent('a').prop('href', '/media/catalog/product' + image);
-    
-    $this.parent().children('input').val($main_image_input.val());  
+
+    $this.parent().children('input').val($main_image_input.val());
     $main_image_input.val(image);
   }
 });
