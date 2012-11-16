@@ -10,7 +10,6 @@ class ZetaPrints_MvProductivityPack_Helper_Data
 
     $image
       ->setBaseFile($file)
-      //->setNewFile($image->getBaseFile())
       ->setQuality(100)
       ->setKeepFrame(false)
       ->rotate($angle)
