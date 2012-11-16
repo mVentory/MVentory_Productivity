@@ -6,11 +6,6 @@ class ZetaPrints_MvProductivityPack_Helper_Data
   const ATTRIBUTE_CODE = 'media_gallery';
 
   public function rotate ($file, $angle) {
-    $media = Mage::getModel('catalog/product_media_config');
-
-    if (!file_exists($media->getMediaPath($file)))
-      return;
-
     $image = Mage::getModel('catalog/product_image');
 
     $image
