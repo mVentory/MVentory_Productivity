@@ -44,34 +44,39 @@ jQuery(document).ready(function ($) {
     .on('click', set_main_button_click_handler);
 
   function rotate_image (file, rotate, complete) {
-
     var imageWidth = $updImage.width();
     var imageHeight = $updImage.height();
 
     var productId = $form.find('input[name="product"]').val();
 
-    if($updImage.parent().parent().is('li')) {
+    if ($updImage.parent().parent().is('li'))
       var thumb = true;
-    } else {
+    else
       var thumb = false;
-    }
 
     $.ajax({
       url: _tm_image_editor_rotate_url,
       type: 'POST',
       dataType: 'json',
-      data: { file: file, rotate:  rotate,
-              imageWidth: imageWidth, imageHeight: imageHeight,
-              thumb: thumb, productId: productId},
+      data: {
+        file: file,
+        rotate: rotate,
+        imageWidth: imageWidth,
+        imageHeight: imageHeight,
+        thumb: thumb,
+        productId: productId
+      },
       error: function (jqXHR, status, errorThrown) {
         var currentBorder = $updImage.css('border');
         $updImage.css('border','1px solid red');
         setTimeout(function(){$updImage.css('border',currentBorder)}, 5000);
-        alert('Product ID: ' + productId + '\nImage file: ' + file + '\nStatus: ' + status);
+        alert('Product ID: ' + productId + '\nImage file: ' + file
+              + '\nStatus: ' + status);
       },
       success: function (data, status, jqXHR) {
         $updImage.prop('src', data.image);
-        $updImage.parent('a').prop('href', '/media/catalog/product' + data.base);
+        $updImage.parent('a')
+          .prop('href', '/media/catalog/product' + data.base);
         $updImageEditor.children('input').val(data.base);
       },
       complete: complete
@@ -149,35 +154,38 @@ jQuery(document).ready(function ($) {
 
   function rotate_button_click_handler (event) {
     var $this = $(this);
+
     /*
     $this
       .parent()
       .children('.rotate-image')
       .off('click', rotate_button_click_handler);
     */
+
     $this
       .parent()
       .addClass('disabled')
       .hide();
+
     event.preventDefault();
 
     var image = $this
                   .parent()
                   .children('input')
                   .val();
-    $updImageEditor =  $this.parent();
+
+    $updImageEditor = $this.parent();
     $updImage = $this.parent().parent().find('img');
     $updImage.css('opacity', '0.5');
 
     $updImage.parent().append('<div class="image-editor-loader"></div>');
-    if(!$updImage.parent().parent().is('li')) {
+
+    if (!$updImage.parent().parent().is('li'))
       $('.image-editor-loader').show();
-    }
 
     var rotate = event.data.rotate;
 
     rotate_image(image, rotate, function () {
-      //$this.on('click', { rotate: rotate }, rotate_button_click_handler);
       $updImage.css('opacity', '1');
       $('.image-editor-loader').remove();
       $this.parent().removeClass('disabled');
