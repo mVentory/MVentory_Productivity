@@ -243,7 +243,7 @@ jQuery(document).ready(function ($) {
     var $main_image_input = $form
                               .find('.product-image')
                               .parent()
-                              .find('input[name="_tm_image_file"]');
+                              .find('input[name="_productivity_image_file"]');
 
     var $mainImageEditor = $main_image_input.parent();
     $mainImageEditor.addClass('disabled').hide();
