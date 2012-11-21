@@ -69,7 +69,7 @@
         ?>
     </p>
 
-    <?php echo $this->getImageEditorHtml($_product->getImage()); ?>
+    <?php echo $this->getImageEditorHtml($_product->getImage(), 265); ?>
 </div>
 <?php endif; ?>
 <?php if (count($this->getGalleryImages()) > 0): ?>
@@ -80,7 +80,7 @@
         <li>
             <a href="#" onclick="popWin('<?php echo $this->getGalleryUrl($_image) ?>', 'gallery', 'width=300,height=300,left=0,top=0,location=no,status=yes,scrollbars=yes,resizable=yes'); return false;" title="<?php echo $this->htmlEscape($_image->getLabel()) ?>"><img src="<?php echo $this->helper('catalog/image')->init($this->getProduct(), 'thumbnail', $_image->getFile())->resize(56); ?>" width="56" height="56" alt="<?php echo $this->htmlEscape($_image->getLabel()) ?>" /></a>
 
-            <?php echo $this->getImageEditorHtml($_image->getFile()); ?>
+            <?php echo $this->getImageEditorHtml($_image->getFile(), 56); ?>
         </li>
     <?php endforeach; ?>
     </ul>

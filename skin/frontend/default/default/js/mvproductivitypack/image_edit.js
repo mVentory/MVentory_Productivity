@@ -43,10 +43,7 @@ jQuery(document).ready(function ($) {
     .children('.set-main-image')
     .on('click', set_main_button_click_handler);
 
-  function rotate_image (file, rotate, complete) {
-    var imageWidth = $updImage.width();
-    var imageHeight = $updImage.height();
-
+  function rotate_image (params, complete) {
     var productId = $form.find('input[name="product"]').val();
 
     if ($updImage.parent().parent().is('li'))
@@ -59,10 +56,7 @@ jQuery(document).ready(function ($) {
       type: 'POST',
       dataType: 'json',
       data: {
-        file: file,
-        rotate: rotate,
-        imageWidth: imageWidth,
-        imageHeight: imageHeight,
+        params: params,
         thumb: thumb,
         productId: productId
       },
@@ -77,32 +71,29 @@ jQuery(document).ready(function ($) {
         $updImage.prop('src', data.image);
         $updImage.parent('a')
           .prop('href', '/media/catalog/product' + data.base);
-        $updImageEditor.children('input').val(data.base);
+        $updImageEditor.children('input').val(data.params);
       },
       complete: complete
     });
   }
 
-  function remove_image (file, product_id, complete) {
+  function remove_image (params, product_id, complete) {
     if($updImage.parent().parent().is('li')) {
       var thumb = true;
     } else {
       var thumb = false;
     }
-    var imageWidth = $updImage.width();
-    var imageHeight = $updImage.height();
 
     $.ajax({
       url: _tm_image_editor_remove_url,
       type: 'POST',
       dataType: 'json',
-      data: { file: file, product: product_id , thumb: thumb,
-              imageWidth: imageWidth, imageHeight: imageHeight},
+      data: { params: params, product: product_id, thumb: thumb },
       error: function (jqXHR, status, errorThrown) {
         var currentBorder = $updImage.css('border');
         $updImage.css('border','1px solid red');
         setTimeout(function(){$updImage.css('border',currentBorder)}, 5000);
-        alert('Product ID: ' + productId + '\nImage file: ' + file + '\nStatus: ' + status);
+        alert('Product ID: ' + product_id + '\nImage file: ' + params.file + '\nStatus: ' + status);
       },
       success: function (data, status, jqXHR) {
         //console.log(data);
@@ -118,33 +109,38 @@ jQuery(document).ready(function ($) {
     });
   }
 
-  function set_main_image (thumbImage, mainImage, product_id, complete) {
+  function set_main_image (params, main_image_params, product_id, complete) {
     var $img = $form.find('.product-image img')
 
     var $thumb = $form
                    .find('img')
-                   .filter('[src$="' + thumbImage + '"]')
-
-    var imageThumbWidth = $thumb.width();
-    var imageThumbHeight = $thumb.height();
-
-    var imageWidth = $img.width();
-    var imageHeight = $img.height();
+                   .filter('[src$="' + params.file + '"]')
 
     $.ajax({
       url: _tm_image_editor_setmain_url,
       type: 'POST',
       dataType: 'json',
-      data: { product: product_id, thumbImage: thumbImage, mainImage: mainImage,
-              imageThumbWidth: imageThumbWidth, imageThumbHeight: imageThumbHeight,
-              imageWidth: imageWidth, imageHeight: imageHeight  },
+      data: { product: product_id,
+              params: params,
+              main_image_params: main_image_params },
       error: function (jqXHR, status, errorThrown) {
-        alert('Product ID: ' + productId + '\nImage file: ' + file + '\nStatus: ' + status);
+        alert('Product ID: ' + product_id + '\nImage file: ' + params.file + '\nStatus: ' + status);
       },
       success: function (data, status, jqXHR) {
         //console.log(data);
         $thumb.prop('src', data.thumbImage);
         $img.prop('src', data.mainImage);
+
+        $img
+          .parents('.product-img-box')
+          .find('input[name="_productivity_image_params"]')
+          .val(data.main_image_params);
+
+        $thumb
+          .parents('li')
+          .find('input[name="_productivity_image_params"]')
+          .val(data.params);
+
         $thumb.css('opacity', '1');
         $img.css('opacity', '1');
       },
@@ -154,6 +150,7 @@ jQuery(document).ready(function ($) {
 
   function rotate_button_click_handler (event) {
     var $this = $(this);
+    var $editor = $this.parent();
 
     /*
     $this
@@ -162,20 +159,21 @@ jQuery(document).ready(function ($) {
       .off('click', rotate_button_click_handler);
     */
 
-    $this
-      .parent()
+    $editor
       .addClass('disabled')
       .hide();
 
     event.preventDefault();
 
-    var image = $this
-                  .parent()
-                  .children('input')
-                  .val();
+    var params = $editor
+                   .children('input[name="_productivity_image_params"]')
+                   .val();
 
-    $updImageEditor = $this.parent();
-    $updImage = $this.parent().parent().find('img');
+    params = $.parseJSON(params);
+    params.rotate = event.data.rotate;
+
+    $updImageEditor = $editor;
+    $updImage = $editor.parent().find('img');
     $updImage.css('opacity', '0.5');
 
     $updImage.parent().append('<div class="image-editor-loader"></div>');
@@ -183,9 +181,7 @@ jQuery(document).ready(function ($) {
     if (!$updImage.parent().parent().is('li'))
       $('.image-editor-loader').show();
 
-    var rotate = event.data.rotate;
-
-    rotate_image(image, rotate, function () {
+    rotate_image(params, function () {
       $updImage.css('opacity', '1');
       $('.image-editor-loader').remove();
       $this.parent().removeClass('disabled');
@@ -196,15 +192,17 @@ jQuery(document).ready(function ($) {
 
   function remove_button_click_handler (event) {
     var $this = $(this);
+    var $editor = $this.parent();
 
     /*$this.off('click', remove_button_click_handler);*/
 
     event.preventDefault();
 
-    var image = $this
-                  .parent()
-                  .children('input')
-                  .val();
+    var params = $editor
+                   .children('input[name="_productivity_image_params"]')
+                   .val();
+
+    params = $.parseJSON(params);
 
     var product_id = $form
                        .find('input[name="product"]')
@@ -212,7 +210,7 @@ jQuery(document).ready(function ($) {
 
     $updImage = $this.parent().parent().find('img');
 
-    remove_image(image, product_id, function () {
+    remove_image(params, product_id, function () {
       $this
         .parent()
         .hide();
@@ -222,6 +220,7 @@ jQuery(document).ready(function ($) {
 
   function set_main_button_click_handler (event) {
     var $this = $(this);
+    var $editor = $this.parent();
 
     /*$this.off('click', set_main_button_click_handler);*/
     $this
@@ -231,10 +230,11 @@ jQuery(document).ready(function ($) {
 
     event.preventDefault();
 
-    var image = $this
-                  .parent()
-                  .children('input')
-                  .val();
+    var params = $editor
+                   .children('input[name="_productivity_image_params"]')
+                   .val();
+
+    params = $.parseJSON(params);
 
     var product_id = $form
                        .find('input[name="product"]')
@@ -243,17 +243,18 @@ jQuery(document).ready(function ($) {
     var $main_image_input = $form
                               .find('.product-image')
                               .parent()
-                              .find('input[name="_productivity_image_file"]');
+                              .find('input[name="_productivity_image_params"]');
 
     var $mainImageEditor = $main_image_input.parent();
     $mainImageEditor.addClass('disabled').hide();
 
-    var mainImage = $main_image_input.val();
+    var main_image_params = $main_image_input.val();
+    main_image_params = $.parseJSON(main_image_params);
 
     var $mainImage = $form.find('.product-image img')
     var $thumbImage = $form
                         .find('img')
-                        .filter('[src$="' + image + '"]')
+                        .filter('[src$="' + params.file + '"]')
 
     $mainImage.css('opacity', '0.5');
     $thumbImage.css('opacity', '0.5');
@@ -261,16 +262,14 @@ jQuery(document).ready(function ($) {
     $mainImage.parent().append('<div class="image-editor-loader"></div>');
     $('.image-editor-loader').show();
 
-    set_main_image(image, mainImage, product_id, function () {
+    set_main_image(params, main_image_params, product_id, function () {
       $('.image-editor-loader').remove();
       $this.parent().removeClass('disabled');
       $mainImageEditor.removeClass('disabled');
     });
 
-    $thumbImage.parent('a').prop('href', '/media/catalog/product' + $main_image_input.val());
-    $mainImage.parent('a').prop('href', '/media/catalog/product' + image);
-
-    $this.parent().children('input').val($main_image_input.val());
-    $main_image_input.val(image);
+    var link = $thumbImage.parent('a').prop('href');
+    $thumbImage.parent('a').prop('href', $mainImage.parent('a').prop('href'));
+    $mainImage.parent('a').prop('href', link);
   }
 });

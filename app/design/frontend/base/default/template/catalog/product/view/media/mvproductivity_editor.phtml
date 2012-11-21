@@ -1,11 +1,12 @@
 <?php
 
-$_image = $this->getImage();
+$_params = htmlspecialchars($this->getImageParameters());
 
 ?>
 
 <div class="tm-image-editor-menu">
-  <input type="hidden" name="_productivity_image_file" value="<?php echo $_image; ?>" />
+  <input type="hidden" name="_productivity_image_params"
+         value="<?php echo $_params; ?>" />
 
   <div class="set-main-image"
        title="<?php echo $this->__('Set as main image'); ?>">

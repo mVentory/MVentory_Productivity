@@ -5,6 +5,8 @@ class ZetaPrints_MvProductivityPack_Helper_Data
 
   const ATTRIBUTE_CODE = 'media_gallery';
 
+  private $_mediaBackend = array();
+
   public function rotate ($file, $angle) {
     $image = Mage::getModel('catalog/product_image');
 
@@ -129,6 +131,27 @@ class ZetaPrints_MvProductivityPack_Helper_Data
     $product->save();
 
     return $file;
+  }
+
+  protected function _getMediaBackend ($product) {
+    $id = $product->getId();
+
+    if (isset($this->_mediaBackend[$id]))
+      return $this->_mediaBackend[$id];
+
+    $attributes = $product
+                    ->getTypeInstance(true)
+                    ->getSetAttributes($product);
+
+    if (!isset($attributes[self::ATTRIBUTE_CODE]))
+      return;
+
+    $mediaGalleryAttribute = $attributes[self::ATTRIBUTE_CODE];
+    $backend = $mediaGalleryAttribute->getBackend();
+
+    $this->_mediaBackend[$id] = $backend;
+
+    return $backend;
   }
 
   public function isAdminLogged () {

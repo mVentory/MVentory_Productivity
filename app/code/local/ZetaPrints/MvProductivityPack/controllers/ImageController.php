@@ -27,30 +27,32 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     $request = $this->getRequest();
 
-    if (!($request->has('file') && $request->has('rotate')
-          && $request->has('productId')))
+    $hasRequiredParam = $request->has('params') && $request->has('productId');
+
+    if (!$hasRequiredParam)
       return;
 
-    $file = $request->get('file');
-    $rotate = $request->get('rotate');
+    $params = $request->get('params');
     $productId = $request->get('productId');
 
     $angels = array('left' => 90, 'right' => -90);
 
-    if (!($file && $rotate && array_key_exists($rotate, $angels)))
+    $hasRequiredValues = $params['file']
+                         && array_key_exists($params['rotate'], $angels);
+
+    if (!$hasRequiredValues)
       return;
+
+    //Export $file, $width, $height and $rotate variables
+    extract($params);
+
+    unset($params);
 
     // rotate image and get new file
     $newFileAbsolute = Mage::helper('MvProductivityPack')
                          ->rotate($file, $angels[$rotate]);
 
     $type = $request->get('thumb') == 'true'?'thumbnail':'image';
-
-    $imageProp1 = $request->get('imageWidth')>$request->get('imageHeight')?
-                  $request->get('imageWidth'):
-                  $request->get('imageHeight');
-    $imageProp2 = null;
-    $imageFile = null;
 
     if($type == 'image') {
       // update main product image and get new base filename
@@ -60,26 +62,23 @@ class ZetaPrints_MvProductivityPack_ImageController
                                  $newFileAbsolute,
                                  $productId,
                                  array('image', 'small_image', 'thumbnail'));
-
     } else {
       $file =
         Mage::helper('MvProductivityPack')
           ->updateImageInGallery($file,
                                  $newFileAbsolute,
                                  $productId);
-      $imageProp2 = $imageProp1;
-      $imageFile = $file;
     }
 
     $_product = Mage::getModel('catalog/product')->load($productId);
 
     // get resized version of image
-    $image = Mage::helper('catalog/image')->init($_product, $type, $imageFile)
-               ->resize($imageProp1, $imageProp2)->__toString();
+    $image = Mage::helper('catalog/image')->init($_product, $type, $file)
+               ->resize($width, $height)->__toString();
 
-    $base = $file;
+    $params = Zend_Json::encode(compact('file', 'width', 'height'));
 
-    echo Zend_Json::encode(compact('image', 'base'));
+    echo Zend_Json::encode(compact('image', 'params'));
 
     return Zend_Json::encode(true);
   }
@@ -90,26 +89,33 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     $request = $this->getRequest();
 
-    if (!($request->has('file') && $request->has('product')))
+    $hasRequiredParam = $request->has('params') && $request->has('product');
+
+    if (!$hasRequiredParam)
       return;
 
-    $file = $request->get('file');
+    $params = $request->get('params');
     $productId = (int) $request->get('product');
 
-    if (!($file && $productId >= 0))
+    $hasRequiredValues = $params['file']
+                         && $productId >= 0;
+
+    if (!$hasRequiredValues)
       return;
+
+    //Export $file, $width and $height variables
+    extract($params);
+
+    unset($params);
 
     Mage::helper('MvProductivityPack')
       ->remove($file, $productId);
 
     if($request->get('thumb') != 'true') {
-      $imageProp = $request->get('imageWidth')>$request->get('imageHeight')?
-                   $request->get('imageWidth'):
-                   $request->get('imageHeight');
       $_product = Mage::getModel('catalog/product')
-                    ->load($request->get('productId'));
+                    ->load($productId);
       $image = Mage::helper('catalog/image')->init($_product, 'image')
-               ->resize($imageProp)->__toString();
+               ->resize($width, $height)->__toString();
       echo Zend_Json::encode(array('image'=>$image));
     }
 
@@ -122,42 +128,50 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     $request = $this->getRequest();
 
-    if (!($request->has('thumbImage')
-        && $request->has('mainImage') && $request->has('product')))
+    $hasRequiredParam = $request->has('params')
+                        && $request->has('main_image_params')
+                        && $request->has('product');
+
+    if (!$hasRequiredParam)
       return;
 
-    $file = $request->get('thumbImage');
+    $thumb = $request->get('params');
+    $image = $request->get('main_image_params');
     $productId = (int) $request->get('product');
 
-    if (!($file && $productId >= 0))
+    $hasRequiredValues = $thumb['file']
+                         && $image['file']
+                         && $productId >= 0;
+
+    if (!$hasRequiredValues)
       return;
 
     Mage::helper('MvProductivityPack')
-      ->setMainImage($file, $productId);
-
-    $imageThumbProp = $request->get('imageThumbWidth') > $request->get('imageThumbHeight')?
-                  $request->get('imageThumbWidth'):
-                  $request->get('imageThumbHeight');
-
-    $imageProp = $request->get('imageWidth') > $request->get('imageHeight')?
-                  $request->get('imageWidth'):
-                  $request->get('imageHeight');
+      ->setMainImage($thumb['file'], $productId);
 
     $_product = Mage::getModel('catalog/product')
-                  ->load($request->get('productId'));
+                  ->load($productId);
 
     $thumbImage = Mage::helper('catalog/image')
-                    ->init($_product, 'thumbnail', $request->get('mainImage'))
-                    ->resize($imageThumbProp, $imageThumbProp)
+                    ->init($_product, 'thumbnail', $image['file'])
+                    ->resize($thumb['width'], $thumb['height'])
                     ->__toString();
 
     $mainImage = Mage::helper('catalog/image')
-                   ->init($_product, 'image', $request->get('thumbImage'))
-                   ->resize($imageProp)
+                   ->init($_product, 'image', $thumb['file'])
+                   ->resize($image['width'], $image['height'])
                    ->__toString();
 
-    echo Zend_Json::encode(array('thumbImage'=>$thumbImage,
-                                 'mainImage'=>$mainImage));
+    $file = $thumb['file'];
+    $thumb['file'] = $image['file'];
+    $image['file'] = $file;
+
+    $params = Zend_Json::encode($thumb);
+    $main_image_params = Zend_Json::encode($image);
+
+    $result = compact('thumbImage', 'mainImage', 'params', 'main_image_params');
+
+    echo Zend_Json::encode($result);
 
     return Zend_Json::encode(true);
   }
