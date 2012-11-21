@@ -2,7 +2,7 @@
 
 class ZetaPrints_MvProductivityPack_ImageController
   extends Mage_Core_Controller_Front_Action {
-  
+
   const ATTRIBUTE_CODE = 'media_gallery';
 
   public function preDispatch () {
@@ -32,7 +32,7 @@ class ZetaPrints_MvProductivityPack_ImageController
       return;
 
     $file = $request->get('file');
-    $rotate = $request->get('rotate');    
+    $rotate = $request->get('rotate');
     $productId = $request->get('productId');
 
     $angels = array('left' => 90, 'right' => -90);
@@ -43,42 +43,42 @@ class ZetaPrints_MvProductivityPack_ImageController
     // rotate image and get new file
     $newFileAbsolute = Mage::helper('MvProductivityPack')
                          ->rotate($file, $angels[$rotate]);
-    
+
     $type = $request->get('thumb') == 'true'?'thumbnail':'image';
-    
+
     $imageProp1 = $request->get('imageWidth')>$request->get('imageHeight')?
                   $request->get('imageWidth'):
-                  $request->get('imageHeight');   
+                  $request->get('imageHeight');
     $imageProp2 = null;
     $imageFile = null;
-    
-    if($type == 'image') {  
-      // update main product image and get new base filename      
+
+    if($type == 'image') {
+      // update main product image and get new base filename
       $file =
         Mage::helper('MvProductivityPack')
-          ->updateImageInGallery($file, 
-                                 $newFileAbsolute, 
-                                 $productId, 
+          ->updateImageInGallery($file,
+                                 $newFileAbsolute,
+                                 $productId,
                                  array('image', 'small_image', 'thumbnail'));
-      
+
     } else {
-      $file = 
+      $file =
         Mage::helper('MvProductivityPack')
-          ->updateImageInGallery($file, 
-                                 $newFileAbsolute, 
+          ->updateImageInGallery($file,
+                                 $newFileAbsolute,
                                  $productId);
       $imageProp2 = $imageProp1;
       $imageFile = $file;
-    }        
-    
+    }
+
     $_product = Mage::getModel('catalog/product')->load($productId);
-		
+
     // get resized version of image
     $image = Mage::helper('catalog/image')->init($_product, $type, $imageFile)
                ->resize($imageProp1, $imageProp2)->__toString();
-               
+
     $base = $file;
-    
+
     echo Zend_Json::encode(compact('image', 'base'));
 
     return Zend_Json::encode(true);
@@ -101,7 +101,7 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     Mage::helper('MvProductivityPack')
       ->remove($file, $productId);
-      
+
     if($request->get('thumb') != 'true') {
       $imageProp = $request->get('imageWidth')>$request->get('imageHeight')?
                    $request->get('imageWidth'):
@@ -122,7 +122,7 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     $request = $this->getRequest();
 
-    if (!($request->has('thumbImage') 
+    if (!($request->has('thumbImage')
         && $request->has('mainImage') && $request->has('product')))
       return;
 
@@ -134,31 +134,31 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     Mage::helper('MvProductivityPack')
       ->setMainImage($file, $productId);
-      
+
     $imageThumbProp = $request->get('imageThumbWidth') > $request->get('imageThumbHeight')?
                   $request->get('imageThumbWidth'):
                   $request->get('imageThumbHeight');
-                  
+
     $imageProp = $request->get('imageWidth') > $request->get('imageHeight')?
                   $request->get('imageWidth'):
-                  $request->get('imageHeight');  
-    
+                  $request->get('imageHeight');
+
     $_product = Mage::getModel('catalog/product')
                   ->load($request->get('productId'));
-    		
+
     $thumbImage = Mage::helper('catalog/image')
                     ->init($_product, 'thumbnail', $request->get('mainImage'))
                     ->resize($imageThumbProp, $imageThumbProp)
                     ->__toString();
-               
+
     $mainImage = Mage::helper('catalog/image')
                    ->init($_product, 'image', $request->get('thumbImage'))
                    ->resize($imageProp)
                    ->__toString();
-      
+
     echo Zend_Json::encode(array('thumbImage'=>$thumbImage,
                                  'mainImage'=>$mainImage));
-                                 
+
     return Zend_Json::encode(true);
   }
 }
