@@ -162,6 +162,6 @@ class ZetaPrints_MvProductivityPack_Helper_Data
     Mage::getSingleton('core/session', array('name' => 'adminhtml'))->start();
 
     Mage::register('is_admin_logged',
-                   Mage::getSingleton('admin/session')->isLoggedIn());
+                   Mage::getSingleton('admin/session')->isLoggedIn(), true);
   }
 }
