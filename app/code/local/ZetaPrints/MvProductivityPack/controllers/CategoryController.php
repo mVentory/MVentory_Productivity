@@ -103,6 +103,9 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
 			$dom->loadXML($rssXml->asXML());
 
 			$this->getResponse()->setBody($dom->saveXML());
+
+			$apiConfigCharset = Mage::getStoreConfig("api/config/charset");
+			$this->getResponse()->setHeader('Content-Type','application/rss+xml; charset='.$apiConfigCharset);
 		}
 	}
 	
