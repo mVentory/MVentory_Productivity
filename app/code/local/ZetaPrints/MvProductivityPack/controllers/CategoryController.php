@@ -50,7 +50,6 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
 	{
 		return  
 		'<div>'."\n".
-			'<a class="mv-rss-title" href="'.$product->getProductUrl().'" title="View the product">'.$product->getName().'</a>' ."\n".
 			'<a class="mv-rss-preview" rel="'.$largeImageUrl.'" href="'.$product->getProductUrl().'" title="'.$product->getName().'">' ."\n".
 				'<img src="'.$thumbnailUrl.'" alt="'.$product->getName().'" title="'.$product->getName().'"/>' ."\n".
 			'</a>'."\n".
