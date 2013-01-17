@@ -30,6 +30,7 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
 		
 		$result = str_replace("&rss=1", "", $currentUrl);
 		$result = str_replace("rss=1&", "", $result);
+		$result = str_replace("?rss=1", "", $result);
 		
 		return $result;
 	}
@@ -82,7 +83,7 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
 				$item->addChild("author");
 				$item->addChild("guid");
 				$mediaContent = $item->addChild("content", "", $this->_mediaNamespace);
-				$item->addChild("title", $product->getName(), $this->_mediaNamespace);
+				$item->addChild("title", htmlspecialchars($product->getName()), $this->_mediaNamespace);
 				$mediaThumbnail = $item->addChild("thumbnail", "", $this->_mediaNamespace);
 
 				$mediaContent->addAttribute("url", $largeImageUrl);
