@@ -10,7 +10,10 @@ require_once("Mage/Catalog/controllers/CategoryController.php");
 class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_CategoryController
 {
 	protected $_mediaNamespace = 'http://search.yahoo.com/mrss/';
-
+	protected $_rssGetVariable = 'rss';
+	protected $_thumbnailSizeGetVariable = 'thumbnail_size';
+	protected $_fullImageSizeGetVariable = 'fullimage_size';
+	
 	/**
 	 * Below preDispatch method will check whether admin is logged in or not on admin side and add the value in 
 	 * registry 
@@ -23,14 +26,22 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
 		return $this;
 	}
 	
+	private function removeqsvar($url, $varname) {
+		list($urlpart, $qspart) = array_pad(explode('?', $url), 2, '');
+		parse_str($qspart, $qsvars);
+		unset($qsvars[$varname]);
+		$newqs = http_build_query($qsvars);
+		return $urlpart . (strlen($newqs)>0?('?'.$newqs):"");
+	}
+	
 	/* Get a url pointing to the normal version of the products list page (not the rss one) */
 	private function getNoRssUrl()
 	{
 		$currentUrl = Mage::helper('core/url')->getCurrentUrl();
-		
-		$result = str_replace("&rss=1", "", $currentUrl);
-		$result = str_replace("rss=1&", "", $result);
-		$result = str_replace("?rss=1", "", $result);
+
+		$result = $this->removeqsvar($currentUrl, $this->_rssGetVariable);
+		$result = $this->removeqsvar($result, $this->_thumbnailSizeGetVariable);
+		$result = $this->removeqsvar($result, $this->_fullImageSizeGetVariable);
 		
 		return $result;
 	}
@@ -51,8 +62,52 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
 	{
 		parent::viewAction();
 		
-		if ($this->getRequest()->getParam("rss", 0) == 1)
+		if ($this->getRequest()->getParam($this->_rssGetVariable, 0) == 1)
 		{
+			/* Default image values */
+			$thumbnailWidth = 215;
+			$thumbnailHeight = 170;
+			
+			$fullImageWidth = 300;
+			$fullImageHeight = 300;
+			
+			$thumbnailSize = $this->getRequest()->getParam($this->_thumbnailSizeGetVariable);
+			$fullImageSize = $this->getRequest()->getParam($this->_fullImageSizeGetVariable);
+			
+			if (!is_null($thumbnailSize))
+			{
+				if (strcmp($thumbnailSize, "full") == 0)
+				{
+					$thumbnailWidth = null;
+					$thumbnailHeight = null;
+				}
+				else
+				{
+					$wh = explode("x", $thumbnailSize);
+					if (count($wh)==2) {
+						$thumbnailWidth = strlen($wh[0])>0?$wh[0]:null;
+						$thumbnailHeight = strlen($wh[1])>0?$wh[1]:null;
+					}
+				}
+			}
+			
+			if (!is_null($fullImageSize))
+			{
+				if (strcmp($fullImageSize, "full") == 0)
+				{
+					$fullImageWidth = null;
+					$fullImageHeight = null;
+				}
+				else
+				{
+					$wh = explode("x", $fullImageSize);
+					if (count($wh)==2) {
+						$fullImageWidth = strlen($wh[0])>0?$wh[0]:null;
+						$fullImageHeight = strlen($wh[1])>0?$wh[1]:null;
+					}
+				}
+			}
+			
 			$collection = $this->getLayout()->getBlock("product_list")->getLoadedProductCollection();
 
 			$rssXml = new SimpleXMLElement('<rss xmlns:media="' . $this->_mediaNamespace . '"/>');
@@ -71,9 +126,11 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
 			
 			foreach($collection as $product)
 			{
-				//TODO: hardcode image sizes for now
-				$thumbnailUrl = Mage::helper('catalog/image')->init($product, 'small_image')->resize(215, 170);
-				$largeImageUrl = Mage::helper('catalog/image')->init($product, 'small_image')->resize(300, 300);
+				$image = Mage::helper('catalog/image')->init($product, 'small_image')->resize($thumbnailWidth, $thumbnailHeight);
+				$thumbnailUrl = "" . $image;
+				
+				$image = Mage::helper('catalog/image')->init($product, 'small_image')->resize($fullImageWidth, $fullImageHeight);
+				$largeImageUrl = "" . $image;
 				
 				$item = $channel->addChild('item');
 				$item->title = $product->getName();
@@ -89,12 +146,19 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
 				$mediaContent->addAttribute("url", $largeImageUrl);
 				$mediaThumbnail->addAttribute("url", $thumbnailUrl);
 
-				//TODO: hardcode image sizes for now
-				$mediaContent->addAttribute("width", 300);
-				$mediaContent->addAttribute("height", 300);
+				if (!is_null($fullImageWidth)) {
+					$mediaContent->addAttribute("width", $fullImageWidth);
+				}
+				if (!is_null($fullImageHeight)) {
+					$mediaContent->addAttribute("height", $fullImageHeight);
+				}
 
-				$mediaThumbnail->addAttribute("width", 215);
-				$mediaThumbnail->addAttribute("height", 170);
+				if (!is_null($thumbnailWidth)) {
+					$mediaThumbnail->addAttribute("width", $thumbnailWidth);
+				}
+				if (!is_null($thumbnailHeight)) {
+					$mediaThumbnail->addAttribute("height", $thumbnailHeight);
+				}
 			}
 
 			//Format the response			
