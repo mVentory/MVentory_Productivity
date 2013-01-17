@@ -58,6 +58,48 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
 		'</div>';
 	}
 	
+	private function formatXml($xml)
+	{
+		$dom = new DOMDocument('1.0');
+		$dom->preserveWhiteSpace = false;
+		$dom->formatOutput = true;
+		$dom->loadXML($xml);
+		
+		return $dom->saveXML();
+	}
+	
+	public function topAction()
+	{
+		$categoryModel = Mage::getModel('catalog/category');
+		$list = Mage::helper('catalog/category')->getStoreCategories();
+		 
+		$rssXml = new SimpleXMLElement('<rss/>');
+		$rssXml->addAttribute('version', '2.0');
+		
+		$pubDate = date("D, d M o G:i:s T",time());
+		
+		$channel = $rssXml->addChild('channel');
+		$channel->title = "Top categories per store";
+		$channel->addChild("description");
+		$channel->pubDate = $pubDate;
+		$channel->lastBuildDate = $pubDate;
+		$channel->generator = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
+		
+		foreach ($list as $cat)
+		{
+			$url = $categoryModel->setData($cat->getData())->getUrl();
+		 	
+			$item = $channel->addChild('item');
+			$item->title = $cat->getName();
+			$item->link = $url;
+		}
+
+		$this->getResponse()->setBody($this->formatXml($rssXml->asXML()));
+
+		$apiConfigCharset = Mage::getStoreConfig("api/config/charset");
+		$this->getResponse()->setHeader('Content-Type','application/rss+xml; charset='.$apiConfigCharset);
+	}
+	
 	public function viewAction()
 	{
 		parent::viewAction();
@@ -161,13 +203,7 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
 				}
 			}
 
-			//Format the response			
-			$dom = new DOMDocument('1.0');
-			$dom->preserveWhiteSpace = false;
-			$dom->formatOutput = true;
-			$dom->loadXML($rssXml->asXML());
-
-			$this->getResponse()->setBody($dom->saveXML());
+			$this->getResponse()->setBody($this->formatXml($rssXml->asXML()));
 
 			$apiConfigCharset = Mage::getStoreConfig("api/config/charset");
 			$this->getResponse()->setHeader('Content-Type','application/rss+xml; charset='.$apiConfigCharset);
