@@ -200,6 +200,13 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
         if (!is_null($thumbnailHeight)) {
           $mediaThumbnail->addAttribute("height", $thumbnailHeight);
         }
+
+        $price = Mage::helper('core')
+                   ->currency($product->getPrice(), true, false);
+
+        $item
+          ->addChild('price', '', $this->_mediaNamespace)
+          ->addAttribute('price', $price);
       }
 
       $this->getResponse()->setBody($this->formatXml($rssXml->asXML()));
