@@ -46,15 +46,22 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
     return $result;
   }
 
-  private function getRssDescriptionHtml($product, $thumbnailUrl, $largeImageUrl)
-  {
-    return
-    '<div>'."\n".
-      '<a class="mv-rss-preview" rel="'.$largeImageUrl.'" href="'.$product->getProductUrl().'" title="'.$product->getName().'">' ."\n".
-        '<img src="'.$thumbnailUrl.'" alt="'.$product->getName().'" title="'.$product->getName().'"/>' ."\n".
-      '</a>'."\n".
-      '<div class="mv-rss-price">'.Mage::helper('core')->currency($product->getPrice(),true,false).'</div>'."\n".
-    '</div>';
+  protected function _getProductAttributes ($product) {
+    Mage::register('product', $product->load($product->getId()));
+
+    $_attrs = $this
+                ->getLayout()
+                ->createBlock('catalog/product_view_attributes')
+                ->getAdditionalData();
+
+    Mage::unregister('product');
+
+    $attrs = '';
+
+    foreach ($_attrs as $_attr)
+      $attrs .= $_attr['label'] . ': ' . $_attr['value'] . '<br />';
+
+    return substr($attrs, 0, -6);
   }
 
   private function formatXml($xml)
@@ -176,7 +183,7 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
         $item = $channel->addChild('item');
         $item->title = $product->getName();
         $item->link = $product->getProductUrl();
-        $item->description = $this->getRssDescriptionHtml($product, $thumbnailUrl, $largeImageUrl);
+        $item->description = $this->_getProductAttributes($product);
         $item->addChild("pubDate");
         $item->addChild("author");
         $item->addChild("guid");
