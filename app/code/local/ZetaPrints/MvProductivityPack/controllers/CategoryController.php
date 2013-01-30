@@ -86,13 +86,6 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
 
     if ($this->getRequest()->getParam($this->_rssGetVariable, 0) == 1)
     {
-      /* Default image values */
-      $thumbnailWidth = 215;
-      $thumbnailHeight = 170;
-
-      $fullImageWidth = 300;
-      $fullImageHeight = 300;
-
       $thumbnailSize = $this->getRequest()->getParam($this->_thumbnailSizeGetVariable);
       $fullImageSize = $this->getRequest()->getParam($this->_fullImageSizeGetVariable);
 

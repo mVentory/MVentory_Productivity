@@ -5,15 +5,21 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
 
   const MEDIA_NS = 'http://search.yahoo.com/mrss/';
 
+  const IMAGE_WIDTH = 300;
+  const IMAGE_HEIGHT = 300;
+
+  const THUMB_WIDTH = 215;
+  const THUMB_HEIGHT = 170; 
+
   public function generateFeedForProducts ($products, $data) {
     $thumbWidth = isset($data['thumb']['width'])
-                    ? $data['thumb']['width'] : null;
+                    ? $data['thumb']['width'] : self::IMAGE_WIDTH;
     $thumbHeight = isset($data['thumb']['height'])
-                     ? $data['thumb']['height'] : null;
+                     ? $data['thumb']['height'] : self::IMAGE_HEIGHT;
     $imageWidth = isset($data['image']['width'])
-                    ? $data['image']['width'] : null;
+                    ? $data['image']['width'] : self::THUMB_WIDTH;
     $imageHeight = isset($data['image']['height'])
-                     ? $data['image']['height'] : null;
+                     ? $data['image']['height'] : self::THUMB_HEIGHT;
 
     $xml = new SimpleXMLElement('<rss xmlns:media="' . self::MEDIA_NS . '"/>');
 
