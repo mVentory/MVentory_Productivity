@@ -82,6 +82,16 @@
           </productivity_add_category_feed>
         </observers>
       </controller_action_layout_render_before_catalog_category_view>
+
+      <controller_action_layout_render_before_cms_index_index>
+        <observers>
+          <productivity_add_latest__product_feed>
+            <type>singleton</type>
+            <class>ZetaPrints_MvProductivityPack_Model_Observer</class>
+            <method>addLatestProductsFeed</method>
+          </productivity_add_latest__product_feed>
+        </observers>
+      </controller_action_layout_render_before_cms_index_index>
     </events>
   </frontend>
 

@@ -9,4 +9,13 @@ class ZetaPrints_MvProductivityPack_Model_Observer {
 
     Mage::helper('MvProductivityPack/rss')->addFeedToHeader($url);
   }
+
+  public function addLatestProductsFeed ($observer) {
+    $helper = Mage::helper('MvProductivityPack/rss');
+
+    $title = $helper->__('Latest products');
+    $url = Mage::getUrl('mvproductivitypackf/rss_product/latest');
+
+    $helper->addFeedToHeader($url, $title);
+  }
 }
