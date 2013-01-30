@@ -67,6 +67,18 @@
         </args>
       </cms>
     </routers>
+
+    <events>
+      <controller_action_layout_render_before_catalog_category_view>
+        <observers>
+          <productivity_add_category_feed>
+            <type>singleton</type>
+            <class>ZetaPrints_MvProductivityPack_Model_Observer</class>
+            <method>addCategoryFeed</method>
+          </productivity_add_category_feed>
+        </observers>
+      </controller_action_layout_render_before_catalog_category_view>
+    </events>
   </frontend>
 
   <admin>
