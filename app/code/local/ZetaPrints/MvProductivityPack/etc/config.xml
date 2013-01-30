@@ -36,6 +36,10 @@
   <frontend>
     <layout>
       <updates>
+        <productivity>
+          <file>productivity.xml</file>
+        </productivity>
+
         <MvProductivityPack>
           <file>zetaprints_mvproductivitypack.xml</file>
         </MvProductivityPack>

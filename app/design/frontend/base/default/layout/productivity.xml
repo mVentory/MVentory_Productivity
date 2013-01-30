@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+
+<layout version="0.1.0">
+  <mvproductivitypack_rss_product_latest>
+    <block type="MvProductivityPack/rss_product_latest" output="toHtml" name="rss.product.latest" />
+  </mvproductivitypack_rss_product_latest>
+</layout>
