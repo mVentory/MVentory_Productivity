@@ -31,7 +31,7 @@ class ZetaPrints_MvProductivityPack_Block_Product_Latest
    */
   public function getCacheKeyInfo () {
     return array(
-      'CATALOG_PRODUCT_NEW',
+      'CATALOG_PRODUCT_LATEST',
       Mage::app()->getStore()->getId(),
       Mage::getDesign()->getPackageName(),
       Mage::getDesign()->getTheme('template'),
