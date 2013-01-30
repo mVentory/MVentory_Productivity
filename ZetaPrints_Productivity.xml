@@ -1,5 +1,5 @@
 <_>
-   <form_key>nJs9A4HIcV8ZsxeC</form_key>
+   <form_key>ssFmQJgYuUyt7mjg</form_key>
    <name>ZetaPrints_Productivity</name>
    <channel>community</channel>
    <version_ids>
@@ -9,18 +9,21 @@
    <description>ZetaPrints_Productivity</description>
    <license>OSL v3.0</license>
    <license_uri/>
-   <version>0.0.0-r686</version>
+   <version>0.0.0-r1196</version>
    <stability>devel</stability>
    <notes>Development releases</notes>
    <authors>
       <name>
          <name>anemets1</name>
+         <name>Anatoly A. Kazantsev</name>
       </name>
       <user>
          <user>anemets1</user>
+         <user>jimcrow</user>
       </user>
       <email>
          <email>anemets1@gmail.com</email>
+         <email>anatoly@zetaprints.com</email>
       </email>
    </authors>
    <depends_php_min>5.2.0</depends_php_min>
@@ -40,7 +43,7 @@
             <max/>
          </max>
          <files>
-            <files>                                                                                                             </files>
+            <files>                                                                                                                        </files>
          </files>
       </package>
       <extension>
@@ -70,6 +73,11 @@
          <target>mageskin</target>
          <target>mageskin</target>
          <target>mageskin</target>
+         <target>magedesign</target>
+         <target>mageskin</target>
+         <target>magedesign</target>
+         <target>magedesign</target>
+         <target>mageweb</target>
       </target>
       <path>
          <path/>
@@ -85,6 +93,11 @@
          <path>frontend/default/default/css/mvproductivitypack.css</path>
          <path>frontend/default/default/images/mvproductivitypack</path>
          <path>frontend/default/default/js/mvproductivitypack</path>
+         <path>frontend/base/default/layout/productivity.xml</path>
+         <path>adminhtml/default/default/mvproductivitypack</path>
+         <path>frontend/base/default/template/catalog/product/latest.phtml</path>
+         <path>frontend/default/default/template/catalog/product/view/media.phtml</path>
+         <path>js/jquery/jquery-min.js</path>
       </path>
       <type>
          <type>file</type>
@@ -100,6 +113,11 @@
          <type>file</type>
          <type>dir</type>
          <type>dir</type>
+         <type>file</type>
+         <type>dir</type>
+         <type>file</type>
+         <type>file</type>
+         <type>file</type>
       </type>
       <include>
          <include/>
@@ -115,8 +133,18 @@
          <include/>
          <include/>
          <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
       </include>
       <ignore>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
          <ignore/>
          <ignore/>
          <ignore/>
