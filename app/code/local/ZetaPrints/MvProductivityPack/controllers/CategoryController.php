@@ -46,34 +46,6 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
     return $result;
   }
 
-  protected function _getProductAttributes ($product) {
-    Mage::register('product', $product->load($product->getId()));
-
-    $_attrs = $this
-                ->getLayout()
-                ->createBlock('catalog/product_view_attributes')
-                ->getAdditionalData();
-
-    Mage::unregister('product');
-
-    $attrs = '';
-
-    foreach ($_attrs as $_attr)
-      $attrs .= $_attr['label'] . ': ' . $_attr['value'] . '<br />';
-
-    return substr($attrs, 0, -6);
-  }
-
-  private function formatXml($xml)
-  {
-    $dom = new DOMDocument('1.0');
-    $dom->preserveWhiteSpace = false;
-    $dom->formatOutput = true;
-    $dom->loadXML($xml);
-
-    return $dom->saveXML();
-  }
-
   public function topAction()
   {
     $categoryModel = Mage::getModel('catalog/category');
@@ -100,7 +72,9 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
       $item->link = $url;
     }
 
-    $this->getResponse()->setBody($this->formatXml($rssXml->asXML()));
+    $helper = Mage::helper('MvProductivityPack/rss');
+
+    $this->getResponse()->setBody($helper->formatXml($rssXml->asXML()));
 
     $apiConfigCharset = Mage::getStoreConfig("api/config/charset");
     $this->getResponse()->setHeader('Content-Type','application/rss+xml; charset='.$apiConfigCharset);
@@ -158,65 +132,24 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
 
       $collection = $this->getLayout()->getBlock("product_list")->getLoadedProductCollection();
 
-      $rssXml = new SimpleXMLElement('<rss xmlns:media="' . $this->_mediaNamespace . '"/>');
-      $rssXml->registerXPathNamespace('media', $this->_mediaNamespace);
-      $rssXml->addAttribute('version', '2.0');
+      $data = array(
+        'title' => $this->getLayout()->getBlock("head")->getTitle(),
+        'link' => $this->getNoRssUrl(),
+        'image' => array(
+          'width' => $fullImageWidth,
+          'height' => $fullImageHeight
+        ),
+        'thumb' => array(
+          'width' => $thumbnailWidth,
+          'height' => $thumbnailHeight
+        )
+      );
 
-      $pubDate = date("D, d M o G:i:s T",time());
+      $feed = Mage::helper('MvProductivityPack/rss')
+                ->setLayout($this->getLayout())
+                ->generateFeedForProducts($collection, $data);
 
-      $channel = $rssXml->addChild('channel');
-      $channel->title = $this->getLayout()->getBlock("head")->getTitle();
-      $channel->link = $this->getNoRssUrl();
-      $channel->addChild("description");
-      $channel->pubDate = $pubDate;
-      $channel->lastBuildDate = $pubDate;
-      $channel->generator = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
-
-      foreach($collection as $product)
-      {
-        $image = Mage::helper('catalog/image')->init($product, 'small_image')->resize($thumbnailWidth, $thumbnailHeight);
-        $thumbnailUrl = "" . $image;
-
-        $image = Mage::helper('catalog/image')->init($product, 'small_image')->resize($fullImageWidth, $fullImageHeight);
-        $largeImageUrl = "" . $image;
-
-        $item = $channel->addChild('item');
-        $item->title = $product->getName();
-        $item->link = $product->getProductUrl();
-        $item->description = $this->_getProductAttributes($product);
-        $item->addChild("pubDate");
-        $item->addChild("author");
-        $item->addChild("guid");
-        $mediaContent = $item->addChild("content", "", $this->_mediaNamespace);
-        $item->addChild("title", htmlspecialchars($product->getName()), $this->_mediaNamespace);
-        $mediaThumbnail = $item->addChild("thumbnail", "", $this->_mediaNamespace);
-
-        $mediaContent->addAttribute("url", $largeImageUrl);
-        $mediaThumbnail->addAttribute("url", $thumbnailUrl);
-
-        if (!is_null($fullImageWidth)) {
-          $mediaContent->addAttribute("width", $fullImageWidth);
-        }
-        if (!is_null($fullImageHeight)) {
-          $mediaContent->addAttribute("height", $fullImageHeight);
-        }
-
-        if (!is_null($thumbnailWidth)) {
-          $mediaThumbnail->addAttribute("width", $thumbnailWidth);
-        }
-        if (!is_null($thumbnailHeight)) {
-          $mediaThumbnail->addAttribute("height", $thumbnailHeight);
-        }
-
-        $price = Mage::helper('core')
-                   ->currency($product->getPrice(), true, false);
-
-        $item
-          ->addChild('price', '', $this->_mediaNamespace)
-          ->addAttribute('price', $price);
-      }
-
-      $this->getResponse()->setBody($this->formatXml($rssXml->asXML()));
+      $this->getResponse()->setBody($feed);
 
       $apiConfigCharset = Mage::getStoreConfig("api/config/charset");
       $this->getResponse()->setHeader('Content-Type','application/rss+xml; charset='.$apiConfigCharset);
