@@ -40,13 +40,12 @@ class ZetaPrints_MvProductivityPack_Block_Product_Latest
       $this->getProductsCount()
     );
   }
+  public function getProductCollection () {
+    $collection = $this->getData('product_collection');
 
-  /**
-   * Prepare collection with new products and applied page limits.
-   *
-   * return Mage_Catalog_Block_Product_New
-   */
-  protected function _beforeToHtml() {
+    if ($collection)
+      return $collection;
+
     $visibility = Mage::getSingleton('catalog/product_visibility')
                     ->getVisibleInCatalogIds();
 
@@ -60,9 +59,9 @@ class ZetaPrints_MvProductivityPack_Block_Product_Latest
                     ->setPageSize($this->getProductsCount())
                     ->setCurPage(1);
 
-    $this->setProductCollection($collection);
+    $this->setData('product_collection', $collection);
 
-    return parent::_beforeToHtml();
+    return $collection;
   }
 
   /**
