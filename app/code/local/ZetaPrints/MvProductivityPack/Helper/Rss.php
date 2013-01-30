@@ -102,6 +102,36 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
     return $dom->saveXML();
   }
 
+  public function addFeedToHeader ($url, $title = null) {
+    $head = $this
+              ->getLayout()
+              ->getBlock('head');
+
+    if (!$head)
+      return;
+
+    if (!$title)
+      $title = $head->getTitle();
+
+    $head->addItem('rss', $url, 'title="' . $title . '"');
+  }
+
+  public function getLayout () {
+    $layout = parent::getLayout();
+
+    if ($layout)
+      return $layout;
+
+    $layout = Mage::app()
+                ->getFrontController()
+                ->getAction()
+                ->getLayout();
+
+    parent::setLayout($layout);
+
+    return $layout;
+  }
+
   protected function _getProductAttributes ($product) {
     Mage::register('product', $product->load($product->getId()));
 
