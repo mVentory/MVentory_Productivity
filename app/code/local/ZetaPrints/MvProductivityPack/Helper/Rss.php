@@ -12,6 +12,12 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
   const THUMB_HEIGHT = 170; 
 
   public function generateFeedForProducts ($products, $data) {
+    $currency = Mage::app()
+                  ->getStore(null)
+                  ->getCurrentCurrency();
+
+    $formatParams = array('display'=>Zend_Currency::NO_SYMBOL);
+
     $thumbWidth = isset($data['thumb']['width'])
                     ? $data['thumb']['width'] : self::IMAGE_WIDTH;
     $thumbHeight = isset($data['thumb']['height'])
@@ -81,8 +87,9 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
       if (!is_null($thumbHeight))
         $mediaThumb->addAttribute('height', $thumbHeight);
 
-      $price = Mage::helper('core')
-                 ->currency($product->getPrice(), true, false);
+      //We assume that current currency and base currency are same.
+      //I.e. no currency convertion in the store
+      $price = $currency->format($product->getPrice(), $formatParams, false);
 
       $item
         ->addChild('price', '', self::MEDIA_NS)
