@@ -80,73 +80,69 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
     $this->getResponse()->setHeader('Content-Type','application/rss+xml; charset='.$apiConfigCharset);
   }
 
-  public function viewAction()
-  {
+  public function viewAction () {
     parent::viewAction();
 
-    if ($this->getRequest()->getParam($this->_rssGetVariable, 0) == 1)
-    {
-      $thumbnailSize = $this->getRequest()->getParam($this->_thumbnailSizeGetVariable);
-      $fullImageSize = $this->getRequest()->getParam($this->_fullImageSizeGetVariable);
+    $request = $this->getRequest();
 
-      if (!is_null($thumbnailSize))
-      {
-        if (strcmp($thumbnailSize, "full") == 0)
-        {
-          $thumbnailWidth = null;
-          $thumbnailHeight = null;
-        }
-        else
-        {
-          $wh = explode("x", $thumbnailSize);
-          if (count($wh)==2) {
-            $thumbnailWidth = strlen($wh[0])>0?$wh[0]:null;
-            $thumbnailHeight = strlen($wh[1])>0?$wh[1]:null;
-          }
-        }
+    if ($request->getParam($this->_rssGetVariable, 0) != 1)
+      return;
+
+    $layout = $this->getLayout();
+
+    $data = array(
+      'title' => $layout
+                   ->getBlock('head')
+                   ->getTitle(),
+      'link' => $this->getNoRssUrl(),
+      'images' => array()
+    );
+
+    $map = array(
+      'main' => 'fullimage_size',
+      'thumb' => 'thumbnail_size'
+    );
+
+    foreach ($map as $key => $param) {
+      if (!$request->has($param))
+        continue;
+
+      $size = $request->getParam($param);
+
+      if ($size == 'full') {
+        $data['images'][$key] = array();
+
+        continue;
       }
 
-      if (!is_null($fullImageSize))
-      {
-        if (strcmp($fullImageSize, "full") == 0)
-        {
-          $fullImageWidth = null;
-          $fullImageHeight = null;
-        }
-        else
-        {
-          $wh = explode("x", $fullImageSize);
-          if (count($wh)==2) {
-            $fullImageWidth = strlen($wh[0])>0?$wh[0]:null;
-            $fullImageHeight = strlen($wh[1])>0?$wh[1]:null;
-          }
-        }
+      $wh = explode('x', $size);
+
+      if (count($wh) == 2) {
+        $data['images'][$key] = array(
+          'width' => is_numeric($wh[0]) ? (int) $wh[0] : null,
+          'height' => is_numeric($wh[1]) ? (int) $wh[1] : null
+        );
+
+        continue;
       }
-
-      $collection = $this->getLayout()->getBlock("product_list")->getLoadedProductCollection();
-
-      $data = array(
-        'title' => $this->getLayout()->getBlock("head")->getTitle(),
-        'link' => $this->getNoRssUrl(),
-        'image' => array(
-          'width' => $fullImageWidth,
-          'height' => $fullImageHeight
-        ),
-        'thumb' => array(
-          'width' => $thumbnailWidth,
-          'height' => $thumbnailHeight
-        )
-      );
-
-      $feed = Mage::helper('MvProductivityPack/rss')
-                ->setLayout($this->getLayout())
-                ->generateFeedForProducts($collection, $data);
-
-      $this->getResponse()->setBody($feed);
-
-      $apiConfigCharset = Mage::getStoreConfig("api/config/charset");
-      $this->getResponse()->setHeader('Content-Type','application/rss+xml; charset='.$apiConfigCharset);
     }
+
+    $collection = $layout
+                    ->getBlock("product_list")
+                    ->getLoadedProductCollection();
+
+    $feed = Mage::helper('MvProductivityPack/rss')
+              ->setLayout($layout)
+              ->generateFeedForProducts($collection, $data);
+
+    $response = $this
+                  ->getResponse()
+                  ->setBody($feed);
+
+    $charset = Mage::getStoreConfig("api/config/charset");
+
+    $response
+      ->setHeader('Content-Type','application/rss+xml; charset=' . $charset);
   }
 
 }

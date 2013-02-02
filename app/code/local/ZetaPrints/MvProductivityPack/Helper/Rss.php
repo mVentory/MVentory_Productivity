@@ -8,24 +8,39 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
   const IMAGE_WIDTH = 300;
   const IMAGE_HEIGHT = 300;
 
-  const THUMB_WIDTH = 215;
-  const THUMB_HEIGHT = 170; 
+  const THUMB_WIDTH = 75;
+  const THUMB_HEIGHT = 75; 
 
-  public function generateFeedForProducts ($products, $data) {
+  public function generateFeedForProducts ($products, $params) {
     $currency = Mage::app()
                   ->getStore(null)
                   ->getCurrentCurrency();
 
     $formatParams = array('display'=>Zend_Currency::NO_SYMBOL);
 
-    $thumbWidth = isset($data['thumb']['width'])
-                    ? $data['thumb']['width'] : self::IMAGE_WIDTH;
-    $thumbHeight = isset($data['thumb']['height'])
-                     ? $data['thumb']['height'] : self::IMAGE_HEIGHT;
-    $imageWidth = isset($data['image']['width'])
-                    ? $data['image']['width'] : self::THUMB_WIDTH;
-    $imageHeight = isset($data['image']['height'])
-                     ? $data['image']['height'] : self::THUMB_HEIGHT;
+    $defaults = array(
+      'images' => array(
+        'main' => array(
+          'width' => self::IMAGE_WIDTH,
+          'height' => self::IMAGE_HEIGHT
+        ),
+        'thumb' => array(
+          'width' => self::THUMB_WIDTH,
+          'height' => self::THUMB_HEIGHT
+        )
+      )
+    );
+
+    $params['images'] = array_merge($defaults['images'], $params['images']);
+    $params = array_merge($defaults, $params);
+
+    $params['images']['content'] = $params['images']['main'];
+    $params['images']['thumbnail'] = $params['images']['thumb'];
+
+    unset($params['images']['main']);
+    unset($params['images']['thumb']);
+
+    $helper = Mage::helper('catalog/image');
 
     $xml = new SimpleXMLElement('<rss xmlns:media="' . self::MEDIA_NS . '"/>');
 
@@ -36,8 +51,8 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
 
     $channel = $xml->addChild('channel');
 
-    $channel->title = $data['title'];
-    $channel->link = $data['link'];
+    $channel->title = $params['title'];
+    $channel->link = $params['link'];
     $channel->addChild('description');
     $channel->pubDate = $date;
     $channel->lastBuildDate = $date;
@@ -45,16 +60,6 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
 
     foreach($products as $product) {
       $name = $product->getName();
-
-      $thumbUrl = Mage::helper('catalog/image')
-                    ->init($product, 'small_image')
-                    ->resize($thumbWidth, $thumbHeight)
-                    ->__toString();
-
-      $imageUrl = Mage::helper('catalog/image')
-                    ->init($product, 'small_image')
-                    ->resize($imageWidth, $imageHeight)
-                    ->__toString();
 
       $item = $channel->addChild('item');
 
@@ -67,25 +72,21 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
 
       $item->addChild('title', htmlspecialchars($name), self::MEDIA_NS);
 
-      $mediaContent = $item->addChild('content', '', self::MEDIA_NS);
+      foreach ($params['images'] as $tag => $data) {
+        $child = $item->addChild($tag, '', self::MEDIA_NS);
 
-      $mediaContent->addAttribute('url', $imageUrl);
+        $url = $helper->init($product, 'small_image');
 
-      if (!is_null($imageWidth))
-        $mediaContent->addAttribute('width', $imageWidth);
+        if (count($data) == 2) {
+          $url->resize($data['width'], $data['height']);
 
-      if (!is_null($imageHeight))
-        $mediaContent->addAttribute('height', $imageHeight);
+          foreach (array('width', 'height') as $p)
+            if ($data[$p])
+              $child->addAttribute($p, $data[$p]);
+        }
 
-      $mediaThumb = $item->addChild('thumbnail', '', self::MEDIA_NS);
-
-      $mediaThumb->addAttribute('url', $thumbUrl);
-
-      if (!is_null($thumbWidth))
-        $mediaThumb->addAttribute('width', $thumbWidth);
-
-      if (!is_null($thumbHeight))
-        $mediaThumb->addAttribute('height', $thumbHeight);
+        $child->addAttribute('url', $url->__toString());
+      }
 
       //We assume that current currency and base currency are same.
       //I.e. no currency convertion in the store
