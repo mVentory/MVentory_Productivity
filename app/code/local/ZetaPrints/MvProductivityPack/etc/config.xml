@@ -90,6 +90,12 @@
             <class>ZetaPrints_MvProductivityPack_Model_Observer</class>
             <method>addLatestProductsFeed</method>
           </productivity_add_latest__product_feed>
+
+          <productivity_add_top_categories_feed>
+            <type>singleton</type>
+            <class>ZetaPrints_MvProductivityPack_Model_Observer</class>
+            <method>addTopCategoriesFeed</method>
+          </productivity_add_top_categories_feed>
         </observers>
       </controller_action_layout_render_before_cms_index_index>
     </events>

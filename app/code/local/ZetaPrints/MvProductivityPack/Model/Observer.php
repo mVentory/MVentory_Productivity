@@ -18,4 +18,13 @@ class ZetaPrints_MvProductivityPack_Model_Observer {
 
     $helper->addFeedToHeader($url, $title);
   }
+
+  public function addTopCategoriesFeed ($observer) {
+    $helper = Mage::helper('MvProductivityPack/rss');
+
+    $title = $helper->__('Top Categories');
+    $url = Mage::getUrl('catalog/category/top');
+
+    $helper->addFeedToHeader($url, $title);
+  }
 }
