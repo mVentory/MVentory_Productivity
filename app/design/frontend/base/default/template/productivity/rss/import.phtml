@@ -1,0 +1,15 @@
+<?php
+
+$_id = $this->getElementId();
+$_class = $this->getAdditionalClass();
+
+$_id = $_id ? 'id="' . $_id . '" ' : '';
+$_class = 'class="productivity-rss-wrapper'
+          . ($_class ? ' ' . $_class : '')
+          . '"';
+
+?>
+
+<div <?php echo $_id, $_class; ?>>
+  <?php echo $this->getContent(); ?>
+</div>
