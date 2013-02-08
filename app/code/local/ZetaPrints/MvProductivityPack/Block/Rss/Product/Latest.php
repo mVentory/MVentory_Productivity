@@ -36,6 +36,7 @@ class ZetaPrints_MvProductivityPack_Block_Rss_Product_Latest
     $data = array(
       'title' => $this->__('Latest products'),
       'link' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB)
+      'images' => array();
     );
 
     return $this
