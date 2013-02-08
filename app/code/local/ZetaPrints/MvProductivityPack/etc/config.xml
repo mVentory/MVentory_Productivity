@@ -14,6 +14,7 @@
 
       <catalog>
         <rewrite>
+          <product_view>ZetaPrints_MvProductivityPack_Block_Product_View</product_view>
           <product_view_media>ZetaPrints_MvProductivityPack_Block_Product_View_Media</product_view_media>
         </rewrite>
       </catalog>
