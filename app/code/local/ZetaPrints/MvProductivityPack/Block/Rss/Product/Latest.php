@@ -3,6 +3,8 @@
 class ZetaPrints_MvProductivityPack_Block_Rss_Product_Latest
   extends Mage_Rss_Block_Abstract {
 
+  const ITEMS_NUMBER = 30;
+
   protected function _construct () {
     parent::_construct();
 
@@ -23,7 +25,6 @@ class ZetaPrints_MvProductivityPack_Block_Rss_Product_Latest
       'PRODUCTIVITY_RSS_PRODUCT_LATEST',
       $this->_getStoreId(),
       Mage::getSingleton('customer/session')->getCustomerGroupId(),
-      $this->getProductsCount()
     );
   }
 
@@ -31,6 +32,7 @@ class ZetaPrints_MvProductivityPack_Block_Rss_Product_Latest
     $products = $this
                   ->getLayout()
                   ->createBlock('MvProductivityPack/product_latest')
+                  ->setProductsCount(self::ITEMS_NUMBER)
                   ->getProductCollection();
 
     $data = array(
