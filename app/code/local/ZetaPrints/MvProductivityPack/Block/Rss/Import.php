@@ -19,7 +19,7 @@ class ZetaPrints_MvProductivityPack_Block_Rss_import
     return array_merge(
              parent::getCacheKeyInfo(),
              array(
-               $this->getData('url'),
+               $this->getData('uri'),
                $design->getTheme('layout'),
                $design->getTheme('locale')
              )
