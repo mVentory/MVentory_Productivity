@@ -1,6 +1,6 @@
 <?php
 
-class ZetaPrints_MvProductivityPack_Block_Rss_import
+class ZetaPrints_MvProductivityPack_Block_Rss_Import
   extends Mage_Core_Block_Template {
 
   public function __construct() {
