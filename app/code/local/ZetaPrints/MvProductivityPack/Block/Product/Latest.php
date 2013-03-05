@@ -54,6 +54,8 @@ class ZetaPrints_MvProductivityPack_Block_Product_Latest
 
     $collection = $this
                     ->_addProductAttributesAndPrices($collection)
+                    ->addAttributeToFilter('small_image',
+                                           array('neq' => 'no_selection'))
                     ->addStoreFilter()
                     ->addAttributeToSort('entity_id', 'desc')
                     ->setPageSize($this->getProductsCount())
