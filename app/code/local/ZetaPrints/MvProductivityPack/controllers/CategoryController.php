@@ -21,7 +21,7 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
   public function preDispatch () {
     Mage::helper('MvProductivityPack')->saveAdminState();
 
-    return parent::preDispatch();
+    parent::preDispatch();
 
     return $this;
   }

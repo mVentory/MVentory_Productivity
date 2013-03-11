@@ -16,7 +16,7 @@ class ZetaPrints_MvProductivityPack_Cms_IndexController extends Mage_Cms_IndexCo
 	public function preDispatch () {
 		Mage::helper('MvProductivityPack')->saveAdminState();
 
-		return parent::preDispatch();
+		parent::preDispatch();
 
 		return $this;
 	}

@@ -16,7 +16,7 @@ class ZetaPrints_MvProductivityPack_Cms_PageController extends Mage_Cms_PageCont
 	public function preDispatch () {
 		Mage::helper('MvProductivityPack')->saveAdminState();
 
-		return parent::preDispatch();
+		parent::preDispatch();
 
 		return $this;
 	}
