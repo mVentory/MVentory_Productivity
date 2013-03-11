@@ -11,7 +11,7 @@ class ZetaPrints_MvProductivityPack_Block_Product_View_Media
   extends Mage_Catalog_Block_Product_View_Media {
 
   public function getImageEditorHtml ($file, $width = null, $height = null) {
-    if (!Mage::helper('MvProductivityPack')->isAdminLogged())
+    if (!Mage::helper('MvProductivityPack')->isReviewerLogged())
       return;
 
     $params = Zend_Json::encode(compact('file', 'width', 'height'));

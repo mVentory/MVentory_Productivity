@@ -5,24 +5,10 @@ class ZetaPrints_MvProductivityPack_ImageController
 
   const ATTRIBUTE_CODE = 'media_gallery';
 
-  public function preDispatch () {
-    Mage::getSingleton('core/session', array('name' => 'adminhtml'))
-      ->start();
-
-    Mage::register('is_admin_logged',
-                   Mage::getSingleton('admin/session')->isLoggedIn());
-
-    parent::preDispatch();
-
-    return $this;
-  }
-
-  protected function _isAdmin () {
-    return Mage::registry('is_admin_logged') === true;
-  }
-
   public function rotateAction () {
-    if (!$this->_isAdmin())
+    $helper = Mage::helper('MvProductivityPack');
+
+    if (!$helper->isReviewerLogged())
       return;
 
     $request = $this->getRequest();
@@ -49,25 +35,21 @@ class ZetaPrints_MvProductivityPack_ImageController
     unset($params);
 
     // rotate image and get new file
-    $newFileAbsolute = Mage::helper('MvProductivityPack')
-                         ->rotate($file, $angels[$rotate]);
+    $newFileAbsolute = $helper->rotate($file, $angels[$rotate]);
 
     $type = $request->get('thumb') == 'true'?'thumbnail':'image';
 
     if($type == 'image') {
       // update main product image and get new base filename
-      $file =
-        Mage::helper('MvProductivityPack')
-          ->updateImageInGallery($file,
-                                 $newFileAbsolute,
-                                 $productId,
-                                 array('image', 'small_image', 'thumbnail'));
+      $file
+        = $helper
+            ->updateImageInGallery($file,
+                                   $newFileAbsolute,
+                                   $productId,
+                                   array('image', 'small_image', 'thumbnail'));
     } else {
-      $file =
-        Mage::helper('MvProductivityPack')
-          ->updateImageInGallery($file,
-                                 $newFileAbsolute,
-                                 $productId);
+      $file = $helper
+                ->updateImageInGallery($file, $newFileAbsolute, $productId);
     }
 
     $_product = Mage::getModel('catalog/product')->load($productId);
@@ -84,7 +66,9 @@ class ZetaPrints_MvProductivityPack_ImageController
   }
 
   public function removeAction () {
-    if (!$this->_isAdmin())
+    $helper = Mage::helper('MvProductivityPack');
+
+    if (!$helper->isReviewerLogged())
       return;
 
     $request = $this->getRequest();
@@ -108,8 +92,7 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     unset($params);
 
-    Mage::helper('MvProductivityPack')
-      ->remove($file, $productId);
+    $helper->remove($file, $productId);
 
     if($request->get('thumb') != 'true') {
       $_product = Mage::getModel('catalog/product')
@@ -123,7 +106,9 @@ class ZetaPrints_MvProductivityPack_ImageController
   }
 
   public function setmainAction () {
-    if (!$this->_isAdmin())
+    $helper = Mage::helper('MvProductivityPack');
+
+    if (!$helper->isReviewerLogged())
       return;
 
     $request = $this->getRequest();
@@ -146,8 +131,7 @@ class ZetaPrints_MvProductivityPack_ImageController
     if (!$hasRequiredValues)
       return;
 
-    Mage::helper('MvProductivityPack')
-      ->setMainImage($thumb['file'], $productId);
+    $helper->setMainImage($thumb['file'], $productId);
 
     $_product = Mage::getModel('catalog/product')
                   ->load($productId);

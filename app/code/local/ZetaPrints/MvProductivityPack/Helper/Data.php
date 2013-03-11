@@ -4,6 +4,7 @@ class ZetaPrints_MvProductivityPack_Helper_Data
   extends Mage_Core_Helper_Abstract {
 
   const ATTRIBUTE_CODE = 'media_gallery';
+  const REVIEWER_GROUP_CODE = 'REVIEWER';
 
   private $_mediaBackend = array();
 
@@ -214,5 +215,23 @@ class ZetaPrints_MvProductivityPack_Helper_Data
 
     if ($cookie->get(session_name()) == $session->getSessionId())
       $cookie->renew(session_name());
+  }
+
+  public function isReviewerLogged () {
+    if ($this->isAdminLogged())
+      return true;
+
+    $groupId = Mage::getSingleton('customer/session')
+                 ->getCustomerGroupId();
+
+    if ($groupId == Mage_Customer_Model_Group::NOT_LOGGED_IN_ID)
+      return false;
+
+    $group = Mage::getModel('customer/group')->load($groupId);
+
+    if (!$group->getId())
+      return false;
+
+    return strcasecmp($group->getCode(), self::REVIEWER_GROUP_CODE) == 0;
   }
 }
