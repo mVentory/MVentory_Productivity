@@ -14,18 +14,6 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
   protected $_thumbnailSizeGetVariable = 'thumbnail_size';
   protected $_fullImageSizeGetVariable = 'fullimage_size';
 
-  /**
-   * Below preDispatch method will check whether admin is logged in or not on admin side and add the value in
-   * registry
-   */
-  public function preDispatch () {
-    Mage::helper('MvProductivityPack')->saveAdminState();
-
-    parent::preDispatch();
-
-    return $this;
-  }
-
   private function removeqsvar($url, $varname) {
     list($urlpart, $qspart) = array_pad(explode('?', $url), 2, '');
     parse_str($qspart, $qsvars);

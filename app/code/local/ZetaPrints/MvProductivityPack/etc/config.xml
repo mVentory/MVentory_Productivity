@@ -63,14 +63,6 @@
           </modules>
         </args>
       </catalog>
-
-      <cms>
-        <args>
-          <modules>
-            <ZetaPrints_MvProductivityPack before="Mage_Cms">ZetaPrints_MvProductivityPack_Cms</ZetaPrints_MvProductivityPack>
-          </modules>
-        </args>
-      </cms>
     </routers>
 
     <events>
@@ -99,6 +91,26 @@
           </productivity_add_top_categories_feed>
         </observers>
       </controller_action_layout_render_before_cms_index_index>
+
+      <controller_action_predispatch_catalog>
+        <observers>
+          <productivity_remember_admin_state>
+            <type>singleton</type>
+            <class>ZetaPrints_MvProductivityPack_Model_Observer</class>
+            <method>rememberAdminState</method>
+          </productivity_remember_admin_state>
+        </observers>
+      </controller_action_predispatch_catalog>
+
+      <controller_action_predispatch_cms>
+        <observers>
+          <productivity_remember_admin_state>
+            <type>singleton</type>
+            <class>ZetaPrints_MvProductivityPack_Model_Observer</class>
+            <method>rememberAdminState</method>
+          </productivity_remember_admin_state>
+        </observers>
+      </controller_action_predispatch_cms>
     </events>
   </frontend>
 

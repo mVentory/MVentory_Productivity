@@ -159,64 +159,6 @@ class ZetaPrints_MvProductivityPack_Helper_Data
     return Mage::registry('is_admin_logged') === true;
   }
 
-  public function saveAdminState () {
-    $session = Mage::getSingleton('core/session', array('name' => 'adminhtml'))
-                 ->start();
-
-    Mage::register('is_admin_logged',
-                   Mage::getSingleton('admin/session')->isLoggedIn(), true);
-
-    $this->restartSession($session, 'frontend');
-  }
-
-  public function restartSession ($session, $sessionName = null) {
-    session_unset();
-    session_destroy();
-
-    $cookie = $session->getCookie();
-
-    $cookieParams = array(
-      'lifetime' => $cookie->getLifetime(),
-      'path' => $cookie->getPath(),
-      'domain' => $cookie->getConfigDomain(),
-      'secure' => $cookie->isSecure(),
-      'httponly' => $cookie->getHttponly()
-    );
-
-    if (!$cookieParams['httponly']) {
-      unset($cookieParams['httponly']);
-
-      if (!$cookieParams['secure']) {
-        unset($cookieParams['secure']);
-
-        if (!$cookieParams['domain']) {
-          unset($cookieParams['domain']);
-        }
-      }
-    }
-
-    if (isset($cookieParams['domain']))
-      $cookieParams['domain'] = $cookie->getDomain();
-
-    call_user_func_array('session_set_cookie_params', $cookieParams);
-
-    if (!empty($sessionName))
-      $session->setSessionName($sessionName);
-
-    $session->setSessionId();
-
-    $sessionCacheLimiter = Mage::getConfig()
-                             ->getNode('global/session_cache_limiter');
-
-    if ($sessionCacheLimiter)
-      session_cache_limiter((string) $sessionCacheLimiter);
-
-    session_start();
-
-    if ($cookie->get(session_name()) == $session->getSessionId())
-      $cookie->renew(session_name());
-  }
-
   public function isReviewerLogged () {
     if ($this->isAdminLogged())
       return true;
