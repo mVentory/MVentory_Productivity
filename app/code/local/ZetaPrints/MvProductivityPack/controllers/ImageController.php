@@ -5,6 +5,12 @@ class ZetaPrints_MvProductivityPack_ImageController
 
   const ATTRIBUTE_CODE = 'media_gallery';
 
+  public function preDispatch () {
+    parent::preDispatch();
+
+    Mage::getModel('MvProductivityPack/observer')->rememberAdminState(null);
+  }
+
   public function rotateAction () {
     $helper = Mage::helper('MvProductivityPack');
 
