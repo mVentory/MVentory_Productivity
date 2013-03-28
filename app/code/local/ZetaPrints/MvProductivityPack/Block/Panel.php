@@ -41,4 +41,12 @@ class ZetaPrints_MvProductivityPack_Block_Panel
     return Mage::helper('adminhtml')
              ->getUrl('adminhtml/catalog_category/edit/', $params);
   }
+
+  protected function _getWithoutImagesLink () {
+    $params['_current'] = true;
+    $params['_use_rewrite'] = true;
+    $params['_query'] = array('without_images_only' => true);
+
+    return Mage::getUrl('*/*/*', $params);
+  }
 }

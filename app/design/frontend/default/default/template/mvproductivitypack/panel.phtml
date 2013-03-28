@@ -1,9 +1,14 @@
-<?php $_type = $this->_getType(); ?>
+<?php
 
-<?php if (Mage::helper('MvProductivityPack')->isAdminLogged()): ?>
+$_helper = Mage::helper('MvProductivityPack');
+$_type = $this->_getType();
+
+?>
+
+<?php if ($_helper->isAdminLogged()): ?>
 
 <div id="productivity-panel">
-  <div id="productivity-panel-content" class="clear">
+  <div id="productivity-panel-content">
 
   <?php if ($_type == 'product'): ?>
   <a href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Product in admin'); ?></a>
@@ -13,10 +18,25 @@
   <a href="<?php echo $link ?>"><?php echo $this->__('CMS page in admin'); ?></a>
   <?php endif; ?>
 
-  <?php if ($_type == 'category' && ($link = $this->_getCategoryLink())): ?>
+  <?php if ($_type == 'category'): ?>
+
+  <a href="<?php echo $this->_getWithoutImagesLink() ?>"><?php echo $this->__('Show products without images'); ?></a>
+
+  <?php if ($link = $this->_getCategoryLink()): ?>
   <a href="<?php echo $link ?>"><?php echo $this->__('Category in admin'); ?></a>
+  <?php endif; ?>
+
   <?php endif; ?>
 
   </div>
 </div>
-<?php endif ?>
+
+<?php elseif ($_helper->isReviewerLogged() && $_type == 'category'): ?>
+
+<div id="productivity-panel">
+  <div id="productivity-panel-content">
+    <a href="<?php echo $this->_getWithoutImagesLink() ?>"><?php echo $this->__('Show products without images'); ?></a>
+  </div>
+</div>
+
+<?php endif; ?>

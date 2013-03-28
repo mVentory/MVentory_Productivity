@@ -28,6 +28,20 @@ class ZetaPrints_MvProductivityPack_Model_Observer {
     $helper->addFeedToHeader($url, $title);
   }
 
+  public function showProductsWithoutSmallImagesOnly ($observer) {
+    $param = Mage::app()
+                ->getRequest()
+                ->getParam('without_images_only');
+
+    if ($param != 1)
+      return;
+
+    $observer
+      ->getCollection()
+      ->addAttributeToFilter('small_image',
+                             array('in' => array('no_selection', '')));
+  }
+
   public function rememberAdminState($observer) {
     if (Mage::registry('is_admin_logged') !== null)
       return;

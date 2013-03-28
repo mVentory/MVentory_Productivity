@@ -111,6 +111,16 @@
           </productivity_remember_admin_state>
         </observers>
       </controller_action_predispatch_cms>
+
+      <catalog_block_product_list_collection>
+        <observers>
+          <productivity_show_products_without_small_image_only>
+            <type>singleton</type>
+            <class>ZetaPrints_MvProductivityPack_Model_Observer</class>
+            <method>showProductsWithoutSmallImagesOnly</method>
+          </productivity_show_products_without_small_image_only>
+        </observers>
+      </catalog_block_product_list_collection>
     </events>
   </frontend>
 

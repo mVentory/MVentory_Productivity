@@ -27,6 +27,7 @@
   font-size: 128%;
   font-weight: bold;
   color: #CCC;
+  margin-left: 10px;
   text-shadow: 1px 1px 0 #222;
   text-decoration: underline;
 }
