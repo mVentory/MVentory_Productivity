@@ -1,27 +1,22 @@
+<?php $_type = $this->_getType(); ?>
+
 <?php if (Mage::helper('MvProductivityPack')->isAdminLogged()): ?>
-<div class="admin-button">
-<?php
-// get page type
-$pageType = $this->getRequest()->getControllerName();
 
+<div id="productivity-panel">
+  <div id="productivity-panel-content" class="clear">
 
-if($pageType=='product'){
-	$currentProduct = Mage::registry('product');
-	echo "<a href = '" . Mage::helper("adminhtml")->getUrl("adminhtml/catalog_product/edit",array("id"=>$currentProduct->getId())) . "'>Product in admin</a>";
-	
-}
-if($pageType == 'page' || $pageType == 'index'){
-	$currentPage = $this->getHelper('cms/page')->getPage()->getData();
-	if ($currentPage) {
-		echo "<a href = '" . Mage::helper("adminhtml")->getUrl("mvproductivitypack/adminhtml_index/index",array("page_id"=>$currentPage['page_id'])) . "'>CMS page in admin</a>";
-	}  
-}
-if($pageType=='category') {
-  $currentCategory = Mage::registry('current_category');
-  if($currentCategory) {
-  	echo "<a href = '" . Mage::helper("adminhtml")->getUrl("adminhtml/catalog_category/edit/",array("id"=>$currentCategory->getId())) . "'>Category in admin</a>";
-  }
-}
-?>
+  <?php if ($_type == 'product'): ?>
+  <a href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Product in admin'); ?></a>
+  <?php endif; ?>
+
+  <?php if (($_type == 'page' || $_type == 'index') && ($link = $this->_getCmsPageLink())): ?>
+  <a href="<?php echo $link ?>"><?php echo $this->__('CMS page in admin'); ?></a>
+  <?php endif; ?>
+
+  <?php if ($_type == 'category' && ($link = $this->_getCategoryLink())): ?>
+  <a href="<?php echo $link ?>"><?php echo $this->__('Category in admin'); ?></a>
+  <?php endif; ?>
+
+  </div>
 </div>
 <?php endif ?>
