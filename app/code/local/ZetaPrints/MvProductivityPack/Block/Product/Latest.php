@@ -52,10 +52,11 @@ class ZetaPrints_MvProductivityPack_Block_Product_Latest
     $collection = Mage::getResourceModel('catalog/product_collection')
                     ->setVisibility($visibility);
 
+    $imageFilter = array('nin' => array('no_selection', ''));
+
     $collection = $this
                     ->_addProductAttributesAndPrices($collection)
-                    ->addAttributeToFilter('small_image',
-                                           array('neq' => 'no_selection'))
+                    ->addAttributeToFilter('small_image', $imageFilter)
                     ->addStoreFilter()
                     ->addAttributeToSort('entity_id', 'desc')
                     ->setPageSize($this->getProductsCount())
