@@ -36,10 +36,19 @@ class ZetaPrints_MvProductivityPack_Model_Observer {
     if ($param != 1)
       return;
 
-    $observer
-      ->getCollection()
-      ->addAttributeToFilter('small_image',
-                             array('in' => array('no_selection', '')));
+    $collection = $observer->getCollection();
+
+    $select = $collection->getSelect();
+    $wherePart = $select->getPart(Zend_Db_Select::WHERE);
+
+    foreach ($wherePart as $i => $condition)
+      if (strpos($condition, 'small_image') !== false)
+        unset($wherePart[$i]);
+
+    $select->setPart(Zend_Db_Select::WHERE, $wherePart);
+
+    $collection->addAttributeToFilter('small_image',
+                                      array('in' => array('no_selection', '')));
   }
 
   public function rememberAdminState($observer) {
