@@ -132,8 +132,9 @@ jQuery(document).ready(function ($) {
         $img.prop('src', data.mainImage);
 
         $img
-          .parents('.product-img-box')
-          .find('input[name="_productivity_image_params"]')
+          .parents('.product-image')
+          .nextAll('.tm-image-editor-menu')
+          .children('input[name="_productivity_image_params"]')
           .val(data.main_image_params);
 
         $thumb
