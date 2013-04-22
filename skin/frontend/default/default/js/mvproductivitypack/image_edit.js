@@ -9,7 +9,10 @@ jQuery(document).ready(function ($) {
     .on('mouseenter', function () {
       var $this = $(this);
 
-      var offset = $this.offset();
+      if ($this.css('position') == 'absolute')
+        var offset = { top: 0, left: 0 };
+      else
+        var offset = $this.offset();
 
       if(!$this.children('.tm-image-editor-menu').hasClass('disabled')) {
         $this
