@@ -26,6 +26,14 @@ class ZetaPrints_MvProductivityPack_Block_Rss_Import
            );
   }
 
+  public function getCacheTags () {
+    $tags = parent::getCacheTags();
+
+    $tags[] = $this->getData('post_link');
+
+    return $tags;
+  }
+
   public function getFeed () {
     $feed = $this->getData('feed');
 
@@ -51,8 +59,10 @@ class ZetaPrints_MvProductivityPack_Block_Rss_Import
     if (!count($feed))
       return false;
 
-    return $feed
-             ->current()
-             ->encoded();
+    $post = $feed->current();
+
+    $this->setData('post_link', $post->link());
+
+    return $post->encoded();
   }
 }
