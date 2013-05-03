@@ -146,7 +146,7 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
     $_attrs = $this
                 ->getLayout()
                 ->createBlock('catalog/product_view_attributes')
-                ->getAdditionalData();
+                ->getAdditionalData(array(), false);
 
     Mage::unregister('product');
 
