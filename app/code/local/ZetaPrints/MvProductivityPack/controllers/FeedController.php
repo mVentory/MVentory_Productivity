@@ -10,5 +10,10 @@ class ZetaPrints_MvProductivityPack_FeedController
       return;
 
     Mage::app()->cleanCache(md5($url));
+
+    $subject = 'WP page was updated';
+    $body = 'URL: ' . $url;
+
+    Mage::helper('MvProductivityPack')->sendEmail($subject, $body);
   }
 }

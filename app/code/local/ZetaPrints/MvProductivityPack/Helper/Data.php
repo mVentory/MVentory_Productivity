@@ -176,4 +176,30 @@ class ZetaPrints_MvProductivityPack_Helper_Data
 
     return strcasecmp($group->getCode(), self::REVIEWER_GROUP_CODE) == 0;
   }
+
+  /**
+   * Sends email to stores's general contant address
+   *
+   * @param string $subject
+   * @param string $message
+   * @param int|string|Mage_Core_Model_Store $store Store, its ID or code
+   */
+  public function sendEmail ($subject,
+                             $message,
+                             $store = Mage_Core_Model_App::ADMIN_STORE_ID) {
+
+    $store = Mage::app()->getStore($store);
+
+    $email = $store->getConfig('trans_email/ident_general/email');
+    $name = $store->getConfig('trans_email/ident_general/name');
+
+    Mage::getModel('core/email')
+      ->setFromEmail($email)
+      ->setFromName($name)
+      ->setToName($name)
+      ->setToEmail($email)
+      ->setBody($message)
+      ->setSubject($subject)
+      ->send();
+  }
 }
