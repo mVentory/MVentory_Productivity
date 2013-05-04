@@ -45,7 +45,11 @@ class ZetaPrints_MvProductivityPack_Block_Rss_Import
     if (!$uri)
       return null;
 
-    $feed = Zend_Feed::import($uri);
+    try {
+      $feed = Zend_Feed::import($uri);
+    } catch (Exception $e) {
+      return null;
+    }
 
     $this->setFeed($feed);
 
