@@ -29,7 +29,7 @@ class ZetaPrints_MvProductivityPack_Block_Rss_Import
   public function getCacheTags () {
     $tags = parent::getCacheTags();
 
-    $tags[] = $this->getData('post_link');
+    $tags[] = md5($this->getData('post_link'));
 
     return $tags;
   }

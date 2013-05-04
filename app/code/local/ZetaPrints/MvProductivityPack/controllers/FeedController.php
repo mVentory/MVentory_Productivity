@@ -9,6 +9,6 @@ class ZetaPrints_MvProductivityPack_FeedController
     if (!$url = $request->getParam('url'))
       return;
 
-    Mage::app()->cleanCache($url);
+    Mage::app()->cleanCache(md5($url));
   }
 }
