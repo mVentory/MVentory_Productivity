@@ -27,9 +27,28 @@ class ZetaPrints_MvProductivityPack_Block_Rss_Import
   }
 
   public function getCacheTags () {
+    $tag = md5($this->getData('post_link'));
+
+    $parentBlock = $this;
+
+    //Find parent block which caches its content and add the tag
+    //to prevent effect of nested caching
+    while ($parentBlock = $parentBlock->getParentBlock())
+      if ($parentBlock instanceof Mage_Core_Block_Template
+          && !($parentBlock instanceof Mage_Page_Block_Html)) {
+
+        $tags = (array) $parentBlock->getData('cache_tags');
+
+        $tags[] = $tag;
+
+        $parentBlock->setData('cache_tags', $tags);
+
+        break;
+      }
+
     $tags = parent::getCacheTags();
 
-    $tags[] = md5($this->getData('post_link'));
+    $tags[] = $tag;
 
     return $tags;
   }
