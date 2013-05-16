@@ -98,4 +98,68 @@ class ZetaPrints_MvProductivityPack_Model_Observer {
     return $result;
   }
 
+  public function mergeAttributeOptions ($observer) {
+    $attr = $observer->getAttribute();
+
+    $code = $attr->getAttributeCode();
+    $option = $attr->getData('option');
+
+    if (!(isset($option['merge']['from']) && isset($option['merge']['to'])))
+      return;
+
+    $from = (int) $option['merge']['from'];
+    $to = (int) $option['merge']['to'];
+
+    $session = Mage::getSingleton('adminhtml/session');
+    $helper = Mage::helper('MvProductivityPack');
+
+    if ($from == 0 || $to == 0 || $from == $to) {
+      $msg = 'Selecting new or similar options for merging are not allowed. '
+             . 'Please, select correct options';
+
+      $session->addError($helper->__($msg));
+      return;
+    }
+
+    $count = 0;
+
+    try {
+      $products = Mage::getResourceModel('catalog/product_collection')
+                    ->addAttributeToFilter($attr, array('finset' => $from));
+
+      foreach ($products as $product) {
+        $values = explode(',', $product->getData($code));
+
+        if (!$values)
+          continue;
+
+        $values = array_flip($values);
+
+        unset($values[$from]);
+        $values[$to] = '';
+
+        $product
+          ->setData($code, implode(',', array_flip($values)))
+          ->save();
+
+        $count++;
+      }
+    } catch (Exception $e) {
+      Mage::logException($e);
+
+      $msg = 'Merging of attribute options failed. Please, check logs '
+             . 'for additional info';
+
+      $session->addError($helper->__($msg));
+
+      return;
+    }
+
+    $option['delete'][$from] = true;
+
+    $attr->setData('option', $option);
+
+    $session->addSuccess($helper->__('Options were merged sucessfully.'));
+    $session->addSuccess($helper->__('Number of updated products: ') . $count);
+  }
 }

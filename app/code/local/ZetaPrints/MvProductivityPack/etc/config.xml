@@ -18,6 +18,12 @@
           <product_view_media>ZetaPrints_MvProductivityPack_Block_Product_View_Media</product_view_media>
         </rewrite>
       </catalog>
+
+      <adminhtml>
+        <rewrite>
+          <catalog_product_attribute_edit_tab_options>ZetaPrints_MvProductivityPack_Block_Catalog_Product_Attribute_Edit_Tab_Options</catalog_product_attribute_edit_tab_options>
+        </rewrite>
+      </adminhtml>
     </blocks>
 
     <helpers>
@@ -137,6 +143,18 @@
   </admin>
 
   <adminhtml>
+    <events>
+      <catalog_entity_attribute_save_before>
+        <observers>
+          <productivity_merge_attribute_options>
+            <type>singleton</type>
+            <class>ZetaPrints_MvProductivityPack_Model_Observer</class>
+            <method>mergeAttributeOptions</method>
+          </productivity_merge_attribute_options>
+        </observers>
+      </catalog_entity_attribute_save_before>
+    </events>
+
     <layout>
       <updates>
         <MvProductivityPack>
