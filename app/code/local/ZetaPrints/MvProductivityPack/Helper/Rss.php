@@ -4,6 +4,7 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
   extends Mage_Core_Helper_Abstract {
 
   const MEDIA_NS = 'http://search.yahoo.com/mrss/';
+  const ATOM_NS = 'http://www.w3.org/2005/Atom';
 
   const IMAGE_WIDTH = 300;
   const IMAGE_HEIGHT = 300;
@@ -42,12 +43,14 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
 
     $helper = Mage::helper('catalog/image');
 
-    $xml = new SimpleXMLElement('<rss xmlns:media="' . self::MEDIA_NS . '"/>');
+    $xml = new SimpleXMLElement('<rss xmlns:media="' . self::MEDIA_NS . '"'
+                                   . 'xmlns:atom="' . self::ATOM_NS . '"/>');
 
     $xml->registerXPathNamespace('media', self::MEDIA_NS);
+    $xml->registerXPathNamespace('atom', self::ATOM_NS);
     $xml->addAttribute('version', '2.0');
 
-    $date = date('D, d M o G:i:s T',time());
+    $date = date('r', time());
 
     $channel = $xml->addChild('channel');
 
@@ -58,6 +61,16 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
     $channel->lastBuildDate = $date;
     $channel->generator = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB);
 
+    $link = $channel->addChild('link', null, self::ATOM_NS);
+    $link->addAttribute('href', Mage::helper('core/url')->getCurrentUrl());
+    $link->addAttribute('rel', 'self');
+    $link->addAttribute('type', 'application/rss+xml');
+
+    $author = Mage::getStoreConfig('trans_email/ident_general/email')
+              . ' ('
+              . Mage::getStoreConfig('trans_email/ident_general/name')
+              . ')';
+
     foreach($products as $product) {
       $name = $product->getName();
 
@@ -66,9 +79,9 @@ class ZetaPrints_MvProductivityPack_Helper_Rss
       $item->title = $name;
       $item->link = $product->getProductUrl();
       $item->description = $this->_getProductAttributes($product);
-      $item->addChild('pubDate');
-      $item->addChild('author');
-      $item->addChild('guid');
+      $item->pubDate = date('r', strtotime($product->getUpdatedAt()));
+      $item->author = $author;
+      $item->guid = $item->link;
 
       $item->addChild('title', htmlspecialchars($name), self::MEDIA_NS);
 
