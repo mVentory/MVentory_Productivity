@@ -8,10 +8,27 @@ $_type = $this->_getType();
 <?php if ($_helper->isAdminLogged()): ?>
 
 <div id="productivity-panel">
-  <div id="productivity-panel-content">
+  <div id="productivity-panel-content" class="clearer">
 
   <?php if ($_type == 'product'): ?>
-  <a href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Product in admin'); ?></a>
+
+    <div id="productivity-actions">
+      <a href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Product in admin'); ?></a>
+    </div>
+
+    <div id="productivity-uploader">
+      <div id="productivity-uploader-element"></div>
+
+      <div id="productivity-uploader-dropzone-wrapper">
+        <div id="productivity-uploader-dropzone"></div>
+        <div id="productivity-uploader-button-upload">
+          <span>Upload</span>
+        </div>
+      </div>
+
+      <ul id="productivity-uploader-previews"></ul>
+    </div>
+
   <?php endif; ?>
 
   <?php if (($_type == 'page' || $_type == 'index') && ($link = $this->_getCmsPageLink())): ?>
@@ -31,12 +48,55 @@ $_type = $this->_getType();
   </div>
 </div>
 
-<?php elseif ($_helper->isReviewerLogged() && $_type == 'category'): ?>
+<?php elseif ($_helper->isReviewerLogged()): ?>
 
 <div id="productivity-panel">
-  <div id="productivity-panel-content">
+  <div id="productivity-panel-content" class="clearer">
+
+  <?php if ($_type == 'product'): ?>
+
+    <div id="productivity-actions">
+      <a href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Product in admin'); ?></a>
+    </div>
+
+    <div id="productivity-uploader">
+      <div id="productivity-uploader-element"></div>
+
+      <div id="productivity-uploader-dropzone-wrapper">
+        <div id="productivity-uploader-dropzone"></div>
+        <div id="productivity-uploader-button-upload">
+          <span>Upload</span>
+        </div>
+      </div>
+
+      <ul id="productivity-uploader-previews"></ul>
+    </div>
+
+  <?php endif; ?>
+
+  <?php if ($_type == 'category'): ?>
     <a href="<?php echo $this->_getWithoutImagesLink() ?>"><?php echo $this->__('Show products without images'); ?></a>
+  <?php endif; ?>
+
   </div>
 </div>
 
 <?php endif; ?>
+
+<script type="text/javascript">
+//<![CDATA[
+
+jQuery(function ($) {
+  var $panel = $('#productivity-panel');
+
+  $panel
+    .on('mouseenter dragover', function () {
+      $panel.addClass('productivity-hovered');
+    })
+    .on('mouseleave', function () {
+      $panel.removeClass('productivity-hovered');
+    });
+});
+
+//]]>
+</script>

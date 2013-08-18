@@ -165,4 +165,52 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     return Zend_Json::encode(true);
   }
+
+  public function uploadAction () {
+    $helper = Mage::helper('MvProductivityPack');
+
+    if (!$helper->isReviewerLogged()) {
+      echo Mage::helper('core')->jsonEncode(array('success' => false));
+
+      return;
+    }
+
+    $request = $this->getRequest();
+
+    $productId = (int) $request->getParam('product_id');
+
+    if (!($productId && isset($_FILES['qqfile']))) {
+      echo Mage::helper('core')->jsonEncode(array('success' => false));
+
+      return;
+    }
+
+    $uploader = new Mage_Core_Model_File_Uploader('qqfile');
+
+    $uploader->setAllowedExtensions(array('jpg','jpeg','gif','png'));
+    $uploader->addValidateCallback(
+      'catalog_product_image',
+      Mage::helper('catalog/image'),
+      'validateUploadFile'
+    );
+    $uploader->setAllowRenameFiles(true);
+    $uploader->setFilesDispersion(true);
+
+    $result = $uploader->save(
+                Mage::getSingleton('catalog/product_media_config')
+                  ->getBaseTmpMediaPath()
+              );
+
+    Mage::dispatchEvent(
+      'catalog_product_gallery_upload_image_after',
+      array(
+        'result' => $result,
+        'action' => $this
+      )
+    );
+
+    $helper->add($productId, $result);
+
+    echo Mage::helper('core')->jsonEncode(array('success' => true));
+  }
 }

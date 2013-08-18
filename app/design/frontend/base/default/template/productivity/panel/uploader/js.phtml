@@ -1,0 +1,65 @@
+<?php if (Mage::helper('MvProductivityPack')->isReviewerLogged()) : ?>
+
+<?php
+
+$_productId = Mage::registry('product')->getId();
+$_url = $this->getUrl('mvproductivitypackf/image/upload');
+
+?>
+
+<script type="text/javascript">
+//<![CDATA[
+
+jQuery(function ($) {
+
+var $upload_elem = $('#productivity-uploader-element');
+var $upload_btn = $('#productivity-uploader-button-upload');
+
+$upload_elem
+  .fineUploader({
+    button: $('#productivity-uploader-dropzone'),
+    listElement: $('#productivity-uploader-previews'),
+    autoUpload: false,
+
+    request: {
+      endpoint: '<?php echo $_url; ?>',
+      params: {
+        product_id: <?php echo $_productId; ?>
+      }
+    },
+
+    dragAndDrop: {
+      disableDefaultDropzone: true,
+      hideDropzones: false,
+      extraDropzones: [$('#productivity-uploader-dropzone')]
+    },
+
+    text: {
+      cancelButton: ''
+    }
+  })
+  .on('submitted', function (event, id, name) {
+    var $this = $(this);
+    var reader = new FileReader();
+
+    reader.onload = function (e) {
+      $this
+        .fineUploader('getItemByFileId', id)
+        .css('background-image', 'url(' + e.target.result + ')');
+    };
+
+    reader.readAsDataURL($this.fineUploader('getFile', id));
+
+    $upload_btn.css('display', 'block');
+  });
+
+$upload_btn.on('click', function () {
+  $upload_elem.fineUploader('uploadStoredFiles');
+});
+
+});
+
+//]]>
+</script>
+
+<?php endif; ?>

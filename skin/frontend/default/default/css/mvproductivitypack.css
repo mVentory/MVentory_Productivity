@@ -1,39 +1,32 @@
 #productivity-panel {
-  background-color: black;
+  background-color: white;
   border-bottom: 2px groove gray;
   left: 0;
-  opacity: 0.75;
+  opacity: 0.65;
   position: fixed;
   right: 0;
   top: 0;
   height: 15px;
+  z-index: 999999;
 }
 
-#productivity-panel:hover {
+#productivity-panel.productivity-hovered {
   height: auto;
+  opacity: 1;
 }
 
 #productivity-panel-content {
   display: none;
   margin: 10px 15px;
-  text-align: right;
 }
 
-#productivity-panel:hover #productivity-panel-content {
+#productivity-panel.productivity-hovered #productivity-panel-content {
   display: block;
 }
 
 #productivity-panel a {
   font-size: 128%;
-  font-weight: bold;
-  color: #CCC;
   margin-left: 10px;
-  text-shadow: 1px 1px 0 #222;
-  text-decoration: underline;
-}
-
-#productivity-panel a:hover {
-  color: white;
 }
 
 /* Image options block */
@@ -120,4 +113,115 @@
   margin-top: -16px;
   left: 50%;
   margin-left: -16px;
+}
+
+#productivity-actions {
+  float: right;
+}
+
+#productivity-uploader {
+}
+
+#productivity-uploader-element {
+  display: none;
+}
+
+#productivity-uploader-dropzone,
+#productivity-uploader-previews li {
+  width: 100px;
+  height: 100px;
+  border: 2px solid lightgray;
+  margin: 0 10px 7px 0;
+}
+
+#productivity-uploader-dropzone-wrapper {
+  float: left;
+}
+
+#productivity-uploader-dropzone {
+  border-style: dashed;
+  margin: 0 0 10px 0;
+  background: url('../images/mvproductivitypack/uploader/add.png') 37px 35px no-repeat;
+}
+
+#productivity-uploader-button-upload {
+  display: none;
+  border: 1px solid lightgray;
+  padding: 5px;
+  text-align: center;
+  cursor: pointer;
+  font-size: 110%;
+}
+
+#productivity-uploader-button-upload:hover {
+  border-color: gray;
+}
+
+#productivity-uploader-previews {
+  display: block;
+  margin-left: 114px;
+}
+
+#productivity-uploader-previews li {
+  display: inline-block;
+  background: none center no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+#productivity-uploader-previews .qq-upload-file,
+#productivity-uploader-previews .qq-upload-size,
+#productivity-uploader-previews .qq-upload-delete,
+#productivity-uploader-previews .qq-upload-retry,
+#productivity-uploader-previews .qq-upload-status-text {
+  display: none !important;
+}
+
+#productivity-uploader-previews .qq-upload-fail {
+  border-color: green;
+}
+
+#productivity-uploader-previews .qq-upload-fail {
+  border-color: red;
+}
+
+#productivity-uploader-previews .qq-upload-success {
+  border-color: greenyellow;
+}
+
+#productivity-uploader-previews .qq-progress-bar {
+  background: -moz-linear-gradient(top, rgba(30,87,153,1) 0%, rgba(41,137,216,1) 50%, rgba(32,124,202,1) 51%, rgba(125,185,232,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,87,153,1)), color-stop(50%,rgba(41,137,216,1)), color-stop(51%,rgba(32,124,202,1)), color-stop(100%,rgba(125,185,232,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(30,87,153,1) 0%,rgba(41,137,216,1) 50%,rgba(32,124,202,1) 51%,rgba(125,185,232,1) 100%); /* W3C */
+  width: 0%;
+  height: 5px;
+  border-radius: 6px;
+  margin: 0 0 3px 0;
+  display: none;
+  position: absolute;
+  bottom: 0;
+}
+
+#productivity-uploader-previews .qq-upload-spinner {
+  display: block;
+  background: url('../images/mvproductivitypack/uploader/loading.gif');
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -7.5px 0 0 -7.5px;
+}
+
+#productivity-uploader-previews .qq-upload-cancel {
+  display: block;
+  background: url('../images/mvproductivitypack/uploader/cancel.png');
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: -8px;
+  top: -8px;
 }

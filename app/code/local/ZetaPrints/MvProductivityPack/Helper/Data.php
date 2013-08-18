@@ -134,6 +134,33 @@ class ZetaPrints_MvProductivityPack_Helper_Data
     return $file;
   }
 
+  public function add ($productId, $data) {
+    Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+
+    $product = Mage::getModel('catalog/product')->load($productId);
+
+    if (!$product->getId())
+      return;
+
+    $backend = $this->_getMediaBackend($product);
+
+    $gallery = $product->getData(self::ATTRIBUTE_CODE);
+
+    $mediaAttribute = null;
+
+    if (!(isset($gallery['images']) && $gallery['images']))
+      $mediaAttribute = array_keys($product->getMediaAttributes());
+
+    $file = $backend->addImage(
+              $product,
+              $data['path'] . $data['file'],
+              $mediaAttribute,
+              true
+            );
+
+    $product->save();
+  }
+
   protected function _getMediaBackend ($product) {
     $id = $product->getId();
 
