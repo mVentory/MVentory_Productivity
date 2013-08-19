@@ -144,19 +144,6 @@
   background: url('../images/mvproductivitypack/uploader/add.png') 37px 35px no-repeat;
 }
 
-#productivity-uploader-button-upload {
-  display: none;
-  border: 1px solid lightgray;
-  padding: 5px;
-  text-align: center;
-  cursor: pointer;
-  font-size: 110%;
-}
-
-#productivity-uploader-button-upload:hover {
-  border-color: gray;
-}
-
 #productivity-uploader-previews {
   display: block;
   margin-left: 114px;
