@@ -9,28 +9,6 @@
 class ZetaPrints_MvProductivityPack_Block_Slideshow
   extends Mage_Core_Block_Abstract implements Mage_Widget_Block_Interface {
 
-  //protected function _prepareLayout() {
-  //  $paths = $this->getData('frontend_js');
-
-  //  $baseUrl = Mage::getBaseUrl('js');
-
-  //  $start = '<script type="text/javascript" src="' . Mage::getBaseUrl('js');
-  //  $end = '"></script>';
-
-  //  $data = '';
-
-  //  foreach (explode(';', $paths) as $path)
-  //    $data .= $start . $path . $end;
-
-  //  $layout = $this->getLayout();
-
-  //  $layout
-  //    ->getBlock('before_body_end')
-  //    ->append($layout->createBlock('core/text')->setText($data));
-
-  //  return $this;
-  //}
-
   public function getProductCollection () {
     $collection = $this->getData('product_collection');
 
@@ -43,6 +21,7 @@ class ZetaPrints_MvProductivityPack_Block_Slideshow
     $imageFilter = array('nin' => array('no_selection', ''));
 
     $collection = Mage::getResourceModel('catalog/product_collection')
+                    ->addAttributeToSelect('name')
                     ->addPriceData()
                     ->addUrlRewrite()
                     ->addAttributeToFilter('small_image', $imageFilter)
@@ -64,15 +43,16 @@ class ZetaPrints_MvProductivityPack_Block_Slideshow
     list($width, $height) = explode('x', $this->getData('image_size'));
 
     $helper = Mage::helper('catalog/image');
+    $coreHelper = Mage::helper('core');
 
     $search = array('%name%', '%price%', '%url%', '%img%');
 
-    $html = '<ul>';
+    $html = '';
 
     foreach ($this->getProductCollection() as $product) {
       $replace = array(
         $product->getName(),
-        $product->getPrice(),
+        Mage::helper('core')->currency($product->getPrice(), true, false), 
         $product->getProductUrl(),
         (string) $helper->init($product, 'small_image')->resize($width, $height)
       );
@@ -80,6 +60,6 @@ class ZetaPrints_MvProductivityPack_Block_Slideshow
       $html .= str_replace($search, $replace, $template);
     }
 
-    return $html . '</ul>';
+    return $html;
   }
 }
