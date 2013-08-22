@@ -33,4 +33,25 @@
       </frontend_js>-->
     </parameters>
   </productivity_slideshow>
+
+  <productivity_attribute type="MvProductivityPack/widget_attribute" translate="name description" module="MvProductivityPack">
+    <name>Productivity: Output values of attributes</name>
+    <description>A generic way to output values of attribute into pages via the admin</description>
+    <parameters>
+      <item_template translate="label">
+        <required>1</required>
+        <visible>1</visible>
+        <value><![CDATA[<li>%code%: %label% (%value%)</li>]]></value>
+        <label>Item template</label>
+        <type>text</type>
+      </item_template>
+      <code translate="label">
+        <required>1</required>
+        <visible>1</visible>
+        <value></value>
+        <label>Attribute code</label>
+        <type>text</type>
+      </code>
+    </parameters>
+  </productivity_attribute>
 </widgets>
