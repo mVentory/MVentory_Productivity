@@ -9,6 +9,27 @@
 class ZetaPrints_MvProductivityPack_Block_Slideshow
   extends Mage_Core_Block_Abstract implements Mage_Widget_Block_Interface {
 
+  protected function _construct () {
+    parent::_construct();
+
+    $this
+      ->addData(array(
+        'cache_lifetime' => 86400,
+        'cache_tags' => array(Mage_Catalog_Model_Product::CACHE_TAG),
+      ));
+  }
+
+  public function getCacheKeyInfo () {
+    return array(
+      'CATALOG_PRODUCT_LATEST',
+      Mage::app()->getStore()->getId(),
+      Mage::getSingleton('customer/session')->getCustomerGroupId(),
+      'template' => $this->getData('item_template'),
+      'image_size' => $this->getData('image_size'),
+      $this->getProductsCount()
+    );
+  }
+
   public function getProductCollection () {
     $collection = $this->getData('product_collection');
 

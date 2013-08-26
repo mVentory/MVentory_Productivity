@@ -9,6 +9,22 @@
 class ZetaPrints_MvProductivityPack_Block_Widget_Attribute
   extends Mage_Core_Block_Abstract implements Mage_Widget_Block_Interface {
 
+  protected function _construct () {
+    parent::_construct();
+
+    $this->setData('cache_lifetime', 86400);
+  }
+
+  public function getCacheKeyInfo () {
+    return array(
+      'EAV_ATTRIBUTE_VALUE_LIST',
+      Mage::app()->getStore()->getId(),
+      Mage::getSingleton('customer/session')->getCustomerGroupId(),
+      'template' => $this->getData('item_template'),
+      'code' => $this->getData('code'),
+    );
+  }
+
   public function getValues () {
     if ($values = $this->getData('values'))
       return $values;
