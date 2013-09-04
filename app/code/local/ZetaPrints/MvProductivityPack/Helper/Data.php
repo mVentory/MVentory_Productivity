@@ -229,4 +229,31 @@ class ZetaPrints_MvProductivityPack_Helper_Data
       ->setSubject($subject)
       ->send();
   }
+
+  /**
+   * List attributes likely to be shown on product page.
+   * 
+   * @param Mage_Catalog_Model_Product $product
+   * @return array of Mage_Catalog_Model_Resource_Eav_Attribute
+   */
+  public function getVisibleAttributes($product)
+  {
+    $result = array();
+    if (!$product) return $result;
+
+    $attributes = $product->getAttributes();
+    // these attrs are always shown somewhere even if not "visible on front"
+    $result['name'] = $attributes['name'];
+    $result['short_description'] = $attributes['short_description'];
+    $result['price'] = $attributes['price'];
+
+    foreach ($attributes as $attribute) {
+      if ($attribute->getIsVisibleOnFront()) {
+        $result[$attribute->getAttributeCode()] = $attribute;
+      }
+    }
+
+    return $result;
+  }
+
 }

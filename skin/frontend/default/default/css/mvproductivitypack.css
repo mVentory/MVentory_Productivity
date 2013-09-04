@@ -212,3 +212,33 @@
   right: -8px;
   top: -8px;
 }
+
+#productivity-edit-attributes {
+  float: left;
+  margin-left: 10px;
+}
+
+#productivity-edit-attributes .field-row {
+  display: block;
+  margin-bottom: 2px;
+}
+
+#productivity-edit-attributes .field-row label {
+  display: block;
+  float: left;
+  width: 100px;
+}
+
+#productivity-edit-attributes .field-row input,
+#productivity-edit-attributes .field-row textarea {
+  width: 500px;
+}
+
+#productivity-edit-attributes .field-row select {
+  /* selects do not obey padding in the same way so add the extra width here */
+  width: 506px;
+}
+
+#productivity-edit-submit {
+  float: right;
+}

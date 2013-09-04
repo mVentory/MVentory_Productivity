@@ -1,5 +1,5 @@
 <?php
-
+/* @var $this ZetaPrints_MvProductivityPack_Block_Panel */
 $_helper = Mage::helper('MvProductivityPack');
 $_type = $this->_getType();
 
@@ -12,11 +12,12 @@ $_type = $this->_getType();
 
   <?php if ($_type == 'product'): ?>
 
-    <?php if ($_helper->isAdminLogged()): ?>
     <div id="productivity-actions">
-      <a href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Product in admin'); ?></a>
-    </div>
+    <?php if ($_helper->isAdminLogged()): ?>
+      <a href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Product in admin'); ?></a><br>
     <?php endif; ?>
+      <a href="#" onclick="this.hide(); $('productivity-edit-form').show(); return false;"><?php echo $this->__('Edit product details') ?></a>
+    </div>
 
     <div id="productivity-uploader">
       <div id="productivity-uploader-element"></div>
@@ -26,6 +27,15 @@ $_type = $this->_getType();
       </div>
 
       <ul id="productivity-uploader-previews"></ul>
+    </div>
+
+<?php /*
+       * A quick form for editing select attributes in a hurry.
+       */ ?>
+    <div id="productivity-edit-attributes">
+      <div id="productivity-edit-form" style="display: none;">
+        <?php echo $this->getEditForm()->setHtmlIdPrefix('productivity-edit-')->toHtml() ?>
+      </div>
     </div>
 
   <?php endif; ?>

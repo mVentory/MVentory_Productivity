@@ -49,4 +49,42 @@ class ZetaPrints_MvProductivityPack_Block_Panel
 
     return Mage::getUrl('*/*/*', $params);
   }
+
+  /**
+   * Build a form object populated with product data.
+   * 
+   * @return Varien_Data_Form
+   */
+  public function getEditForm() {
+    /* @var $product Mage_Catalog_Model_Product */
+  	$product = Mage::registry('product');
+  	$form = new Varien_Data_Form();
+    $form->setUseContainer(true)
+         ->setMethod('post')
+         // see ZetaPrints_MvProductivityPack_ProductController::saveAction()
+         ->setAction(Mage::getUrl('catalog/product/save', array('id' => $product->getId())))
+         // rewrite price type as a text type
+         ->addType('price', 'Varien_Data_Form_Element_Text');
+    $attributes = Mage::helper('MvProductivityPack')->getVisibleAttributes($product);
+
+    /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
+    foreach ($attributes as $attribute) {
+      $field = array(
+        'name'   => $attribute->getAttributeCode(),
+        'label'  => $attribute->getFrontendLabel(),
+        'values' => $attribute->usesSource() ? $attribute->getSource()->getAllOptions() : null
+      );
+      $form->addField($attribute->getAttributeCode(), $attribute->getFrontendInput(), $field)
+           ->setRows(5); // in case it's a textarea, make it taller
+    }
+
+    $form->setValues($product->getData());
+    // add field after values so "Submit" value is not overwritten
+    $form->addField('submit', 'submit', array(
+      'value'   => 'Save',
+      'no_span' => true,
+    ));
+    return $form;
+  }
+
 }
