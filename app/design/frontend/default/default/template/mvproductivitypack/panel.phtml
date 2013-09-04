@@ -5,16 +5,18 @@ $_type = $this->_getType();
 
 ?>
 
-<?php if ($_helper->isAdminLogged()): ?>
+<?php if ($_helper->isReviewerLogged()): ?>
 
 <div id="productivity-panel">
   <div id="productivity-panel-content" class="clearer">
 
   <?php if ($_type == 'product'): ?>
 
+    <?php if ($_helper->isAdminLogged()): ?>
     <div id="productivity-actions">
       <a href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Product in admin'); ?></a>
     </div>
+    <?php endif; ?>
 
     <div id="productivity-uploader">
       <div id="productivity-uploader-element"></div>
@@ -28,48 +30,17 @@ $_type = $this->_getType();
 
   <?php endif; ?>
 
-  <?php if (($_type == 'page' || $_type == 'index') && ($link = $this->_getCmsPageLink())): ?>
+  <?php if ($_helper->isAdminLogged() && ($_type == 'page' || $_type == 'index') && ($link = $this->_getCmsPageLink())): ?>
   <a href="<?php echo $link ?>"><?php echo $this->__('CMS page in admin'); ?></a>
   <?php endif; ?>
 
   <?php if ($_type == 'category'): ?>
-
-  <a href="<?php echo $this->_getWithoutImagesLink() ?>"><?php echo $this->__('Show products without images'); ?></a>
-
-  <?php if ($link = $this->_getCategoryLink()): ?>
-  <a href="<?php echo $link ?>"><?php echo $this->__('Category in admin'); ?></a>
-  <?php endif; ?>
-
-  <?php endif; ?>
-
-  </div>
-</div>
-
-<?php elseif ($_helper->isReviewerLogged()): ?>
-
-<div id="productivity-panel">
-  <div id="productivity-panel-content" class="clearer">
-
-  <?php if ($_type == 'product'): ?>
-
-    <div id="productivity-actions">
-      <a href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Product in admin'); ?></a>
-    </div>
-
-    <div id="productivity-uploader">
-      <div id="productivity-uploader-element"></div>
-
-      <div id="productivity-uploader-dropzone-wrapper">
-        <div id="productivity-uploader-dropzone"></div>
-      </div>
-
-      <ul id="productivity-uploader-previews"></ul>
-    </div>
-
-  <?php endif; ?>
-
-  <?php if ($_type == 'category'): ?>
     <a href="<?php echo $this->_getWithoutImagesLink() ?>"><?php echo $this->__('Show products without images'); ?></a>
+
+    <?php if ($_helper->isAdminLogged() && ($link = $this->_getCategoryLink())): ?>
+    <a href="<?php echo $link ?>"><?php echo $this->__('Category in admin'); ?></a>
+    <?php endif; ?>
+
   <?php endif; ?>
 
   </div>
