@@ -236,15 +236,14 @@ class ZetaPrints_MvProductivityPack_Helper_Data
    * @param Mage_Catalog_Model_Product $product
    * @return array of Mage_Catalog_Model_Resource_Eav_Attribute
    */
-  public function getVisibleAttributes($product)
-  {
+  public function getVisibleAttributes($product) {
     $result = array();
     if (!$product) return $result;
 
     $attributes = $product->getAttributes();
     // these attrs are always shown somewhere even if not "visible on front"
     $result['name'] = $attributes['name'];
-    $result['short_description'] = $attributes['short_description'];
+    $result['short_description'] = $attributes['short_description']->setFrontendLabel('Description');
     $result['price'] = $attributes['price'];
 
     foreach ($attributes as $attribute) {

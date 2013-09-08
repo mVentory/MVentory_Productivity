@@ -62,10 +62,9 @@ class ZetaPrints_MvProductivityPack_Block_Panel
     $form->setUseContainer(true)
          ->setMethod('post')
          // see ZetaPrints_MvProductivityPack_ProductController::saveAction()
-         ->setAction(Mage::getUrl('catalog/product/save', array('id' => $product->getId())))
-         // rewrite price type as a text type
-         ->addType('price', 'Varien_Data_Form_Element_Text');
+         ->setAction(Mage::getUrl('catalog/product/save', array('id' => $product->getId())));
     $attributes = Mage::helper('MvProductivityPack')->getVisibleAttributes($product);
+    $allowedInputs = array('text', 'textarea', 'date', 'select', 'multiselect');
 
     /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
     foreach ($attributes as $attribute) {
@@ -74,7 +73,10 @@ class ZetaPrints_MvProductivityPack_Block_Panel
         'label'  => $attribute->getFrontendLabel(),
         'values' => $attribute->usesSource() ? $attribute->getSource()->getAllOptions() : null
       );
-      $form->addField($attribute->getAttributeCode(), $attribute->getFrontendInput(), $field)
+      $input = in_array($attribute->getFrontendInput(), $allowedInputs)
+               ? $attribute->getFrontendInput()
+               : 'text';
+      $form->addField($attribute->getAttributeCode(), $input, $field)
            ->setRows(5); // in case it's a textarea, make it taller
     }
 
