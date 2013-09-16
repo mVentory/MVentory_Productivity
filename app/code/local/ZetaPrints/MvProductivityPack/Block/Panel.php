@@ -77,6 +77,7 @@ class ZetaPrints_MvProductivityPack_Block_Panel
                ? $attribute->getFrontendInput()
                : 'text';
       $form->addField($attribute->getAttributeCode(), $input, $field)
+           ->setFormat(Mage::app()->getLocale()->getDateFormat()) // for date, time & datetime fields
            ->setRows(5); // in case it's a textarea, make it taller
     }
 
