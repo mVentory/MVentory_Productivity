@@ -15,7 +15,6 @@
       <catalog>
         <rewrite>
           <product_view>ZetaPrints_MvProductivityPack_Block_Product_View</product_view>
-          <product_view_media>ZetaPrints_MvProductivityPack_Block_Product_View_Media</product_view_media>
         </rewrite>
       </catalog>
 
@@ -46,6 +45,10 @@
         <productivity>
           <file>productivity.xml</file>
         </productivity>
+
+        <catalog_productivity>
+          <file>catalog/productivity.xml</file>
+        </catalog_productivity>
 
         <MvProductivityPack>
           <file>zetaprints_mvproductivitypack.xml</file>

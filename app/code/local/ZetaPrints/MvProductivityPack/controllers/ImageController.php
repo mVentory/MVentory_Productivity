@@ -61,8 +61,10 @@ class ZetaPrints_MvProductivityPack_ImageController
     $_product = Mage::getModel('catalog/product')->load($productId);
 
     // get resized version of image
-    $image = Mage::helper('catalog/image')->init($_product, $type, $file)
-               ->resize($width, $height)->__toString();
+    $image = Mage::helper('catalog/image')
+               ->init($_product, $type, $file)
+               ->resize($width ? $width : null, $height ? $height : null)
+               ->__toString();
 
     $params = Zend_Json::encode(compact('file', 'width', 'height'));
 
@@ -103,8 +105,12 @@ class ZetaPrints_MvProductivityPack_ImageController
     if($request->get('thumb') != 'true') {
       $_product = Mage::getModel('catalog/product')
                     ->load($productId);
-      $image = Mage::helper('catalog/image')->init($_product, 'image')
-               ->resize($width, $height)->__toString();
+
+      $image = Mage::helper('catalog/image')
+                 ->init($_product, 'image')
+                 ->resize($width ? $width : null, $height ? $height : null)
+                 ->__toString();
+
       echo Zend_Json::encode(array('image'=>$image));
     }
 
@@ -144,12 +150,18 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     $thumbImage = Mage::helper('catalog/image')
                     ->init($_product, 'thumbnail', $image['file'])
-                    ->resize($thumb['width'], $thumb['height'])
+                    ->resize(
+                        $thumb['width'] ? $thumb['width'] : null,
+                        $thumb['height'] ? $thumb['height'] : null
+                      )
                     ->__toString();
 
     $mainImage = Mage::helper('catalog/image')
                    ->init($_product, 'image', $thumb['file'])
-                   ->resize($image['width'], $image['height'])
+                   ->resize(
+                       $image['width'] ? $image['width'] : null,
+                       $image['height'] ? $image['height'] : null
+                     )
                    ->__toString();
 
     $file = $thumb['file'];

@@ -1,0 +1,45 @@
+<?php
+
+$helper = Mage::helper('core');
+
+?>
+
+<div id="productivity-image-edit-panel" class="tm-image-editor-menu">
+  <div class="set-main-image"
+       title="<?php echo $this->__('Set as main image'); ?>">
+  </div>
+
+  <div class="rotate-image rotate-left"
+       title="<?php echo $this->__('Rotate left'); ?>">
+  </div>
+
+  <div class="rotate-image rotate-right"
+       title="<?php echo $this->__('Rotate right'); ?>">
+  </div>
+
+  <div class="remove-image"
+       title="<?php echo $this->__('Remove'); ?>">
+  </div>
+</div>
+
+<script type="text/javascript">
+//<![CDATA[
+
+_tm_image_editor_rotate_url = '<?php echo $this->getUrl('mvproductivitypackf/image/rotate') ?>';
+_tm_image_editor_remove_url = '<?php echo $this->getUrl('mvproductivitypackf/image/remove') ?>';
+_tm_image_editor_setmain_url = '<?php echo $this->getUrl('mvproductivitypackf/image/setmain') ?>';
+
+productivity = {
+  selector: {
+    image: '<?php echo $this->getImageSelector() ?>',
+    thumbnail: '<?php echo $this->getThumbSelector() ?>'
+  },
+
+  size: {
+    image: <?php echo $helper->jsonEncode($this->getImageSize()) ?>,
+    thumbnail: <?php echo $helper->jsonEncode($this->getThumbSize()) ?>
+  }
+}
+
+//]]>
+</script>

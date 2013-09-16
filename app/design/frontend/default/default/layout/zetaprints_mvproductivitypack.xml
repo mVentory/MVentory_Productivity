@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <layout>
 	<catalog_product_view>
-		<reference name="head">
-			<action method="addJs">
-				<script>jquery/jquery-min.js</script>
-			</action>
-
-      <action method="addJs">
-        <script>jquery/jquery-fineuploader-min.js</script>
-      </action>
-
-			<action method="addItem">
-				<type>skin_js</type>
-				<name>js/mvproductivitypack/image_edit.js</name>
-			</action>
-		</reference>
-
 		<reference name="before_body_end">
-			<block type="core/template"
-				name="tm_image_editor_js"
-				template="catalog/product/view/media/mvproductivity_editor/js.phtml" />
-
       <block type="core/template"
              name="productivity.panel.upload.js"
              template="productivity/panel/uploader/js.phtml" />
