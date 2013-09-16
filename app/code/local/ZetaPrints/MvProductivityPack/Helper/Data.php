@@ -243,7 +243,7 @@ class ZetaPrints_MvProductivityPack_Helper_Data
     $attributes = $product->getAttributes();
     // these attrs are always shown somewhere even if not "visible on front"
     $result['name'] = $attributes['name'];
-    $result['short_description'] = $attributes['short_description']->setFrontendLabel('Description');
+    $result['description'] = $attributes['description'];
     $result['price'] = $attributes['price'];
 
     foreach ($attributes as $attribute) {

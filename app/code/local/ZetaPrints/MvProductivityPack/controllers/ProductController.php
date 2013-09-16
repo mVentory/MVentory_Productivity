@@ -36,6 +36,9 @@ class ZetaPrints_MvProductivityPack_ProductController extends Mage_Core_Controll
         $this->getRequest()->getPost(),
         $helper->getVisibleAttributes($product)
       );
+      if (isset($data['description'])) {
+        $data['short_description'] = $data['description'];
+      }
       $product->addData($data)
           ->save();
 
