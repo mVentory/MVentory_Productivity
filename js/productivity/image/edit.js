@@ -5,17 +5,24 @@ jQuery(document).ready(function ($) {
   var $updImage;
   var $updImageEditor;
 
-  for (var type in productivity.selector)
-    if (productivity.selector.hasOwnProperty(type))
-      $(productivity.selector[type]).on(
-        {
-          mouseenter: image_mouseenter_handler,
-          mouseleave: panel_mouseleave_handler
-        },
-        {
-          type: type
-        }
-      );
+  for (var type in productivity.selector) {
+    if (!productivity.selector.hasOwnProperty(type))
+      continue;
+
+    var selector = productivity.wrapper[type]
+                    ? productivity.wrapper[type]
+                      : productivity.selector[type];
+
+    $(selector).on(
+      {
+        mouseenter: image_mouseenter_handler,
+        mouseleave: panel_mouseleave_handler
+      },
+      {
+        type: type
+      }
+    );
+  }
 
   $panel
     .on('mouseenter', function () {
@@ -156,6 +163,11 @@ jQuery(document).ready(function ($) {
     if (!($img && type))
       return false;
 
+    if (productivity.wrapper[type]
+        && !(($img = $img.find(productivity.selector[type]))
+             && $img.length))
+      return false;
+
     $img.css('opacity', '0.5');
 
     if (type == 'image')
@@ -195,6 +207,11 @@ jQuery(document).ready(function ($) {
     if (!($img && type))
       return false;
 
+    if (productivity.wrapper[type]
+        && !(($img = $img.find(productivity.selector[type]))
+             && $img.length))
+      return false;
+
     var params = {
       file: get_filename_from_url($img.prop('src')),
       width: productivity.size[type].width,
@@ -223,6 +240,11 @@ jQuery(document).ready(function ($) {
     if (!($img && type == 'thumbnail'))
       return false;
 
+    if (productivity.wrapper[type]
+        && !(($img = $img.find(productivity.selector[type]))
+             && $img.length))
+      return false;
+
     $panel
       .addClass('disabled')
       .hide();
@@ -247,7 +269,10 @@ jQuery(document).ready(function ($) {
                               .parent()
                               .find('input[name="_productivity_image_params"]');
 
-    $mainImage = $(productivity.selector.image);
+    var $mainImage = productivity.wrapper.image
+                       ? $(productivity.wrapper.image)
+                           .find(productivity.selector.image)
+                         : $(productivity.selector.image);
 
     var main_image_params = {
       file: get_filename_from_url($mainImage.prop('src')),

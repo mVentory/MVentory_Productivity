@@ -35,6 +35,11 @@ productivity = {
     thumbnail: '<?php echo $this->getThumbSelector() ?>'
   },
 
+  wrapper: {
+    image: '<?php echo $this->getImageWrapperSelector() ?>',
+    thumbnail: '<?php echo $this->getThumbWrapperSelector() ?>'
+  },
+
   size: {
     image: <?php echo $helper->jsonEncode($this->getImageSize()) ?>,
     thumbnail: <?php echo $helper->jsonEncode($this->getThumbSize()) ?>
