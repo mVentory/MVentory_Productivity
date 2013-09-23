@@ -1,4 +1,7 @@
 jQuery(document).ready(function ($) {
+  if (typeof productivity === 'undefined')
+    return;
+
   var $form = $('#product_addtocart_form');
   var $panel = $('#productivity-image-edit-panel');
   var $menus = $form.find('.tm-image-editor-menu');
