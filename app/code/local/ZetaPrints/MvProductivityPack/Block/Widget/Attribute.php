@@ -25,43 +25,41 @@ class ZetaPrints_MvProductivityPack_Block_Widget_Attribute
     );
   }
 
-  public function getValues () {
-    if ($values = $this->getData('values'))
-      return $values;
+  protected function _getAttributeSource () {
+    $attr = $this->getData('attribute_source');
 
-    $this->setData('values', $values = array());
+    if ($attr)
+      return $attr;
 
     if (!$code = $this->getData('code'))
-      return $values;
+      return null;
 
-    $attr = Mage::getModel('eav/entity_attribute')
-              ->loadByCode(Mage_Catalog_Model_Product::ENTITY, $code);
+    $attr = Mage::getModel('MvProductivityPack/widget_attribute')
+              ->loadByCode($code);
 
-    if (!($attr->getId() && $attr->usesSource()))
-      return $values;
+    $this->setData('attribute_source', $attr);
 
-    $values = $attr
-                ->getSource()
-                ->getAllOptions(false);
-
-    $this->setData('values', $values);
-
-    return $values;
+    return $attr;
   }
 
   protected function _toHtml () {
+    $html = '';
+
+    $attr = $this->_getAttributeSource();
+
+    if (!$attr)
+      return $html;
+
     $template = $this->getData('item_template');
     $code = $this->getData('code');
 
     $search = array('%code%', '%value%', '%label%');
 
-    $html = '';
-
-    foreach ($this->getValues() as $value) {
+    foreach ($attr->getOptions() as $option) {
       $replace = array(
         $code,
-        $value['value'],
-        $value['label'],
+        $option['value'],
+        $option['label'],
       );
 
       $html .= str_replace($search, $replace, $template);
