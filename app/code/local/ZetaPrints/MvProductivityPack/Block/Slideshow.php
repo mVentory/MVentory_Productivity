@@ -83,7 +83,7 @@ class ZetaPrints_MvProductivityPack_Block_Slideshow
         $hasSpecial = $specialPrice !== null
                       && $specialPrice !== false
                       && $locale->isStoreDateInInterval(
-                           $locale,
+                           $store,
                            $product->getSpecialFromDate(),
                            $product->getSpecialToDate()
                          );
@@ -97,7 +97,7 @@ class ZetaPrints_MvProductivityPack_Block_Slideshow
     foreach ($this->getProductCollection() as $product) {
       $replace = array(
         $product->getName(),
-        Mage::helper('core')->currency($product->getPrice(), true, false),
+        $coreHelper->currency($product->getPrice(), true, false),
         $this->getPriceHtml($product),
         $product->getProductUrl(),
         (string) $helper->init($product, 'small_image')->resize($width, $height)
