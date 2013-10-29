@@ -7,7 +7,8 @@
  * @author ZetaPrints
  */
 class ZetaPrints_MvProductivityPack_Block_Slideshow
-  extends Mage_Core_Block_Abstract implements Mage_Widget_Block_Interface {
+  extends Mage_Catalog_Block_Product_Abstract
+  implements Mage_Widget_Block_Interface {
 
   protected function _construct () {
     parent::_construct();
@@ -42,7 +43,12 @@ class ZetaPrints_MvProductivityPack_Block_Slideshow
     $imageFilter = array('nin' => array('no_selection', ''));
 
     $collection = Mage::getResourceModel('catalog/product_collection')
-                    ->addAttributeToSelect('name')
+                    ->addAttributeToSelect(array(
+                       'name',
+                       'special_price',
+                       'special_from_date',
+                       'special_to_date'
+                      ))
                     ->addPriceData()
                     ->addUrlRewrite()
                     ->addAttributeToFilter('small_image', $imageFilter)
@@ -66,19 +72,51 @@ class ZetaPrints_MvProductivityPack_Block_Slideshow
     $helper = Mage::helper('catalog/image');
     $coreHelper = Mage::helper('core');
 
-    $search = array('%name%', '%price%', '%url%', '%img%');
+    $search = array('%name%', '%price%', '%price-block%', '%url%', '%img%');
+
+    $store = Mage::app()->getStore();
+    $locale = Mage::app()->getLocale();
+
+    $statements = array(
+      'sale' => function ($body, $product) use ($locale, $store) {
+        $specialPrice = $product->getSpecialPrice();
+        $hasSpecial = $specialPrice !== null
+                      && $specialPrice !== false
+                      && $locale->isStoreDateInInterval(
+                           $locale,
+                           $product->getSpecialFromDate(),
+                           $product->getSpecialToDate()
+                         );
+
+        return $hasSpecial ? $body : '';
+      }
+    );
 
     $html = '';
 
     foreach ($this->getProductCollection() as $product) {
       $replace = array(
         $product->getName(),
-        Mage::helper('core')->currency($product->getPrice(), true, false), 
+        Mage::helper('core')->currency($product->getPrice(), true, false),
+        $this->getPriceHtml($product),
         $product->getProductUrl(),
         (string) $helper->init($product, 'small_image')->resize($width, $height)
       );
 
-      $html .= str_replace($search, $replace, $template);
+      $html .= preg_replace_callback(
+        '/%if:(?<statement>.+)%(?<body>.+)%end:\k<statement>%/is',
+        function ($matches) use ($statements, $product) {
+          $statement = trim($matches['statement']);
+
+          if (!isset($statements[$statement]))
+            return '';
+
+          $func = $statements[$statement];
+
+          return $func($matches['body'], $product);
+        },
+        str_replace($search, $replace, $template)
+      );
     }
 
     return $html;
