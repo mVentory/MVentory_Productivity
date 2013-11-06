@@ -21,6 +21,22 @@ class ZetaPrints_MvProductivityPack_Model_Widget_Attribute
   }
 
   public function getOptions () {
-    return $this->_getItemsData();
+    if (!Mage::registry('current_category'))
+      return $this->_getItemsData();
+
+    $layer = $this->getLayer();
+    $category = $layer->getCurrentCategory();
+
+    //Set store's root category as current category in the layer
+    //to get number of products contain a value for the attribute
+    //for the entire store
+
+    $layer->setCurrentCategory(Mage::app()->getStore()->getRootCategoryId());
+
+    $options = $this->_getItemsData();
+
+    $layer->setCurrentCategory($category);
+
+    return $options;
   }
 }
