@@ -7,36 +7,133 @@
  * @author ZetaPrints
  */
 
-class ZetaPrints_MvProductivityPack_Model_Widget_Attribute
-  extends Mage_Catalog_Model_Layer_Filter_Attribute {
+class ZetaPrints_MvProductivityPack_Model_Widget_Attribute {
 
+  //TODO: convert to singleton
+
+  const OPTIONS_ONLY_WITH_RESULTS
+    = Mage_Catalog_Model_Layer_Filter_Attribute::OPTIONS_ONLY_WITH_RESULTS;
+
+  protected $_attributeModel = null;
+
+  /**
+   * Load by attribute code
+   *
+   * @param string $code
+   *
+   * @return ZetaPrints_MvProductivityPack_Model_Widget_Attribute
+   */
   public function loadByCode ($code) {
-    $attr = Mage::getModel('eav/entity_attribute')
-              ->loadByCode(Mage_Catalog_Model_Product::ENTITY, $code);
+    $attribute = Mage::getModel('eav/entity_attribute')
+                   ->loadByCode(Mage_Catalog_Model_Product::ENTITY, $code);
 
-    if (!($attr->getId() && $attr->usesSource()))
-      return $this;
+    if ($attribute->getId() && $attribute->usesSource())
+      $this->_attributeModel = $attribute;
 
-    return $this->setAttributeModel($attr);
+    return $this;
   }
 
+  /**
+   * Code is taken from
+   * Mage_Catalog_Model_Layer_Filter_Attribute::_getItemsData() method
+   *
+   * @return array|null
+   */
   public function getOptions () {
-    if (!Mage::registry('current_category'))
-      return $this->_getItemsData();
+    if (!$attribute = $this->_attributeModel)
+      return;
 
-    $layer = $this->getLayer();
-    $category = $layer->getCurrentCategory();
+    $store = Mage::app()->getStore();
+    $category = Mage::getModel('catalog/category')
+                  ->load($store->getRootCategoryId());
 
-    //Set store's root category as current category in the layer
-    //to get number of products contain a value for the attribute
-    //for the entire store
+    if (!$categoryId = $category->getId())
+      return;
 
-    $layer->setCurrentCategory(Mage::app()->getStore()->getRootCategoryId());
+    $storeId = $store->getId();
+    $aggregator = Mage::getSingleton('catalogindex/aggregation');
 
-    $options = $this->_getItemsData();
+    $key = 'STORE_' . $storeId
+           . '_CAT_' . $categoryId
+           . '_CUSTGROUP_'
+           . Mage::getSingleton('customer/session')->getCustomerGroupId()
+           . '_' . $attribute->getAttributeCode();
 
-    $layer->setCurrentCategory($category);
+    if ($data = $aggregator->getCacheData($key))
+      return $data;
 
-    return $options;
+    $options = $attribute->getFrontend()->getSelectOptions();
+
+    //Fake 'filter' model with required fields for
+    //Mage_Catalog_Model_Resource_Layer_Filter_Attribute::getCount() method
+    $object = new Varien_Object(array(
+      'layer' => new Varien_Object(array(
+        'product_collection' => $this->_getProductCollection($category)
+      )),
+      'attribute_model' => $attribute,
+      'store_id' => $storeId
+    ));
+
+    $optionsCount = Mage::getResourceModel('catalog/layer_filter_attribute')
+                      ->getCount($object);
+
+    $helper = Mage::helper('core/string');
+    $onlyWithResult = $attribute->getIsFilterable()
+                        == self::OPTIONS_ONLY_WITH_RESULTS;
+
+    $data = array();
+
+    foreach ($options as $option) {
+      if (is_array($option['value']))
+        continue;
+
+      if ($onlyWithResult && empty($optionsCount[$option['value']]))
+        continue;
+
+      if (!$helper->strlen($option['value']))
+        continue;
+
+      $data[] = $option;
+    }
+
+    $tags = array(
+      Mage_Eav_Model_Entity_Attribute::CACHE_TAG . ':' . $attribute->getId(),
+      Mage_Catalog_Model_Category::CACHE_TAG . $categoryId
+    );
+
+    $aggregator->saveCacheData($data, $key, $tags);
+
+    return $data;
+  }
+
+  /**
+   * Initialise product collection from the category
+   *
+   * Code is taken from Mage_Catalog_Model_Layer::prepareProductCollection()
+   * method
+   *
+   * @param Mage_Catalog_Model_Category $category
+   *
+   * @return Mage_Catalog_Model_Resource_Product_Collection
+   */
+  protected function _getProductCollection ($category) {
+    $productAttributes = Mage::getSingleton('catalog/config')
+                           ->getProductAttributes();
+
+    $collection = $category
+      ->getProductCollection()
+      ->addAttributeToSelect($productAttributes)
+      ->addMinimalPrice()
+      ->addFinalPrice()
+      ->addTaxPercents()
+      ->addUrlRewrite($category->getId());
+
+    Mage::getSingleton('catalog/product_status')
+      ->addVisibleFilterToCollection($collection);
+
+    Mage::getSingleton('catalog/product_visibility')
+      ->addVisibleInCatalogFilterToCollection($collection);
+
+    return $collection;
   }
 }
