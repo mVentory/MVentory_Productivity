@@ -12,7 +12,7 @@
         <reference name="head">
             <action method="addCss"><stylesheet>css/mvproductivitypack.css</stylesheet></action>
         </reference>
-        <reference name="content">
+        <reference name="after_body_start">
             <block type="MvProductivityPack/panel" name="admin_panel" after="-" template="mvproductivitypack/panel.phtml" />
         </reference>        
     </MvProductivityPack_panel>	

@@ -87,6 +87,10 @@ class ZetaPrints_MvProductivityPack_Block_Panel
       'value'   => 'Save',
       'no_span' => true,
     ));
+    $form->addField('cancel', 'button', array(
+      'value'   => 'Cancel',
+      'no_span' => true,
+    ));
     return $form;
   }
 

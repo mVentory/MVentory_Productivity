@@ -8,70 +8,151 @@ $_type = $this->_getType();
 <?php if ($_helper->isReviewerLogged()): ?>
 
 <div id="productivity-panel">
-  <div id="productivity-panel-content" class="clearer">
+  <div id="productivity-panel-menu" class="clearer">
+    <ul id="productivity-tasks">
+
+      <li>
+        <a title="<?php echo $this->__('About this extension'); ?>" href="/">mVentory</a>
+      </li>
+
+      <?php if ($_helper->isAdminLogged() && ($_type == 'page' || $_type == 'index') && ($link = $this->_getCmsPageLink())): ?>
+      <li>
+        <a title="<?php echo $this->__('Edit the page in CMS'); ?>" href="<?php echo $link ?>"><?php echo $this->__('CMS'); ?></a>
+      </li>
+      <?php endif; ?>
+
+      <?php if ($_type == 'category'): ?>
+
+      <?php if ($_helper->isAdminLogged() && ($link = $this->_getCategoryLink())): ?>
+      <li>
+        <a title="<?php echo $this->__('Edit the current category'); ?>" href="<?php echo $link ?>"><?php echo $this->__('Category'); ?></a>
+      </li>
+      <?php endif; ?>
+
+      <li>
+        <a title="<?php echo $this->__('View products with no images'); ?>" href="<?php echo $this->_getWithoutImagesLink() ?>"><?php echo $this->__('No-image products'); ?></a>
+      </li>
+
+      <?php endif; ?>
+
+      <?php if ($_type == 'product'): ?>
+
+      <?php if ($_helper->isAdminLogged()): ?>
+      <li>
+        <a title="<?php echo $this->__('Go to Magento admin panel'); ?>" href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Admin'); ?></a>
+      </li>
+      <?php endif; ?>
+
+      <li>
+        <a title="<?php echo $this->__('Upload a product image'); ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"><?php echo $this->__('Upload') ?></a>
+      </li>
+
+      <li>
+        <a title="<?php echo $this->__('Edit product details'); ?>" id="productivity-task-edit-form" class="productivity-panel-task" href="#"><?php echo $this->__('Edit') ?></a>
+      </li>
+
+      <li>
+        <a title="<?php echo $this->__('Hide the editing panel'); ?>" id="productivity-action-close" href="#">&times;</a>
+      </li>
+
+      <?php endif; ?>
+
+    </ul>
+  </div>
 
   <?php if ($_type == 'product'): ?>
+  <div id="productivity-panel-content">
+    <div id="productivity-panel-content-inner" class="clearer">
 
-    <div id="productivity-actions">
-    <?php if ($_helper->isAdminLogged()): ?>
-      <a href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Product in admin'); ?></a><br>
-    <?php endif; ?>
-      <a href="#" onclick="this.hide(); $('productivity-edit-form').show(); return false;"><?php echo $this->__('Edit product details') ?></a>
-    </div>
+      <div id="productivity-uploader">
+        <div id="productivity-uploader-element"></div>
 
-    <div id="productivity-uploader">
-      <div id="productivity-uploader-element"></div>
+        <div id="productivity-uploader-dropzone-wrapper">
+          <div id="productivity-uploader-dropzone">
+            <span><?php echo $this->__('Drag and drop product images to upload here'); ?></span>
+          </div>
+        </div>
 
-      <div id="productivity-uploader-dropzone-wrapper">
-        <div id="productivity-uploader-dropzone"></div>
+        <ul id="productivity-uploader-previews"></ul>
       </div>
 
-      <ul id="productivity-uploader-previews"></ul>
-    </div>
+      <?php //A quick form for editing select attributes in a hurry. ?>
 
-<?php /*
-       * A quick form for editing select attributes in a hurry.
-       */ ?>
-    <div id="productivity-edit-attributes">
-      <div id="productivity-edit-form" style="display: none;">
-        <?php echo $this->getEditForm()->setHtmlIdPrefix('productivity-edit-')->toHtml() ?>
+      <div id="productivity-edit-attributes">
+        <h3><?php echo $this->__('Edit product details'); ?></h3>
+
+        <div id="productivity-edit-form">
+          <?php echo $this->getEditForm()->setHtmlIdPrefix('productivity_edit_form_')->toHtml() ?>
+        </div>
       </div>
+
     </div>
-
-  <?php endif; ?>
-
-  <?php if ($_helper->isAdminLogged() && ($_type == 'page' || $_type == 'index') && ($link = $this->_getCmsPageLink())): ?>
-  <a href="<?php echo $link ?>"><?php echo $this->__('CMS page in admin'); ?></a>
-  <?php endif; ?>
-
-  <?php if ($_type == 'category'): ?>
-    <a href="<?php echo $this->_getWithoutImagesLink() ?>"><?php echo $this->__('Show products without images'); ?></a>
-
-    <?php if ($_helper->isAdminLogged() && ($link = $this->_getCategoryLink())): ?>
-    <a href="<?php echo $link ?>"><?php echo $this->__('Category in admin'); ?></a>
-    <?php endif; ?>
-
-  <?php endif; ?>
-
   </div>
+  <?php endif; ?>
+
 </div>
 
-<?php endif; ?>
+<?php if ($_type == 'product'): ?>
 
 <script type="text/javascript">
 //<![CDATA[
 
 jQuery(function ($) {
   var $panel = $('#productivity-panel');
+  var $content = $('#productivity-panel-content');
 
-  $panel
-    .on('mouseenter dragover', function () {
-      $panel.addClass('productivity-hovered');
-    })
-    .on('mouseleave', function () {
-      $panel.removeClass('productivity-hovered');
+  var menu_height = $('#productivity-panel-menu').height();
+
+  $panel.css('height', menu_height);
+
+  function resize_panel () {
+    $panel.css('height', $content.height() + menu_height);
+
+    return false;
+  }
+
+  $panel.on('mouseenter drop', resize_panel)
+
+  var tasks = '';
+
+  $('#productivity-tasks .productivity-panel-task').each(function () {
+    var $this = $(this);
+
+    var task = $this.attr('id') + '-on';
+
+    tasks += task + ' ';
+
+    $(this).on('click', function () {
+      $panel.hasClass(task)
+        ? $panel.removeClass(task)
+          : $panel.addClass(task);
+
+      resize_panel();
+
+      return false;
     });
+  });
+
+  $('#productivity-action-close').on('click', function () {
+    $panel.removeClass(tasks);
+
+    resize_panel();
+
+    return false;
+  });
+
+  $('#productivity_edit_form_cancel').on('click', function () {
+    $panel.removeClass('productivity-task-edit-form-on');
+
+    resize_panel();
+
+    return false;
+  });
 });
 
 //]]>
 </script>
+
+<?php endif; ?>
+
+<?php endif; ?>
