@@ -30,6 +30,16 @@
   padding: 2px 5px;
 }
 
+#productivity-panel .clearer:after {
+  clear: both;
+  content: ".";
+  display: block;
+  font-size: 0;
+  height: 0;
+  line-height: 0;
+  overflow: hidden;
+}
+
 #productivity-panel-menu {
   background: linear-gradient(to top, #373737 0px, #464646 5px) repeat scroll 0 0 #464646;
 }
