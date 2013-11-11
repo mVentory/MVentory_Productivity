@@ -190,10 +190,15 @@ class ZetaPrints_MvProductivityPack_Helper_Data
     if ($this->isAdminLogged())
       return true;
 
-    $groupId = Mage::getSingleton('customer/session')
-                 ->getCustomerGroupId();
+    $session = Mage::getSingleton('customer/session');
+
+    $groupId = $session->getCustomerGroupId();
 
     if ($groupId == Mage_Customer_Model_Group::NOT_LOGGED_IN_ID)
+      return false;
+
+    if ($session->getCustomer()->getWebsiteId()
+          != Mage::app()->getWebsite()->getId())
       return false;
 
     $group = Mage::getModel('customer/group')->load($groupId);
