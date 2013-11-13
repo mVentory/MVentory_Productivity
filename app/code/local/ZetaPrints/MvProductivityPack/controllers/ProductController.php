@@ -8,6 +8,8 @@
  * @author     ZetaPrints <daniel@clockworkgeek.com>
  */
 
+require_once 'Mage/Adminhtml/controllers/Catalog/ProductController.php';
+
 class ZetaPrints_MvProductivityPack_ProductController extends Mage_Core_Controller_Front_Action
 {
 
@@ -16,8 +18,10 @@ class ZetaPrints_MvProductivityPack_ProductController extends Mage_Core_Controll
    * Reviewer will see the page refresh.
    */
   public function saveAction() {
+    $request = $this->getRequest();
+
     // URL parameter
-    $productId = $this->getRequest()->getParam('id');
+    $productId = $request->getParam('id');
     // Useful stuff
     $storeId = Mage::app()->getStore()->getId();
     $helper = Mage::helper('MvProductivityPack');
@@ -31,14 +35,28 @@ class ZetaPrints_MvProductivityPack_ProductController extends Mage_Core_Controll
       // Product's store is set back to frontend so correct values are loaded+saved
       $product->setStoreId($storeId)
           ->load($productId);
+
+      $qty = (float) $request->getParam('qty');
+
       // Only allow certain attributes to be set, if missing product will not be changed.
       $data = array_intersect_key(
-        $this->getRequest()->getPost(),
+        $request->getPost(),
         $helper->getVisibleAttributes($product)
       );
       if (isset($data['description'])) {
         $data['short_description'] = $data['description'];
       }
+
+      $data['stock_data'] = array(
+        'qty' => $qty < Mage_Adminhtml_Catalog_ProductController::MAX_QTY_VALUE
+                   ? $qty
+                     : Mage_Adminhtml_Catalog_ProductController::MAX_QTY_VALUE,
+        'is_in_stock'
+          => $qty > 0
+               ? Mage_CatalogInventory_Model_Stock_Status::STATUS_IN_STOCK
+                 : Mage_CatalogInventory_Model_Stock_Status::STATUS_OUT_OF_STOCK
+      );
+
       $product->addData($data)
           ->save();
 
@@ -47,11 +65,7 @@ class ZetaPrints_MvProductivityPack_ProductController extends Mage_Core_Controll
     }
 
     // Always show same page, even if nothing has changed
-    $this->_redirectReferer(Mage::getUrl('catalog/product/view', array(
-      'id'      => $productId,
-      '_store'    => $storeId,
-      '_use_rewrite'  => true
-    )));
+    $this->_redirectUrl($product->setData('url', null)->getProductUrl());
   }
 
 }

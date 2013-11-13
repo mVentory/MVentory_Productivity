@@ -68,20 +68,56 @@ class ZetaPrints_MvProductivityPack_Block_Panel
 
     /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
     foreach ($attributes as $attribute) {
+      $label = trim($attribute->getStoreLabel());
+
+      //Support for features of MVentory extension
+      //Hide attributes which are disabled in the current store
+      if ($label == '~')
+        continue;
+
+      $values = $attribute->usesSource()
+                  ? $attribute->getSource()->getAllOptions()
+                    : null;
+
+      //Support for features of MVentory extension
+      //Hide attribute's values which are disabled in the current store
+      if ($values) {
+        foreach ($values as $i => $value)
+          if (strpos($value['label'], '~') === 0)
+            unset($values[$i]);
+
+        //Also hide attribute if it doesn't have allowed values
+        if (count($values) < 2)
+          continue;
+      }
+
       $field = array(
         'name'   => $attribute->getAttributeCode(),
-        'label'  => $attribute->getFrontendLabel(),
-        'values' => $attribute->usesSource() ? $attribute->getSource()->getAllOptions() : null
+        'label'  => $label,
+        'values' => $values
       );
       $input = in_array($attribute->getFrontendInput(), $allowedInputs)
                ? $attribute->getFrontendInput()
                : 'text';
-      $form->addField($attribute->getAttributeCode(), $input, $field)
+      $form->addField($field['name'], $input, $field)
            ->setFormat(Mage::app()->getLocale()->getDateFormat()) // for date, time & datetime fields
            ->setRows(5); // in case it's a textarea, make it taller
     }
 
+    $qtyField = $form->addField(
+      'qty',
+      'text',
+      array(
+        'name' => 'qty',
+        'label'  => 'Qty',
+      ),
+      'price'
+    );
+
     $form->setValues($product->getData());
+
+    $qtyField->setValue($product->getStockItem()->getQty() * 1);
+
     // add field after values so "Submit" value is not overwritten
     $form->addField('submit', 'submit', array(
       'value'   => 'Save',
