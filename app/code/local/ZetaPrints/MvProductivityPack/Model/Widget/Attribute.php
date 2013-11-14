@@ -93,6 +93,12 @@ class ZetaPrints_MvProductivityPack_Model_Widget_Attribute {
       if (!$helper->strlen($option['value']))
         continue;
 
+      //Ignore 'n/a', 'n-a', 'n\a' and 'na' values
+      //Note: case insensitive comparing; delimeter can be surrounded
+      //      with spaces
+      if (preg_match('#^n(\s*[/-\\\\]\s*)?a$#i', trim($option['label'])))
+        continue;
+
       $data[] = $option;
     }
 
