@@ -30,7 +30,8 @@
   padding: 2px 5px;
 }
 
-#productivity-panel .clearer:after {
+#productivity-panel .clearer:after,
+#productivity-edit-form .field-row:after {
   clear: both;
   content: ".";
   display: block;

@@ -252,9 +252,10 @@ class ZetaPrints_MvProductivityPack_Helper_Data
     $result['price'] = $attributes['price'];
 
     foreach ($attributes as $attribute) {
-      if ($attribute->getIsVisibleOnFront()) {
-        $result[$attribute->getAttributeCode()] = $attribute;
-      }
+      $code = $attribute->getAttributeCode();
+
+      if ($attribute->getIsVisibleOnFront() || substr($code, -1) === '_')
+        $result[$code] = $attribute;
     }
 
     return $result;
