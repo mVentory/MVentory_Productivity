@@ -29,7 +29,7 @@ class ZetaPrints_MvProductivityPack_Block_Product_Related
 
     $this->setData(
       'product_collection',
-      $collection = Mage::getResourceModel('catalog/product_collection')
+      $collection = new Varien_Data_Collection()
     );
 
     if (!(($product = $this->getProduct())
@@ -47,22 +47,22 @@ class ZetaPrints_MvProductivityPack_Block_Product_Related
 
     $imageFilter = array('nin' => array('no_selection', ''));
 
-    $collection
-      ->addAttributeToSelect(array(
-          'name',
-          'special_price',
-          'special_from_date',
-          'special_to_date'
-        ))
-      ->addPriceData()
-      ->addUrlRewrite()
-      ->addIdFilter($productId, true)
-      ->addAttributeToFilter($code, $value)
-      ->addAttributeToFilter('small_image', $imageFilter)
-      ->setVisibility($visibility)
-      ->addStoreFilter()
-      ->setPageSize($this->getProductsCount())
-      ->setCurPage(1);
+    $collection = Mage::getResourceModel('catalog/product_collection')
+                    ->addAttributeToSelect(array(
+                        'name',
+                        'special_price',
+                        'special_from_date',
+                        'special_to_date'
+                      ))
+                    ->addPriceData()
+                    ->addUrlRewrite()
+                    ->addIdFilter($productId, true)
+                    ->addAttributeToFilter($code, $value)
+                    ->addAttributeToFilter('small_image', $imageFilter)
+                    ->setVisibility($visibility)
+                    ->addStoreFilter()
+                    ->setPageSize($this->getProductsCount())
+                    ->setCurPage(1);
 
     $collection
       ->getSelect()
