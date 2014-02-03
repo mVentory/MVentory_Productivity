@@ -31,10 +31,9 @@ class ZetaPrints_MvProductivityPack_ProductController extends Mage_Core_Controll
       // Product saves must be made from admin store
       Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
 
-      $product = Mage::getModel('catalog/product');
-      // Product's store is set back to frontend so correct values are loaded+saved
-      $product->setStoreId($storeId)
-          ->load($productId);
+      //Don't set store ID to product because it has to be saved
+      //in a global scope
+      $product = Mage::getModel('catalog/product')->load($productId);
 
       $qty = (float) $request->getParam('qty');
 
