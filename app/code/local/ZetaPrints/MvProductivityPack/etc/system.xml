@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config>
+  <sections>
+    <google>
+      <groups>
+        <analytics>
+          <fields>
+            <productivity_analytics_url translate="label comment" module="MvProductivityPack">
+              <label>Analytics Reports URL</label>
+              <frontend_type>text</frontend_type>
+              <validate>validate-url</validate>
+              <comment>Link to analytics reports for Productivity toolbar.</comment>
+
+              <show_in_default>0</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+
+              <sort_order>30</sort_order>
+            </productivity_analytics_url>
+          </fields>
+        </analytics>
+      </groups>
+    </google>
+  </sections>
+</config>
