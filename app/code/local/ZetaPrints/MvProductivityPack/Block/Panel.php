@@ -9,6 +9,8 @@
 class ZetaPrints_MvProductivityPack_Block_Panel
   extends Mage_Core_Block_Template {
 
+  const CONFIG_ANALYTICS_URL = 'google/analytics/productivity_analytics_url';
+
   protected function _getType () {
     return $this->getRequest()->getControllerName();
   }
@@ -48,6 +50,10 @@ class ZetaPrints_MvProductivityPack_Block_Panel
     $params['_query'] = array('without_images_only' => true);
 
     return Mage::getUrl('*/*/*', $params);
+  }
+
+  public function _getAnalyticsUrl () {
+    return Mage::getStoreConfig(self::CONFIG_ANALYTICS_URL);
   }
 
   /**
