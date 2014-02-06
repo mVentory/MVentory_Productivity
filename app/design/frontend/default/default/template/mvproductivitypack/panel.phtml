@@ -19,7 +19,7 @@ $_type = $this->_getType();
 
       <?php if ($_helper->isAdminLogged() && ($_type == 'page' || $_type == 'index') && ($link = $this->_getCmsPageLink())): ?>
       <li>
-        <a title="<?php echo $this->__('Edit the page in CMS'); ?>" href="<?php echo $link ?>"><?php echo $this->__('CMS'); ?></a>
+        <a title="<?php echo $this->__('Go to Magento admin panel'); ?>" href="<?php echo $link ?>"><?php echo $this->__('Admin'); ?></a>
       </li>
       <?php endif; ?>
 
@@ -27,7 +27,7 @@ $_type = $this->_getType();
 
       <?php if ($_helper->isAdminLogged() && ($link = $this->_getCategoryLink())): ?>
       <li>
-        <a title="<?php echo $this->__('Edit the current category'); ?>" href="<?php echo $link ?>"><?php echo $this->__('Category'); ?></a>
+        <a title="<?php echo $this->__('Go to Magento admin panel'); ?>" href="<?php echo $link ?>"><?php echo $this->__('Admin'); ?></a>
       </li>
       <?php endif; ?>
 
