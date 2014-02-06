@@ -56,6 +56,10 @@ class ZetaPrints_MvProductivityPack_Block_Panel
     return Mage::getStoreConfig(self::CONFIG_ANALYTICS_URL);
   }
 
+  public function _getHelpUrl () {
+    return 'http://mventory.com/help/toolbar/mventory-toolbar/';
+  }
+
   /**
    * Build a form object populated with product data.
    * 

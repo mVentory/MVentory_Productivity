@@ -11,10 +11,6 @@ $_type = $this->_getType();
   <div id="productivity-panel-menu" class="clearer">
     <ul id="productivity-tasks">
 
-      <li>
-        <a title="<?php echo $this->__('About this extension'); ?>" href="/">mVentory</a>
-      </li>
-
       <?php if ($url = $this->_getAnalyticsUrl()): ?>
       <li>
         <a title="<?php echo $this->__('Analytics reports'); ?>" href="<?php echo $url; ?>"><?php echo $this->__('Analytics'); ?></a>
@@ -57,10 +53,16 @@ $_type = $this->_getType();
         <a title="<?php echo $this->__('Edit product details'); ?>" id="productivity-task-edit-form" class="productivity-panel-task" href="#"><?php echo $this->__('Edit') ?></a>
       </li>
 
+      <?php endif; ?>
+
+      <li>
+        <a title="<?php echo $this->__('About this extension'); ?>" href="<?php $this->_getHelpUrl(); ?>"><?php echo $this->__('Help') ?></a>
+      </li>
+
+      <?php if ($_type == 'product'): ?>
       <li>
         <a title="<?php echo $this->__('Hide the editing panel'); ?>" id="productivity-action-close" href="#">&times;</a>
       </li>
-
       <?php endif; ?>
 
     </ul>
