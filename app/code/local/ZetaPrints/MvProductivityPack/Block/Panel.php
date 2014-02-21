@@ -114,19 +114,21 @@ class ZetaPrints_MvProductivityPack_Block_Panel
            ->setRows(5); // in case it's a textarea, make it taller
     }
 
-    $qtyField = $form->addField(
-      'qty',
-      'text',
-      array(
-        'name' => 'qty',
-        'label'  => 'Qty',
-      ),
-      'price'
-    );
-
     $form->setValues($product->getData());
 
-    $qtyField->setValue($product->getStockItem()->getQty() * 1);
+    if ($product->getTypeId() != 'configurable') {
+      $qtyField = $form->addField(
+        'qty',
+        'text',
+        array(
+          'name' => 'qty',
+          'label'  => 'Qty',
+        ),
+        'price'
+      );
+
+      $qtyField->setValue($product->getStockItem()->getQty() * 1);
+    }
 
     // add field after values so "Submit" value is not overwritten
     $form->addField('submit', 'submit', array(
