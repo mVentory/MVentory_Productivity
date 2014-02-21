@@ -140,6 +140,12 @@ class ZetaPrints_MvProductivityPack_Model_Widget_Attribute {
     Mage::getSingleton('catalog/product_visibility')
       ->addVisibleInCatalogFilterToCollection($collection);
 
+    //Dispatch the event to emul;ate loading collection of products in catalog
+    Mage::dispatchEvent(
+      'catalog_block_product_list_collection',
+      array('collection' => $collection)
+    );
+
     return $collection;
   }
 }
