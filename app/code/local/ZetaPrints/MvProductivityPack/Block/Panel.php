@@ -116,6 +116,8 @@ class ZetaPrints_MvProductivityPack_Block_Panel
 
     $form->setValues($product->getData());
 
+    $isConfigurable = $product->getTypeId() == 'configurable';
+
     $form
       ->addField(
           'qty',
@@ -128,7 +130,7 @@ class ZetaPrints_MvProductivityPack_Block_Panel
         )
       ->setValue(
           $isConfigurable
-            ? $this->__('Edit individual products')
+            ? $this->__('Edit individual sub-products')
               : $product->getStockItem()->getQty() * 1
         );
 
