@@ -116,19 +116,21 @@ class ZetaPrints_MvProductivityPack_Block_Panel
 
     $form->setValues($product->getData());
 
-    if ($product->getTypeId() != 'configurable') {
-      $qtyField = $form->addField(
-        'qty',
-        'text',
-        array(
-          'name' => 'qty',
-          'label'  => 'Qty',
-        ),
-        'price'
-      );
-
-      $qtyField->setValue($product->getStockItem()->getQty() * 1);
-    }
+    $form
+      ->addField(
+          'qty',
+          $isConfigurable ? 'label' : 'text',
+          array(
+            'name' => 'qty',
+            'label'  => 'Qty',
+          ),
+          'price'
+        )
+      ->setValue(
+          $isConfigurable
+            ? $this->__('Edit individual products')
+              : $product->getStockItem()->getQty() * 1
+        );
 
     // add field after values so "Submit" value is not overwritten
     $form->addField('submit', 'submit', array(
