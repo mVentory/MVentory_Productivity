@@ -182,6 +182,14 @@
   background: url('../images/mvproductivitypack/main-image-icon.png') no-repeat center;
 }
 
+#productivity-image-edit-panel.productivity-state-main-image {
+  width: 78px;
+}
+
+.productivity-state-main-image .set-main-image {
+  display: none;
+}
+
 .image-editor-loader{
   display:none;
   background: url(/skin/frontend/default/default/images/loading.gif) no-repeat;

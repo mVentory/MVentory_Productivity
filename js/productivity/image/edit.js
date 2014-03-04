@@ -141,6 +141,11 @@ jQuery(document).ready(function ($) {
     if($panel.hasClass('disabled'))
       return;
 
+    if (event.data.type == 'image')
+      $panel.addClass('productivity-state-main-image');
+    else
+      $panel.removeClass('productivity-state-main-image');
+
     $panel
       .css({
         top: offset.top + $this.height() - 10,
