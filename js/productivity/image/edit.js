@@ -69,6 +69,18 @@ jQuery(document).ready(function ($) {
               + '\nStatus: ' + status);
       },
       success: function (data, status, jqXHR) {
+        if (!data.success) {
+          var currentBorder = $img.css('border');
+          $img.css('border','1px solid red');
+          setTimeout(function(){$img.css('border',currentBorder)}, 5000);
+          alert('Product ID: ' + productId + '\nImage file: ' + file
+                + '\nStatus: ' + status);
+
+          return;
+        }
+
+        data = data.data;
+
         $img.prop('src', data.image);
         $img.parent('a')
           .prop('href', '/media/catalog/product' + data.base);
@@ -93,7 +105,18 @@ jQuery(document).ready(function ($) {
       },
       success: function (data, status, jqXHR) {
         //console.log(data);
-        if(data) {
+        if (!data.success) {
+          var currentBorder = $img.css('border');
+          $img.css('border','1px solid red');
+          setTimeout(function(){$img.css('border',currentBorder)}, 5000);
+          alert('Product ID: ' + product_id + '\nImage file: ' + params.file + '\nStatus: ' + status);
+
+          return;
+        }
+
+        data = data.data;
+
+        if (data.image) {
           $img
             .prop('src', data.image);
         }
@@ -124,6 +147,15 @@ jQuery(document).ready(function ($) {
       },
       success: function (data, status, jqXHR) {
         //console.log(data);
+
+        if (!data.success) {
+          alert('Product ID: ' + product_id + '\nImage file: ' + params.file + '\nStatus: ' + status);
+
+          return;
+        }
+
+        data = data.data;
+
         $thumb.prop('src', data.thumbImage);
         $image.prop('src', data.mainImage);
 

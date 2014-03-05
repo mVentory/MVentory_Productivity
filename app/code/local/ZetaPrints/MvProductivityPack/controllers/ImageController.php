@@ -15,14 +15,14 @@ class ZetaPrints_MvProductivityPack_ImageController
     $helper = Mage::helper('MvProductivityPack');
 
     if (!$helper->isReviewerLogged())
-      return;
+      return $this->_error();
 
     $request = $this->getRequest();
 
     $hasRequiredParam = $request->has('params') && $request->has('productId');
 
     if (!$hasRequiredParam)
-      return;
+      return $this->_error();
 
     $params = $request->get('params');
     $productId = $request->get('productId');
@@ -33,7 +33,7 @@ class ZetaPrints_MvProductivityPack_ImageController
                          && array_key_exists($params['rotate'], $angels);
 
     if (!$hasRequiredValues)
-      return;
+      return $this->_error();
 
     //Export $file, $width, $height and $rotate variables
     extract($params);
@@ -68,23 +68,21 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     $params = Zend_Json::encode(compact('file', 'width', 'height'));
 
-    echo Zend_Json::encode(compact('image', 'params'));
-
-    return Zend_Json::encode(true);
+    $this->_success(compact('image', 'params'));
   }
 
   public function removeAction () {
     $helper = Mage::helper('MvProductivityPack');
 
     if (!$helper->isReviewerLogged())
-      return;
+      return $this->_error();
 
     $request = $this->getRequest();
 
     $hasRequiredParam = $request->has('params') && $request->has('product');
 
     if (!$hasRequiredParam)
-      return;
+      return $this->_error();
 
     $params = $request->get('params');
     $productId = (int) $request->get('product');
@@ -93,7 +91,7 @@ class ZetaPrints_MvProductivityPack_ImageController
                          && $productId >= 0;
 
     if (!$hasRequiredValues)
-      return;
+      return $this->_error();
 
     //Export $file, $width and $height variables
     extract($params);
@@ -102,26 +100,26 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     $helper->remove($file, $productId);
 
+    $data = array();
+
     if($request->get('thumb') != 'true') {
       $_product = Mage::getModel('catalog/product')
                     ->load($productId);
 
-      $image = Mage::helper('catalog/image')
-                 ->init($_product, 'image')
-                 ->resize($width ? $width : null, $height ? $height : null)
-                 ->__toString();
-
-      echo Zend_Json::encode(array('image'=>$image));
+      $data['image'] = Mage::helper('catalog/image')
+        ->init($_product, 'image')
+        ->resize($width ? $width : null, $height ? $height : null)
+        ->__toString();
     }
 
-    return Zend_Json::encode(true);
+    $this->_success($data);
   }
 
   public function setmainAction () {
     $helper = Mage::helper('MvProductivityPack');
 
     if (!$helper->isReviewerLogged())
-      return;
+      return $this->_error();
 
     $request = $this->getRequest();
 
@@ -130,7 +128,7 @@ class ZetaPrints_MvProductivityPack_ImageController
                         && $request->has('product');
 
     if (!$hasRequiredParam)
-      return;
+      return $this->_error();
 
     $thumb = $request->get('params');
     $image = $request->get('main_image_params');
@@ -141,7 +139,7 @@ class ZetaPrints_MvProductivityPack_ImageController
                          && $productId >= 0;
 
     if (!$hasRequiredValues)
-      return;
+      return $this->_error();
 
     $helper->setMainImage($thumb['file'], $productId);
 
@@ -173,29 +171,21 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     $result = compact('thumbImage', 'mainImage', 'params', 'main_image_params');
 
-    echo Zend_Json::encode($result);
-
-    return Zend_Json::encode(true);
+    $this->_success($result);
   }
 
   public function uploadAction () {
     $helper = Mage::helper('MvProductivityPack');
 
-    if (!$helper->isReviewerLogged()) {
-      echo Mage::helper('core')->jsonEncode(array('success' => false));
-
-      return;
-    }
+    if (!$helper->isReviewerLogged())
+      return $this->_error();
 
     $request = $this->getRequest();
 
-    $productId = (int) $request->getParam('product_id');
+    $productId = $request->getParam('product_id');
 
-    if (!($productId && isset($_FILES['qqfile']))) {
-      echo Mage::helper('core')->jsonEncode(array('success' => false));
-
-      return;
-    }
+    if (!($productId && isset($_FILES['qqfile'])))
+     return $this->_error();
 
     $uploader = new Mage_Core_Model_File_Uploader('qqfile');
 
@@ -223,6 +213,17 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     $helper->add($productId, $result);
 
-    echo Mage::helper('core')->jsonEncode(array('success' => true));
+    $this->_success();
+  }
+
+  private function _success ($data = null) {
+    echo Mage::helper('core')->jsonEncode(array(
+      'success' => true,
+      'data' => $data
+    ));
+  }
+
+  private function _error () {
+    echo Mage::helper('core')->jsonEncode(array('success' => false));
   }
 }
