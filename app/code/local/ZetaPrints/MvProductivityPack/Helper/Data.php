@@ -155,7 +155,8 @@ class ZetaPrints_MvProductivityPack_Helper_Data
               $product,
               $data['path'] . $data['file'],
               $mediaAttribute,
-              true
+              true,
+              false
             );
 
     $product->save();
