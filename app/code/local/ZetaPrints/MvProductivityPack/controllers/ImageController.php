@@ -63,10 +63,13 @@ class ZetaPrints_MvProductivityPack_ImageController
     $_product = Mage::getModel('catalog/product')->load($productId);
 
     // get resized version of image
-    $result['url'] = Mage::helper('catalog/image')
-               ->init($_product, $type, $result['file'])
-               ->resize($width ? $width : null, $height ? $height : null)
-               ->__toString();
+    $result['url'] = $this->_getImageUrl(
+      $_product,
+      $type,
+      $result['file'],
+      $width ? $width : null,
+      $height ? $height : null
+    );
 
     $this->_success($result);
   }
@@ -106,10 +109,13 @@ class ZetaPrints_MvProductivityPack_ImageController
       $_product = Mage::getModel('catalog/product')
                     ->load($productId);
 
-      $data['url'] = Mage::helper('catalog/image')
-        ->init($_product, 'image')
-        ->resize($width ? $width : null, $height ? $height : null)
-        ->__toString();
+      $data['url'] = $this->_getImageUrl(
+        $_product,
+        'image',
+        null,
+        $width ? $width : null,
+        $height ? $height : null
+      );
     }
 
     $this->_success($data);
@@ -149,23 +155,23 @@ class ZetaPrints_MvProductivityPack_ImageController
     $result = array(
       'image' => array(
         'file' => $thumb['file'],
-        'url' => Mage::helper('catalog/image')
-          ->init($_product, 'image', $thumb['file'])
-          ->resize(
-              $image['width'] ? $image['width'] : null,
-              $image['height'] ? $image['height'] : null
-            )
-          ->__toString()
+        'url' => $this->_getImageUrl(
+          $_product,
+          'image',
+          $thumb['file'],
+          $image['width'] ? $image['width'] : null,
+          $image['height'] ? $image['height'] : null
+        )
       ),
       'thumbnail' => array(
         'file' => $image['file'],
-        'url' => Mage::helper('catalog/image')
-          ->init($_product, 'thumbnail', $image['file'])
-          ->resize(
-              $thumb['width'] ? $thumb['width'] : null,
-              $thumb['height'] ? $thumb['height'] : null
-            )
-          ->__toString()
+        'url' => $this->_getImageUrl(
+          $_product,
+          'thumbnail',
+          $image['file'],
+          $thumb['width'] ? $thumb['width'] : null,
+          $thumb['height'] ? $thumb['height'] : null
+        )
       )
     );
 
@@ -212,6 +218,18 @@ class ZetaPrints_MvProductivityPack_ImageController
     $helper->add($productId, $result);
 
     $this->_success();
+  }
+
+  private function _getImageUrl ($product,
+                                 $type = 'image',
+                                 $file = null,
+                                 $width = null,
+                                 $height = null) {
+
+    return Mage::helper('catalog/image')
+      ->init($product, $type, $file)
+      ->resize($width, $height)
+      ->__toString();
   }
 
   private function _success ($data = null) {
