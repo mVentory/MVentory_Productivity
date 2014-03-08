@@ -19,13 +19,10 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     $request = $this->getRequest();
 
-    $hasRequiredParam = $request->has('params') && $request->has('productId');
-
-    if (!$hasRequiredParam)
+    if (!$request->has('params'))
       return $this->_error();
 
     $params = $request->get('params');
-    $productId = $request->get('productId');
 
     $angels = array('left' => 90, 'right' => -90);
 
@@ -33,6 +30,9 @@ class ZetaPrints_MvProductivityPack_ImageController
                          && array_key_exists($params['rotate'], $angels);
 
     if (!$hasRequiredValues)
+      return $this->_error();
+
+    if (!$product = $this->_getProduct($request->getParam('productId')))
       return $this->_error();
 
     //Export $file, $width, $height and $rotate variables
@@ -53,18 +53,16 @@ class ZetaPrints_MvProductivityPack_ImageController
         = $helper
             ->updateImageInGallery($file,
                                    $newFileAbsolute,
-                                   $productId,
+                                   $product,
                                    array('image', 'small_image', 'thumbnail'));
     } else {
       $result['file'] = $helper
-                ->updateImageInGallery($file, $newFileAbsolute, $productId);
+                ->updateImageInGallery($file, $newFileAbsolute, $product);
     }
-
-    $_product = Mage::getModel('catalog/product')->load($productId);
 
     // get resized version of image
     $result['url'] = $this->_getImageUrl(
-      $_product,
+      $product,
       $type,
       $result['file'],
       $width ? $width : null,
@@ -82,18 +80,15 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     $request = $this->getRequest();
 
-    $hasRequiredParam = $request->has('params') && $request->has('product');
-
-    if (!$hasRequiredParam)
+    if (!$request->has('params'))
       return $this->_error();
 
     $params = $request->get('params');
-    $productId = (int) $request->get('product');
 
-    $hasRequiredValues = $params['file']
-                         && $productId >= 0;
+    if (!$params['file'])
+      return $this->_error();
 
-    if (!$hasRequiredValues)
+    if (!$product = $this->_getProduct($request->getParam('product')))
       return $this->_error();
 
     //Export $file, $width and $height variables
@@ -101,16 +96,13 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     unset($params);
 
-    $helper->remove($file, $productId);
+    $helper->remove($file, $product);
 
     $data = array();
 
     if($request->get('thumb') != 'true') {
-      $_product = Mage::getModel('catalog/product')
-                    ->load($productId);
-
       $data['url'] = $this->_getImageUrl(
-        $_product,
+        $product,
         'image',
         null,
         $width ? $width : null,
@@ -130,33 +122,29 @@ class ZetaPrints_MvProductivityPack_ImageController
     $request = $this->getRequest();
 
     $hasRequiredParam = $request->has('params')
-                        && $request->has('main_image_params')
-                        && $request->has('product');
+                        && $request->has('main_image_params');
 
     if (!$hasRequiredParam)
       return $this->_error();
 
     $thumb = $request->get('params');
     $image = $request->get('main_image_params');
-    $productId = (int) $request->get('product');
 
-    $hasRequiredValues = $thumb['file']
-                         && $image['file']
-                         && $productId >= 0;
+    $hasRequiredValues = $thumb['file'] && $image['file'];
 
     if (!$hasRequiredValues)
       return $this->_error();
 
-    $helper->setMainImage($thumb['file'], $productId);
+    if (!$product = $this->_getProduct($request->getParam('product')))
+      return $this->_error();
 
-    $_product = Mage::getModel('catalog/product')
-                  ->load($productId);
+    $helper->setMainImage($thumb['file'], $product);
 
     $result = array(
       'image' => array(
         'file' => $thumb['file'],
         'url' => $this->_getImageUrl(
-          $_product,
+          $product,
           'image',
           $thumb['file'],
           $image['width'] ? $image['width'] : null,
@@ -166,7 +154,7 @@ class ZetaPrints_MvProductivityPack_ImageController
       'thumbnail' => array(
         'file' => $image['file'],
         'url' => $this->_getImageUrl(
-          $_product,
+          $product,
           'thumbnail',
           $image['file'],
           $thumb['width'] ? $thumb['width'] : null,
@@ -184,12 +172,12 @@ class ZetaPrints_MvProductivityPack_ImageController
     if (!$helper->isReviewerLogged())
       return $this->_error();
 
-    $request = $this->getRequest();
+    if (!isset($_FILES['qqfile']))
+      return $this->_error();
 
-    $productId = $request->getParam('product_id');
-
-    if (!($productId && isset($_FILES['qqfile'])))
-     return $this->_error();
+    if (!$product
+          = $this->_getProduct($this->getRequest()->getParam('product_id')))
+      return $this->_error();
 
     $uploader = new Mage_Core_Model_File_Uploader('qqfile');
 
@@ -215,10 +203,21 @@ class ZetaPrints_MvProductivityPack_ImageController
       )
     );
 
-    if (!$file = $helper->add($productId, $result))
+    if (!$file = $helper->add($product, $result))
       return $this->_error();
 
     $this->_success(array('file' => $file));
+  }
+
+  private function _getProduct ($id) {
+    if (($id = (int) $id) < 1)
+      return;
+
+    Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+
+    $product = Mage::getModel('catalog/product')->load($id);
+
+    return $product->getId() ? $product : null;
   }
 
   private function _getImageUrl ($product,

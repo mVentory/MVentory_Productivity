@@ -21,11 +21,7 @@ class ZetaPrints_MvProductivityPack_Helper_Data
     return $image->getNewFile();
   }
 
-  public function remove ($file, $productId) {
-    Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
-
-    $product = Mage::getModel('catalog/product')->load($productId);
-
+  public function remove ($file, $product) {
     if (!$product->getId())
       return;
 
@@ -54,11 +50,7 @@ class ZetaPrints_MvProductivityPack_Helper_Data
     return true;
   }
 
-  public function setMainImage ($file, $productId) {
-    Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
-
-    $product = Mage::getModel('catalog/product')->load($productId);
-
+  public function setMainImage ($file, $product) {
     if (!$product->getId())
       return;
 
@@ -101,13 +93,9 @@ class ZetaPrints_MvProductivityPack_Helper_Data
     return true;
   }
 
-  public function updateImageInGallery ($oldFile, $newFile, $productId,
+  public function updateImageInGallery ($oldFile, $newFile, $product,
                                         $mediaAttribute = null, $move = true,
                                         $exclude = false) {
-
-    Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
-
-    $product = Mage::getModel('catalog/product')->load($productId);
 
     if (!$product->getId())
       return;
@@ -134,11 +122,7 @@ class ZetaPrints_MvProductivityPack_Helper_Data
     return $file;
   }
 
-  public function add ($productId, $data) {
-    Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
-
-    $product = Mage::getModel('catalog/product')->load($productId);
-
+  public function add ($product, $data) {
     if (!$product->getId())
       return;
 
