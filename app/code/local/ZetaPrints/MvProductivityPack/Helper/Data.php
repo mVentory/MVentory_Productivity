@@ -160,6 +160,8 @@ class ZetaPrints_MvProductivityPack_Helper_Data
             );
 
     $product->save();
+
+    return $file;
   }
 
   protected function _getMediaBackend ($product) {

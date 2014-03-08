@@ -215,9 +215,10 @@ class ZetaPrints_MvProductivityPack_ImageController
       )
     );
 
-    $helper->add($productId, $result);
+    if (!$file = $helper->add($productId, $result))
+      return $this->_error();
 
-    $this->_success();
+    $this->_success(array('file' => $file));
   }
 
   private function _getImageUrl ($product,
