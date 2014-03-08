@@ -45,30 +45,30 @@ class ZetaPrints_MvProductivityPack_ImageController
 
     $type = $request->get('thumb') == 'true'?'thumbnail':'image';
 
+    $result = array();
+
     if($type == 'image') {
       // update main product image and get new base filename
-      $file
+      $result['file']
         = $helper
             ->updateImageInGallery($file,
                                    $newFileAbsolute,
                                    $productId,
                                    array('image', 'small_image', 'thumbnail'));
     } else {
-      $file = $helper
+      $result['file'] = $helper
                 ->updateImageInGallery($file, $newFileAbsolute, $productId);
     }
 
     $_product = Mage::getModel('catalog/product')->load($productId);
 
     // get resized version of image
-    $image = Mage::helper('catalog/image')
-               ->init($_product, $type, $file)
+    $result['url'] = Mage::helper('catalog/image')
+               ->init($_product, $type, $result['file'])
                ->resize($width ? $width : null, $height ? $height : null)
                ->__toString();
 
-    $params = Zend_Json::encode(compact('file', 'width', 'height'));
-
-    $this->_success(compact('image', 'params'));
+    $this->_success($result);
   }
 
   public function removeAction () {
@@ -106,7 +106,7 @@ class ZetaPrints_MvProductivityPack_ImageController
       $_product = Mage::getModel('catalog/product')
                     ->load($productId);
 
-      $data['image'] = Mage::helper('catalog/image')
+      $data['url'] = Mage::helper('catalog/image')
         ->init($_product, 'image')
         ->resize($width ? $width : null, $height ? $height : null)
         ->__toString();
@@ -146,30 +146,28 @@ class ZetaPrints_MvProductivityPack_ImageController
     $_product = Mage::getModel('catalog/product')
                   ->load($productId);
 
-    $thumbImage = Mage::helper('catalog/image')
-                    ->init($_product, 'thumbnail', $image['file'])
-                    ->resize(
-                        $thumb['width'] ? $thumb['width'] : null,
-                        $thumb['height'] ? $thumb['height'] : null
-                      )
-                    ->__toString();
-
-    $mainImage = Mage::helper('catalog/image')
-                   ->init($_product, 'image', $thumb['file'])
-                   ->resize(
-                       $image['width'] ? $image['width'] : null,
-                       $image['height'] ? $image['height'] : null
-                     )
-                   ->__toString();
-
-    $file = $thumb['file'];
-    $thumb['file'] = $image['file'];
-    $image['file'] = $file;
-
-    $params = Zend_Json::encode($thumb);
-    $main_image_params = Zend_Json::encode($image);
-
-    $result = compact('thumbImage', 'mainImage', 'params', 'main_image_params');
+    $result = array(
+      'image' => array(
+        'file' => $thumb['file'],
+        'url' => Mage::helper('catalog/image')
+          ->init($_product, 'image', $thumb['file'])
+          ->resize(
+              $image['width'] ? $image['width'] : null,
+              $image['height'] ? $image['height'] : null
+            )
+          ->__toString()
+      ),
+      'thumbnail' => array(
+        'file' => $image['file'],
+        'url' => Mage::helper('catalog/image')
+          ->init($_product, 'thumbnail', $image['file'])
+          ->resize(
+              $thumb['width'] ? $thumb['width'] : null,
+              $thumb['height'] ? $thumb['height'] : null
+            )
+          ->__toString()
+      )
+    );
 
     $this->_success($result);
   }
