@@ -143,9 +143,29 @@ class ZetaPrints_MvProductivityPack_Helper_Data
               false
             );
 
+    $backend->addImage(
+      $product,
+      $data['path'] . $data['file'],
+      $mediaAttribute,
+      true,
+      false
+    );
+
     $product->save();
 
-    return $file;
+    $gallery = $product->getData(self::ATTRIBUTE_CODE);
+
+    if (!(isset($gallery['images']) && $gallery['images']))
+      return;
+
+    $image = end($gallery['images']);
+
+    if (!(isset($image['new_file'], $image['file'])
+          && $image['new_file']
+          && $image['file']))
+      return;
+
+    return $image['file'];
   }
 
   protected function _getMediaBackend ($product) {
