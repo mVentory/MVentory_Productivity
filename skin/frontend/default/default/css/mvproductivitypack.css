@@ -186,6 +186,24 @@
   width: 78px;
 }
 
+#productivity-image-edit-panel.productivity-scope-uploader {
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  padding: 0;
+  width: 100px;
+  height: 100px;
+}
+
+.productivity-scope-uploader .rotate-image.rotate-left,
+.productivity-scope-uploader .rotate-image.rotate-right,
+.productivity-scope-uploader .remove-image,
+.productivity-scope-uploader .set-main-image {
+  background-color: #fff;
+  width: 36px;
+  height: 36px;
+  margin: 8px 0 0 8px;
+}
+
 .productivity-state-main-image .set-main-image {
   display: none;
 }

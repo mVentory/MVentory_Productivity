@@ -25,26 +25,26 @@ $helper = Mage::helper('core');
 <script type="text/javascript">
 //<![CDATA[
 
-_tm_image_editor_rotate_url = '<?php echo $this->getUrl('mvproductivitypackf/image/rotate') ?>';
-_tm_image_editor_remove_url = '<?php echo $this->getUrl('mvproductivitypackf/image/remove') ?>';
-_tm_image_editor_setmain_url = '<?php echo $this->getUrl('mvproductivitypackf/image/setmain') ?>';
+productivity.image.url = {
+  rotate: '<?php echo $this->getUrl('mvproductivitypackf/image/rotate') ?>',
+  remove: '<?php echo $this->getUrl('mvproductivitypackf/image/remove') ?>',
+  setmain: '<?php echo $this->getUrl('mvproductivitypackf/image/setmain') ?>'
+};
 
-productivity = {
-  selector: {
-    image: '<?php echo $this->getImageSelector() ?>',
-    thumbnail: '<?php echo $this->getThumbSelector() ?>'
-  },
+productivity.edit.selector = {
+  image: '<?php echo $this->getImageSelector() ?>',
+  thumbnail: '<?php echo $this->getThumbSelector() ?>'
+};
 
-  wrapper: {
-    image: '<?php echo $this->getImageWrapperSelector() ?>',
-    thumbnail: '<?php echo $this->getThumbWrapperSelector() ?>'
-  },
+productivity.edit.wrapper = {
+  image: '<?php echo $this->getImageWrapperSelector() ?>',
+  thumbnail: '<?php echo $this->getThumbWrapperSelector() ?>'
+};
 
-  size: {
-    image: <?php echo $helper->jsonEncode($this->getImageSize()) ?>,
-    thumbnail: <?php echo $helper->jsonEncode($this->getThumbSize()) ?>
-  }
-}
+productivity.edit.size = {
+  image: <?php echo $helper->jsonEncode($this->getImageSize()) ?>,
+  thumbnail: <?php echo $helper->jsonEncode($this->getThumbSize()) ?>
+};
 
 //]]>
 </script>

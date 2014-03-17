@@ -50,6 +50,62 @@ $upload_elem
     reader.readAsDataURL($this.fineUploader('getFile', id));
 
     $upload_btn.css('display', 'block');
+  })
+  .on('complete', function (event, id, name, response, xhr) {
+    if (!response.success)
+      return;
+
+    if (typeof productivity === 'undefined')
+      return;
+
+    function on_error ($element, data) {
+      $element
+        .removeClass('qq-upload-success')
+        .addClass('qq-upload-fail');
+
+      setTimeout(
+        function () { $element.removeClass('qq-upload-fail'); },
+        5000
+      );
+    }
+
+    productivity.func.add_panel(
+      $(this).fineUploader('getItemByFileId', id),
+      {
+        panel: {
+          position: { top: 2, left: 2 },
+          scope: 'uploader',
+          action: {
+            remove: {
+              on_error: on_error,
+              on_success: function ($element, data) {
+                $element.remove();
+              }
+            },
+            rotate: {
+              on_error: on_error,
+              on_success: function ($element, data) {
+                $element.css('background-image', 'url(' + data.url + ')');
+                $element.data('productivity').file = data.file;
+              }
+            },
+            setmain: {
+              on_error: on_error,
+              on_success: function ($element, data) {
+                $element.image.prop('src', data.image.url);
+                $element.image.data('productivity').file = data.image.file;
+              }
+            }
+          }
+        },
+        image: {
+          file: response.data.file,
+          type: 'thumbnail',
+          width: null,
+          height: null
+        }
+      }
+    );
   });
 
 $upload_btn.on('click', function () {
