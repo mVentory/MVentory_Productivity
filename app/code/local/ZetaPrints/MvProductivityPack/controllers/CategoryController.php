@@ -68,8 +68,8 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
     $this->getResponse()->setHeader('Content-Type','application/rss+xml; charset='.$apiConfigCharset);
   }
 
-  public function viewAction () {
-    parent::viewAction();
+  public function viewAction ($categoryId = null) {
+    $this->_viewAction($categoryId);
 
     $request = $this->getRequest();
 
@@ -133,5 +133,73 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
       ->setHeader('Content-Type','application/rss+xml; charset=' . $charset);
   }
 
+  /**
+   * Category view action
+   *
+   * The method is redefined to allow passing category ID
+   * via function parameters
+   */
+  private function _viewAction ($categoryId = null) {
+    $categoryId = (int) $categoryId;
+
+    if ($categoryId)
+      $this->getRequest()->setParam('id', $categoryId);
+
+    if (!$category = $this->_initCatagory()) {
+      if (!$this->getResponse()->isRedirect())
+        $this->_forward('noRoute');
+
+      return;
+    }
+
+    $categoryId = $category->getId();
+
+    $design = Mage::getSingleton('catalog/design');
+    $settings = $design->getDesignSettings($category);
+
+    //Apply custom design
+    if ($customDesign = $settings->getCustomDesign())
+      $design->applyCustomDesign($customDesign);
+
+    Mage::getSingleton('catalog/session')->setLastViewedCategoryId($categoryId);
+
+    $layout = $this->getLayout();
+
+    $update = $layout->getUpdate();
+    $update->addHandle('default');
+
+    if (!$category->hasChildren())
+      $update->addHandle('catalog_category_layered_nochildren');
+
+    $this->addActionLayoutHandles();
+    $update->addHandle($category->getLayoutUpdateHandle());
+    $update->addHandle('CATEGORY_' . $categoryId);
+
+    $this->loadLayoutUpdates();
+
+    //Apply custom layout update once layout is loaded
+    $layoutUpdates = $settings->getLayoutUpdates();
+
+    if ($layoutUpdates && is_array($layoutUpdates))
+        foreach($layoutUpdates as $layoutUpdate)
+          $update->addUpdate($layoutUpdate);
+
+    $this->generateLayoutXml()->generateLayoutBlocks();
+
+    //Apply custom layout (page) template once the blocks are generated
+    if ($pageLayout = $settings->getPageLayout()) {
+      $layout->helper('page/layout')->applyTemplate($pageLayout);
+    }
+
+    if ($root = $layout->getBlock('root'))
+      $root
+        ->addBodyClass('categorypath-' . $category->getUrlPath())
+        ->addBodyClass('category-' . $category->getUrlKey());
+
+    $this->_initLayoutMessages('catalog/session');
+    $this->_initLayoutMessages('checkout/session');
+
+    $this->renderLayout();
+  }
 }
 
