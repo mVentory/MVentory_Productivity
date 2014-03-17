@@ -27,31 +27,30 @@ if ($_type == 'product') {
       </li>
       <?php endif; ?>
 
-      <?php if ($_helper->isAdminLogged() && ($_type == 'page' || $_type == 'index') && ($link = $this->_getCmsPageLink())): ?>
+      <?php if ($_helper->isAdminLogged()): ?>
+
+      <?php
+
+      switch ($_type) {
+        case 'page':
+        case 'index': $_link = $this->_getCmsPageLink(); break;
+        case 'category': $_link = $this->_getCategoryLink(); break;
+        case 'product': $_link = $this->_getProductLink(); break;
+      }
+
+      ?>
+
+      <?php if (isset($_link) && $_link): ?>
       <li>
-        <a title="<?php echo $this->__('Go to Magento admin panel'); ?>" href="<?php echo $link ?>"><?php echo $this->__('Admin'); ?></a>
+        <a title="<?php echo $this->__('Go to Magento admin panel'); ?>" href="<?php echo $_link ?>"><?php echo $this->__('Admin'); ?></a>
       </li>
       <?php endif; ?>
 
-      <?php if ($_type == 'category'): ?>
-
-      <?php if ($_helper->isAdminLogged() && ($link = $this->_getCategoryLink())): ?>
-      <li>
-        <a title="<?php echo $this->__('Go to Magento admin panel'); ?>" href="<?php echo $link ?>"><?php echo $this->__('Admin'); ?></a>
-      </li>
       <?php endif; ?>
 
       <li>
         <a title="<?php echo $this->__('View products with no images'); ?>" href="<?php echo $this->_getWithoutImagesLink() ?>"><?php echo $this->__('No-image products'); ?></a>
       </li>
-
-      <?php endif; ?>
-
-      <?php if ($_type == 'product' && $_helper->isAdminLogged()): ?>
-      <li>
-        <a title="<?php echo $this->__('Go to Magento admin panel'); ?>" href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Admin'); ?></a>
-      </li>
-      <?php endif; ?>
 
       <li>
         <a title="<?php echo $__uploadTitle; ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClick; ?>><?php echo $this->__('Upload') ?></a>

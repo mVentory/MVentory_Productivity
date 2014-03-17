@@ -45,11 +45,17 @@ class ZetaPrints_MvProductivityPack_Block_Panel
   }
 
   protected function _getWithoutImagesLink () {
-    $params['_current'] = true;
-    $params['_use_rewrite'] = true;
+    if ($isCategoryPage = $this->_getType() == 'category') {
+      $params['_current'] = true;
+      $params['_use_rewrite'] = true;
+    }
+
     $params['_query'] = array('without_images_only' => true);
 
-    return Mage::getUrl('*/*/*', $params);
+    return Mage::getUrl(
+      $isCategoryPage ? '*/*/*' : 'catalog/category/all',
+      $params
+    );
   }
 
   public function _getAnalyticsUrl () {
