@@ -3,6 +3,16 @@
 $_helper = Mage::helper('MvProductivityPack');
 $_type = $this->_getType();
 
+if ($_type == 'product') {
+  $__uploadTitle = $this->__('Upload a product image');
+  $__editTitle = $this->__('Edit product details');
+} else {
+  $__uploadTitle = $this->__('Select a product and click on Upload again to add more product images');
+  $__editTitle = $this->__('Select a product and click on Edit again to edit product details');
+
+  $_onClick = ' onclick="alert(this.title); return false;"';
+}
+
 ?>
 
 <?php if ($_helper->isReviewerLogged()): ?>
@@ -37,23 +47,19 @@ $_type = $this->_getType();
 
       <?php endif; ?>
 
-      <?php if ($_type == 'product'): ?>
-
-      <?php if ($_helper->isAdminLogged()): ?>
+      <?php if ($_type == 'product' && $_helper->isAdminLogged()): ?>
       <li>
         <a title="<?php echo $this->__('Go to Magento admin panel'); ?>" href="<?php echo $this->_getProductLink(); ?>"><?php echo $this->__('Admin'); ?></a>
       </li>
       <?php endif; ?>
 
       <li>
-        <a title="<?php echo $this->__('Upload a product image'); ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"><?php echo $this->__('Upload') ?></a>
+        <a title="<?php echo $__uploadTitle; ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClick; ?>><?php echo $this->__('Upload') ?></a>
       </li>
 
       <li>
-        <a title="<?php echo $this->__('Edit product details'); ?>" id="productivity-task-edit-form" class="productivity-panel-task" href="#"><?php echo $this->__('Edit') ?></a>
+        <a title="<?php echo $__editTitle; ?>" id="productivity-task-edit-form" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClick; ?>><?php echo $this->__('Edit') ?></a>
       </li>
-
-      <?php endif; ?>
 
       <li>
         <a title="<?php echo $this->__('About this extension'); ?>" href="<?php echo $this->_getHelpUrl(); ?>" target="_blank"><?php echo $this->__('Help') ?></a>
