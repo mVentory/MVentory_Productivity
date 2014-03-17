@@ -133,6 +133,10 @@ class ZetaPrints_MvProductivityPack_CategoryController extends Mage_Catalog_Cate
       ->setHeader('Content-Type','application/rss+xml; charset=' . $charset);
   }
 
+  public function allAction () {
+    return $this->viewAction(Mage::app()->getStore()->getRootCategoryId());
+  }
+
   /**
    * Category view action
    *
