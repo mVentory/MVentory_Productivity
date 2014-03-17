@@ -29,6 +29,12 @@
       <MvProductivityPack>
         <class>ZetaPrints_MvProductivityPack_Helper</class>
       </MvProductivityPack>
+
+      <catalog>
+        <rewrite>
+          <category>ZetaPrints_MvProductivityPack_Helper_Mage_Catalog_Category</category>
+        </rewrite>
+      </catalog>
     </helpers>
 
     <models>
