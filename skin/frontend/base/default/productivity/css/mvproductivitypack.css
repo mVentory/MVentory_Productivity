@@ -167,19 +167,19 @@
 }
 
 .tm-image-editor-menu .rotate-image.rotate-left {
-  background: url('../images/mvproductivitypack/rotate-left-icon.png') no-repeat center;
+  background: url('../images/rotate-left-icon.png') no-repeat center;
 }
 
 .tm-image-editor-menu .rotate-image.rotate-right {
-  background: url('../images/mvproductivitypack/rotate-right-icon.png') no-repeat center;
+  background: url('../images/rotate-right-icon.png') no-repeat center;
 }
 
 .tm-image-editor-menu .remove-image {
-  background: url('../images/mvproductivitypack/remove-icon.png') no-repeat center;
+  background: url('../images/remove-icon.png') no-repeat center;
 }
 
 .tm-image-editor-menu .set-main-image {
-  background: url('../images/mvproductivitypack/main-image-icon.png') no-repeat center;
+  background: url('../images/main-image-icon.png') no-repeat center;
 }
 
 #productivity-image-edit-panel.productivity-state-main-image {
@@ -210,6 +210,7 @@
 
 .image-editor-loader{
   display:none;
+  /* !!!FIX: add image to the extension */
   background: url(/skin/frontend/default/default/images/loading.gif) no-repeat;
   width: 32px;
   height: 32px;
@@ -249,7 +250,7 @@
 #productivity-uploader-dropzone {
   border-style: dashed;
   margin: 0 0 10px 0;
-  background: url('../images/mvproductivitypack/uploader/add.png') 37px 5px no-repeat;
+  background: url('../images/uploader/add.png') 37px 5px no-repeat;
 }
 
 #productivity-uploader-dropzone span {
@@ -313,7 +314,7 @@
 
 #productivity-uploader-previews .qq-upload-spinner {
   display: block;
-  background: url('../images/mvproductivitypack/uploader/loading.gif');
+  background: url('../images/uploader/loading.gif');
   width: 15px;
   height: 15px;
   position: absolute;
@@ -324,7 +325,7 @@
 
 #productivity-uploader-previews .qq-upload-cancel {
   display: block;
-  background: url('../images/mvproductivitypack/uploader/cancel.png');
+  background: url('../images/uploader/cancel.png');
   width: 16px;
   height: 16px;
   position: absolute;

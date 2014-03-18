@@ -55,10 +55,6 @@
         <catalog_productivity>
           <file>catalog/productivity.xml</file>
         </catalog_productivity>
-
-        <MvProductivityPack>
-          <file>zetaprints_mvproductivitypack.xml</file>
-        </MvProductivityPack>
       </updates>
     </layout>
 
