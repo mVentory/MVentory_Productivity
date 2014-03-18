@@ -12,7 +12,7 @@ class ZetaPrints_Productivity_Block_Adminhtml_Cms_Page_Edit_Button extends Mage_
    * Get cms page frontend url
    */
   public function getPageUrl()
-  {         
-    return Mage::getBaseUrl() . Mage::registry('cms_page')->getIdentifier(); 
+  {
+    return Mage::getBaseUrl() . Mage::registry('cms_page')->getIdentifier();
   }
 }

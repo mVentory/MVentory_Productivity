@@ -12,7 +12,7 @@ class ZetaPrints_Productivity_Block_Adminhtml_Catalog_Product_Edit_Button extend
    * Get product frontend url
    */
   public function getProductUrl()
-  {         
-    return Mage::registry('product')->getProductUrl(); 
+  {
+    return Mage::registry('product')->getProductUrl();
   }
 }

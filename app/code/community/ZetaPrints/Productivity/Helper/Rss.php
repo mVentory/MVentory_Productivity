@@ -10,7 +10,7 @@ class ZetaPrints_Productivity_Helper_Rss
   const IMAGE_HEIGHT = 300;
 
   const THUMB_WIDTH = 75;
-  const THUMB_HEIGHT = 75; 
+  const THUMB_HEIGHT = 75;
 
   public function generateFeedForProducts ($products, $params) {
     $currency = Mage::app()

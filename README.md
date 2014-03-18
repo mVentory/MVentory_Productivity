@@ -4,12 +4,12 @@ mvProductivity
 The Productivity extension contains different features which make life of store administrator easier. It includes fast cross-switching between products, categories and respective editors, basic editing of product images in the frontend.
 
 
-# Frontend features 
+# Frontend features
 
   * _Category_, _Product_ and _Static_ pages in the front end display a small button-like link at the top right corner of the page if the user is logged in as an admin to the same domain. The link opens a corresponding page in the admin.
   * Images on a product page in the front end can be manipulated (_delete, rotate, make main_) if the user is logged in as an admin to the same domain.
 
-## Fast access to editors 
+## Fast access to editors
 
 Add button to the CMS, product and category pages for fast editing pages in the admin panel. Done by updating page's layout in frontend interface with following XML code (see https://code.google.com/p/mageventory/source/browse/branches/mvProductivity/app/design/frontend/default/default/layout/zetaprints_mvproductivitypack.xml):
 
@@ -18,10 +18,10 @@ Add button to the CMS, product and category pages for fast editing pages in the 
 	  <reference name="head">
 		<action method="addCss"><stylesheet>css/zetaprints_mvproductivitypack.css</stylesheet></action>
 	  </reference>
-	  
+	
 	  <reference name="content">
 		<block type="mvproductivitypack/panel" name="admin_panel" after="-" template="zetaprints/mvproductivitypack/panel.phtml" />
-	  </reference>        
+	  </reference>
 	</mvproductivitypack_panel>	
 
 	<catalog_category_default>
@@ -30,18 +30,18 @@ Add button to the CMS, product and category pages for fast editing pages in the 
 
 	<catalog_category_layered>
 	  <update handle="mvproductivitypack_panel" />
-	</catalog_category_layered>    
+	</catalog_category_layered>
 
 	<catalog_product_view>
 	  <update handle="mvproductivitypack_panel" />
-	</catalog_product_view>    
+	</catalog_product_view>
 
 	<cms_page>
 	  <update handle="mvproductivitypack_panel" />
 	</cms_page>
-   
 
-## Simple image editor 
+
+## Simple image editor
 
 Add simple image editor to the product page. JS code for the image editor is appended via page layout (see https://code.google.com/p/mageventory/source/browse/branches/mvProductivity/app/design/frontend/default/default/layout/zetaprints_mvproductivitypack.xml)
 
@@ -118,18 +118,18 @@ Adds button for preview product, category and cms page
             <block name="page.edit.frontview.button" type="mvproductivitypack/adminhtml_cms_page_edit_button" before="-" template="mvproductivitypack/cms/page/edit/button.phtml" />
         </reference>
     </adminhtml_cms_page_edit>
-    
+
 
 Adds middle click for Attributes
 Adds middle click for Attribute Sets
-  - Done by js code in update_grid.js file which is appended to the page in 
+  - Done by js code in update_grid.js file which is appended to the page in
     adminhtml's zetaprints_mvproductivitypack.xml:
 
     <adminhtml_catalog_product_attribute_index>
         <reference name="head">
             <action method="addJs"><script>mvproductivitypack/update_grid.js</script></action>
             <action method="addCss"><name>mvproductivitypack/mvproductivitypack.css</name></action>
-        </reference>  
+        </reference>
     </adminhtml_catalog_product_attribute_index>
     <adminhtml_catalog_product_set_index>
         <reference name="head">
@@ -138,13 +138,13 @@ Adds middle click for Attribute Sets
     </adminhtml_catalog_product_set_index>
 
 Adds middle click for attributes in editing attribute set
-  - Done by js code in script.js.phtml file which is appended to the page in 
+  - Done by js code in script.js.phtml file which is appended to the page in
     adminhtml's zetaprints_mvproductivitypack.xml:
 
     <adminhtml_catalog_product_set_edit>
         <reference name="js">
             <block type="core/template" template="mvproductivitypack/catalog/product/attribute/set/edit/script.js.phtml" name="attribute.script.js" />
-        </reference>  
+        </reference>
     </adminhtml_catalog_product_set_edit>
 
 
@@ -180,7 +180,7 @@ This widget is available in CMS pages to output a list with product info for inc
   * `item_template` - escaped HTML with variables
   * `image_size` - from the list of available sizes and no resizing is done
 
-*Variables:* 
+*Variables:*
   * `%url%` - absolute URL of the product
   * `%img%` - absolute URL of the product image
   * `%name%` - product name
@@ -197,7 +197,7 @@ As of now it outputs a random list of products in stock.
 	  <a href=\"%url%\">
 		<img src=\"%img%\" alt=\"%name% %price%\"/>
 	  </a>
-	  
+	
 	  %if:sale%<span>(Sale!)</span>%end:sale%
 	</li>" image_size="215x170"}}
 
@@ -234,18 +234,18 @@ This widget is available in CMS pages to output a list with attribute values for
   * `item_template` - escaped HTML with variables
   * `code` - attribute's code
 
-*Variables:* 
+*Variables:*
   * `%code%` - attribute's code
   * `%label%` - label of attribute's value
   * `%value%` - id of attribute's value
 
-### Widget example 
+### Widget example
 
 
 	{{widget type="MvProductivityPack/widget_attribute" item_template="<li>%code%: %label% (%value%)</li>" code="brands"}}
 
 
-### Full example 
+### Full example
 
 *Content: *
 
@@ -259,7 +259,7 @@ This widget is available in CMS pages to output a list with attribute values for
 
 This block is used to show related products based on a shared attribute and its value in the current product. It can be used only on a product details page.
 
-The block returns a list of all products that have a matching value of the same attribute regardless on the attribute set or category. E.g. there are cups, mugs and plates who share attribute `color`. If the product details page displays a `purple` mug then the related products will have other `purple` mugs, cups and plates. 
+The block returns a list of all products that have a matching value of the same attribute regardless on the attribute set or category. E.g. there are cups, mugs and plates who share attribute `color`. If the product details page displays a `purple` mug then the related products will have other `purple` mugs, cups and plates.
 
 *Params:*
   * `attribute_code` - attribute's code
@@ -318,7 +318,7 @@ The block returns a list of all products that have a matching value of the same 
 
 		$_name = $_helper->productAttribute($_product, $_product->getName(), 'name');
 		$_productUrl = $_product->getProductUrl();
-	  
+	
 	  ?>
 
 	  <li>
@@ -336,7 +336,7 @@ The block returns a list of all products that have a matching value of the same 
 		  </span>
 		</button>
 	  </li>
-	  
+	
 	  <?php endforeach ?>
 	</ul>
 

@@ -2,13 +2,13 @@
 var categories = <?php echo $this->getJson() ?>;
 var key = '<?php echo Mage::getSingleton('adminhtml/url')->getSecretKey("catalog_product_attribute","edit");?>';
 Event.observe(window, 'load', function() {
-  $('front-button').observe('click', function() { 
+  $('front-button').observe('click', function() {
       var id = $$('input[name="general[id]"]')[0].value;
       if(id > 0) {
         var url = categories[id];
-        window.open(url);   
+        window.open(url);
       }
-  }); 
+  });
     $('category-edit-container').observe('mousedown', function(e) {
       if(Event.isMiddleClick(e)) {
         var tr = e.target.up('tr');
@@ -17,7 +17,7 @@ Event.observe(window, 'load', function() {
           window.open('/admin/catalog_product/edit/id/'+id+'/key/'+key+'/');
         }
       }
-      
+
     });
 });
 </script>

@@ -236,7 +236,7 @@ class ZetaPrints_Productivity_Helper_Data
 
   /**
    * List attributes likely to be shown on product page.
-   * 
+   *
    * @param Mage_Catalog_Model_Product $product
    * @return array of Mage_Catalog_Model_Resource_Eav_Attribute
    */

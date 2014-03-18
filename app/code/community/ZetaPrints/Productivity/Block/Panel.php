@@ -68,7 +68,7 @@ class ZetaPrints_Productivity_Block_Panel
 
   /**
    * Build a form object populated with product data.
-   * 
+   *
    * @return Varien_Data_Form
    */
   public function getEditForm() {

@@ -3,15 +3,15 @@ function addMiddleClick() {
     item.stopObserving('click');
     item.observe('mousedown', function(e) {
       if(Event.isMiddleClick(e)) {
-        window.open(item.readAttribute('title'), '_blank');  
-      } 
+        window.open(item.readAttribute('title'), '_blank');
+      }
     });
     item.observe('click', function(e) {
       if(Event.isLeftClick(e)) {
-        document.location.href = item.readAttribute('title'); 
-      } 
+        document.location.href = item.readAttribute('title');
+      }
     });
-  }); 
+  });
 }
 
-Event.observe(window, 'load', addMiddleClick); 
+Event.observe(window, 'load', addMiddleClick);
