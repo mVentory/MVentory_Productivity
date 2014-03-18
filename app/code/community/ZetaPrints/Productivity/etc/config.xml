@@ -159,7 +159,7 @@
     <layout>
       <updates>
         <productivity>
-          <file>zetaprints_mvproductivitypack.xml</file>
+          <file>productivity.xml</file>
         </productivity>
       </updates>
     </layout>

@@ -8,7 +8,7 @@
   <productivity_panel>
     <reference name="head">
       <action method="addCss">
-        <stylesheet>productivity/css/mvproductivitypack.css</stylesheet>
+        <stylesheet>productivity/css/styles.css</stylesheet>
       </action>
     </reference>
 

@@ -37,6 +37,6 @@ class ZetaPrints_Productivity_Block_Catalog_Product_Attribute_Edit_Tab_Options
   public function __construct () {
     parent::__construct();
 
-    $this->setTemplate('mvproductivitypack/catalog/product/attribute/options.phtml');
+    $this->setTemplate('productivity/catalog/product/attribute/options.phtml');
   }
 }
