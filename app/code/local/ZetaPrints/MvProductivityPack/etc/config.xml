@@ -51,10 +51,6 @@
         <productivity>
           <file>productivity.xml</file>
         </productivity>
-
-        <catalog_productivity>
-          <file>catalog/productivity.xml</file>
-        </catalog_productivity>
       </updates>
     </layout>
 
