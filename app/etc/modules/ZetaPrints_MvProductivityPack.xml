@@ -3,7 +3,7 @@
     <modules>
         <ZetaPrints_MvProductivityPack>
             <active>true</active>
-            <codePool>local</codePool>
+            <codePool>community</codePool>
         </ZetaPrints_MvProductivityPack>
     </modules>
 </config>
