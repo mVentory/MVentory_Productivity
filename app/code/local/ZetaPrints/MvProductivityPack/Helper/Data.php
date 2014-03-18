@@ -135,14 +135,6 @@ class ZetaPrints_MvProductivityPack_Helper_Data
     if (!(isset($gallery['images']) && $gallery['images']))
       $mediaAttribute = array_keys($product->getMediaAttributes());
 
-    $file = $backend->addImage(
-              $product,
-              $data['path'] . $data['file'],
-              $mediaAttribute,
-              true,
-              false
-            );
-
     $backend->addImage(
       $product,
       $data['path'] . $data['file'],
