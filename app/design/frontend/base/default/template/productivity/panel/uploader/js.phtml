@@ -1,4 +1,4 @@
-<?php if (Mage::helper('MvProductivityPack')->isReviewerLogged()) : ?>
+<?php if (Mage::helper('productivity')->isReviewerLogged()) : ?>
 
 <?php
 
@@ -111,6 +111,10 @@ $upload_elem
 $upload_btn.on('click', function () {
   $upload_elem.fineUploader('uploadStoredFiles');
 });
+
+//function get_image_edit_panel_size ($element) {
+//  return { width: $element.width(), height: $element.height() };
+//}
 
 });
 

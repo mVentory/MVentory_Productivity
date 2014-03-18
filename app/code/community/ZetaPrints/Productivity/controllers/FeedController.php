@@ -14,6 +14,6 @@ class ZetaPrints_Productivity_FeedController
     $subject = 'WP page was updated';
     $body = 'URL: ' . $url;
 
-    Mage::helper('MvProductivityPack')->sendEmail($subject, $body);
+    Mage::helper('productivity')->sendEmail($subject, $body);
   }
 }

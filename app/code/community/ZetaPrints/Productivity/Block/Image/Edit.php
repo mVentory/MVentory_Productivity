@@ -25,7 +25,7 @@ class ZetaPrints_Productivity_Block_Image_Edit
   }
 
   protected function _toHtml () {
-    if (Mage::helper('MvProductivityPack')->isReviewerLogged())
+    if (Mage::helper('productivity')->isReviewerLogged())
       return parent::_toHtml();
   }
 }

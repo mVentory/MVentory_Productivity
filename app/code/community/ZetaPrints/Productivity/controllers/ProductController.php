@@ -24,7 +24,7 @@ class ZetaPrints_Productivity_ProductController extends Mage_Core_Controller_Fro
     $productId = $request->getParam('id');
     // Useful stuff
     $storeId = Mage::app()->getStore()->getId();
-    $helper = Mage::helper('MvProductivityPack');
+    $helper = Mage::helper('productivity');
 
     if ($helper->isReviewerLogged())
     {

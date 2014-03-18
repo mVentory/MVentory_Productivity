@@ -60,7 +60,7 @@ class ZetaPrints_Productivity_CategoryController extends Mage_Catalog_CategoryCo
       $item->link = $url;
     }
 
-    $helper = Mage::helper('MvProductivityPack/rss');
+    $helper = Mage::helper('productivity/rss');
 
     $this->getResponse()->setBody($helper->formatXml($rssXml->asXML()));
 
@@ -119,7 +119,7 @@ class ZetaPrints_Productivity_CategoryController extends Mage_Catalog_CategoryCo
                     ->getBlock("product_list")
                     ->getLoadedProductCollection();
 
-    $feed = Mage::helper('MvProductivityPack/rss')
+    $feed = Mage::helper('productivity/rss')
               ->setLayout($layout)
               ->generateFeedForProducts($collection, $data);
 

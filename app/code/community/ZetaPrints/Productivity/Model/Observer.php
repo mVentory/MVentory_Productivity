@@ -7,11 +7,11 @@ class ZetaPrints_Productivity_Model_Observer {
     $url = $helper->getCurrentUrl();
     $url = $helper->addRequestParam($url, array('rss' => 1));
 
-    Mage::helper('MvProductivityPack/rss')->addFeedToHeader($url);
+    Mage::helper('productivity/rss')->addFeedToHeader($url);
   }
 
   public function addLatestProductsFeed ($observer) {
-    $helper = Mage::helper('MvProductivityPack/rss');
+    $helper = Mage::helper('productivity/rss');
 
     $title = $helper->__('Latest products');
     $url = Mage::getUrl('mvproductivitypackf/rss_product/latest');
@@ -20,7 +20,7 @@ class ZetaPrints_Productivity_Model_Observer {
   }
 
   public function addTopCategoriesFeed ($observer) {
-    $helper = Mage::helper('MvProductivityPack/rss');
+    $helper = Mage::helper('productivity/rss');
 
     $title = $helper->__('Top Categories');
     $url = Mage::getUrl('catalog/category/top');
@@ -111,7 +111,7 @@ class ZetaPrints_Productivity_Model_Observer {
     $to = (int) $option['merge']['to'];
 
     $session = Mage::getSingleton('adminhtml/session');
-    $helper = Mage::helper('MvProductivityPack');
+    $helper = Mage::helper('productivity');
 
     if ($from == 0 || $to == 0 || $from == $to) {
       $msg = 'Selecting new or similar options for merging are not allowed. '

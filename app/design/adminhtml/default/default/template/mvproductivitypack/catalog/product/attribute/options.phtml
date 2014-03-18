@@ -74,8 +74,8 @@
         <div class="hor-scroll">
             <table class="dynamic-grid" cellspacing="0"  cellpadding="0">
                 <tr id="attribute-options-table">
-                        <th><?php echo Mage::helper('MvProductivityPack')->__('From') ?></th>
-                        <th><?php echo Mage::helper('MvProductivityPack')->__('To') ?></th>
+                        <th><?php echo Mage::helper('productivity')->__('From') ?></th>
+                        <th><?php echo Mage::helper('productivity')->__('To') ?></th>
                     <?php foreach ($this->getStores() as $_store): ?>
                         <th><?php echo $_store->getName() ?></th>
                     <?php endforeach; ?>

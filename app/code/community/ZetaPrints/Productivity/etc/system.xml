@@ -5,7 +5,7 @@
       <groups>
         <analytics>
           <fields>
-            <productivity_analytics_url translate="label comment" module="MvProductivityPack">
+            <productivity_analytics_url translate="label comment" module="productivity">
               <label>Analytics Reports URL</label>
               <frontend_type>text</frontend_type>
               <validate>validate-url</validate>

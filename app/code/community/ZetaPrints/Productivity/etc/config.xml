@@ -8,9 +8,9 @@
 
   <global>
     <blocks>
-      <MvProductivityPack>
+      <productivity>
         <class>ZetaPrints_Productivity_Block</class>
-      </MvProductivityPack>
+      </productivity>
 
       <catalog>
         <rewrite>
@@ -26,9 +26,9 @@
     </blocks>
 
     <helpers>
-      <MvProductivityPack>
+      <productivity>
         <class>ZetaPrints_Productivity_Helper</class>
-      </MvProductivityPack>
+      </productivity>
 
       <catalog>
         <rewrite>
@@ -38,10 +38,10 @@
     </helpers>
 
     <models>
-      <MvProductivityPack>
+      <productivity>
         <class>ZetaPrints_Productivity_Model</class>
         <resourceModel>ZetaPrints_Productivity_resources</resourceModel>
-      </MvProductivityPack>
+      </productivity>
     </models>
   </global>
 
@@ -55,13 +55,13 @@
     </layout>
 
     <routers>
-      <MvProductivityPack>
+      <productivity>
         <use>standard</use>
         <args>
           <module>ZetaPrints_Productivity</module>
           <frontName>mvproductivitypackf</frontName>
         </args>
-      </MvProductivityPack>
+      </productivity>
 
       <catalog>
         <args>
@@ -133,13 +133,13 @@
 
   <admin>
     <routers>
-      <MvProductivityPack>
+      <productivity>
         <use>admin</use>
         <args>
           <module>ZetaPrints_Productivity</module>
           <frontName>mvproductivitypack</frontName>
         </args>
-      </MvProductivityPack>
+      </productivity>
     </routers>
   </admin>
 
@@ -158,9 +158,9 @@
 
     <layout>
       <updates>
-        <MvProductivityPack>
+        <productivity>
           <file>zetaprints_mvproductivitypack.xml</file>
-        </MvProductivityPack>
+        </productivity>
       </updates>
     </layout>
   </adminhtml>

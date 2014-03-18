@@ -8,11 +8,11 @@ class ZetaPrints_Productivity_ImageController
   public function preDispatch () {
     parent::preDispatch();
 
-    Mage::getModel('MvProductivityPack/observer')->rememberAdminState(null);
+    Mage::getModel('productivity/observer')->rememberAdminState(null);
   }
 
   public function rotateAction () {
-    $helper = Mage::helper('MvProductivityPack');
+    $helper = Mage::helper('productivity');
 
     if (!$helper->isReviewerLogged())
       return $this->_error();
@@ -73,7 +73,7 @@ class ZetaPrints_Productivity_ImageController
   }
 
   public function removeAction () {
-    $helper = Mage::helper('MvProductivityPack');
+    $helper = Mage::helper('productivity');
 
     if (!$helper->isReviewerLogged())
       return $this->_error();
@@ -114,7 +114,7 @@ class ZetaPrints_Productivity_ImageController
   }
 
   public function setmainAction () {
-    $helper = Mage::helper('MvProductivityPack');
+    $helper = Mage::helper('productivity');
 
     if (!$helper->isReviewerLogged())
       return $this->_error();
@@ -167,7 +167,7 @@ class ZetaPrints_Productivity_ImageController
   }
 
   public function uploadAction () {
-    $helper = Mage::helper('MvProductivityPack');
+    $helper = Mage::helper('productivity');
 
     if (!$helper->isReviewerLogged())
       return $this->_error();

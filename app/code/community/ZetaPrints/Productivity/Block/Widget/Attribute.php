@@ -34,7 +34,7 @@ class ZetaPrints_Productivity_Block_Widget_Attribute
     if (!$code = $this->getData('code'))
       return null;
 
-    $attr = Mage::getModel('MvProductivityPack/widget_attribute')
+    $attr = Mage::getModel('productivity/widget_attribute')
               ->loadByCode($code);
 
     $this->setData('attribute_source', $attr);

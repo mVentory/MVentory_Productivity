@@ -79,7 +79,7 @@ class ZetaPrints_Productivity_Block_Panel
          ->setMethod('post')
          // see ZetaPrints_Productivity_ProductController::saveAction()
          ->setAction(Mage::getUrl('catalog/product/save', array('id' => $product->getId())));
-    $attributes = Mage::helper('MvProductivityPack')->getVisibleAttributes($product);
+    $attributes = Mage::helper('productivity')->getVisibleAttributes($product);
     $allowedInputs = array('text', 'textarea', 'date', 'select', 'multiselect');
 
     /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */

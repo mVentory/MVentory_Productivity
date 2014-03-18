@@ -31,7 +31,7 @@ class ZetaPrints_Productivity_Block_Rss_Product_Latest
   protected function _toHtml () {
     $products = $this
                   ->getLayout()
-                  ->createBlock('MvProductivityPack/product_latest')
+                  ->createBlock('productivity/product_latest')
                   ->setProductsCount(self::ITEMS_NUMBER)
                   ->getProductCollection();
 
@@ -42,7 +42,7 @@ class ZetaPrints_Productivity_Block_Rss_Product_Latest
     );
 
     return $this
-             ->helper('MvProductivityPack/rss')
+             ->helper('productivity/rss')
              ->generateFeedForProducts($products, $data);
   }
 }

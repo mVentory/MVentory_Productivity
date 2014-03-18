@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <widgets>
-  <productivity_slideshow type="MvProductivityPack/slideshow" translate="name description" module="MvProductivityPack">
+  <productivity_slideshow type="productivity/slideshow" translate="name description" module="productivity">
     <name>Productivity: Universal slideshow</name>
     <description>A generic way of inserting different dynamic slideshows and galleries into pages via the admin</description>
     <parameters>
@@ -34,7 +34,7 @@
     </parameters>
   </productivity_slideshow>
 
-  <productivity_attribute type="MvProductivityPack/widget_attribute" translate="name description" module="MvProductivityPack">
+  <productivity_attribute type="productivity/widget_attribute" translate="name description" module="productivity">
     <name>Productivity: Output values of attributes</name>
     <description>A generic way to output values of attribute into pages via the admin</description>
     <parameters>
