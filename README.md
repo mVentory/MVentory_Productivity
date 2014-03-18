@@ -11,62 +11,90 @@ The Productivity extension contains different features which make life of store 
 
 ## Fast access to editors
 
-Add button to the CMS, product and category pages for fast editing pages in the admin panel. Done by updating page's layout in frontend interface with following XML code (see https://code.google.com/p/mageventory/source/browse/branches/mvProductivity/app/design/frontend/default/default/layout/zetaprints_mvproductivitypack.xml):
+Add button to the CMS, product and category pages for fast editing pages in the admin panel. Done by updating page's layout in frontend interface with following XML code (see app/design/frontend/base/default/layout/productivity.xml):
 
 
-	<mvproductivitypack_panel>
-	  <reference name="head">
-		<action method="addCss"><stylesheet>css/zetaprints_mvproductivitypack.css</stylesheet></action>
-	  </reference>
-	
-	  <reference name="content">
-		<block type="mvproductivitypack/panel" name="admin_panel" after="-" template="zetaprints/mvproductivitypack/panel.phtml" />
-	  </reference>
-	</mvproductivitypack_panel>	
+  <productivity_panel>
+    <reference name="head">
+      <action method="addCss">
+        <stylesheet>productivity/css/styles.css</stylesheet>
+      </action>
+    </reference>
 
-	<catalog_category_default>
-	  <update handle="mvproductivitypack_panel" />
-	</catalog_category_default>
+    <reference name="after_body_start">
+      <block type="productivity/panel" name="admin_panel" after="-" template="productivity/panel.phtml" />
+    </reference>
+  </productivity_panel>
 
-	<catalog_category_layered>
-	  <update handle="mvproductivitypack_panel" />
-	</catalog_category_layered>
+  <catalog_category_default>
+    <update handle="productivity_panel" />
+  </catalog_category_default>
 
-	<catalog_product_view>
-	  <update handle="mvproductivitypack_panel" />
-	</catalog_product_view>
+  <catalog_category_layered>
+    <update handle="productivity_panel" />
+  </catalog_category_layered>
 
-	<cms_page>
-	  <update handle="mvproductivitypack_panel" />
-	</cms_page>
+  <catalog_product_view>
+    <update handle="productivity_panel" />
+  </catalog_product_view>
+
+  <cms_page>
+    <update handle="productivity_panel" />
+  </cms_page>>
 
 
 ## Simple image editor
 
-Add simple image editor to the product page. JS code for the image editor is appended via page layout (see https://code.google.com/p/mageventory/source/browse/branches/mvProductivity/app/design/frontend/default/default/layout/zetaprints_mvproductivitypack.xml)
+Add simple image editor to the product page. JS code for the image editor is appended via page layout (see app/design/frontend/base/default/layout/productivity.xml)
 
 
-	<catalog_product_view>
-	  <reference name="head">
-		<action method="addJs"><script>jquery/jquery-min.js</script></action<
-		<action method="addItem"><type>skin_js</type><name>js/zetaprints_mvproductivitypack/image_edit.js</name></action>
-	  </reference>
+  <catalog_product_view>
+    <reference name="head">
+      <action method="addJs">
+        <script>jquery/jquery-min.js</script>
+      </action>
 
-	  <reference name="before_body_end">
-		<block type="core/template" name="tm_image_editor_js" template="zetaprints/mvproductivitypack/catalog/product/view/media/editor/js.phtml" />
-	  </reference>
-	</catalog_product_view>
+      <action method="addJs">
+        <script>jquery/jquery-fineuploader-min.js</script>
+      </action>
+
+      <action method="addJs">
+        <script>productivity/image/edit.js</script>
+      </action>
+    </reference>
+
+    <reference name="before_body_end">
+      <block type="productivity/image_edit" name="productivity.image.edit" template="productivity/image/edit.phtml">
+        <action method="setImageSelector">
+          <selector><![CDATA[#product_addtocart_form > .product-img-box > .product-image > img]]></selector>
+        </action>
+
+        <action method="setThumbSelector">
+          <selector><![CDATA[#product_addtocart_form > .product-img-box > .more-views > ul > li > a > img]]></selector>
+        </action>
+
+        <action method="setImageSize">
+          <width>265</width>
+          <height></height>
+        </action>
+
+        <action method="setThumbSize">
+          <width>56</width>
+          <height></height>
+        </action>
+      </block>
+  </catalog_product_view>
 
 
 ## RSS import
 
-Allow to import content (content:encoded tag) of first item from feed. Add 'MvProductivityPack/rss_import' block to the layout in necessary place to show content of feed's item.
+Allow to import content (content:encoded tag) of first item from feed. Add 'productivity/rss_import' block to the layout in necessary place to show content of feed's item.
 
 Using example:
 
 
 	<reference name="insert_to_block">
-	  <block type="MvProductivityPack/rss_import" name="productivity.rss.import" after="some_block" before="some_black">
+	  <block type="productivity/rss_import" name="productivity.rss.import" after="some_block" before="some_black">
 		
 		<!-- Set url to feed -->
 		<action method="setUri"><uri>http://foo.bar/feed/</uri></action>
@@ -92,60 +120,60 @@ Using example:
   * "View in frontend" button appears on Product, Category and other admin pages above the main block of buttons to quickly jump from the admin to the front end page
 
 Adds button for preview product, category and cms page
-  - Added in adminhtml's zetaprints_mvproductivitypack.xml:
+  - Added in adminhtml's productivity.xml:
 
-    <adminhtml_catalog_product_edit>
-        <reference name="head">
-            <action method="addCss"><name>mvproductivitypack/mvproductivitypack.css</name></action>
-        </reference>
-        <reference name="content">
-            <block name="product.edit.frontview.button" type="mvproductivitypack/adminhtml_catalog_product_edit_button" before="-" template="mvproductivitypack/catalog/product/edit/button.phtml" />
-        </reference>
-    </adminhtml_catalog_product_edit>
-    <adminhtml_catalog_category_edit>
-        <reference name="head">
-            <action method="addCss"><name>mvproductivitypack/mvproductivitypack.css</name></action>
-        </reference>
-        <reference name="content">
-            <block name="category.edit.frontview.button" type="mvproductivitypack/adminhtml_catalog_category_edit_button" before="-" template="mvproductivitypack/catalog/category/edit/button.phtml" />
-        </reference>
-    </adminhtml_catalog_category_edit>
-    <adminhtml_cms_page_edit>
-        <reference name="head">
-            <action method="addCss"><name>mvproductivitypack/mvproductivitypack.css</name></action>
-        </reference>
-        <reference name="content">
-            <block name="page.edit.frontview.button" type="mvproductivitypack/adminhtml_cms_page_edit_button" before="-" template="mvproductivitypack/cms/page/edit/button.phtml" />
-        </reference>
-    </adminhtml_cms_page_edit>
+  <adminhtml_catalog_product_edit>
+    <reference name="head">
+      <action method="addCss"><name>productivity.css</name></action>
+    </reference>
+    <reference name="content">
+      <block name="product.edit.frontview.button" type="productivity/adminhtml_catalog_product_edit_button" before="-" template="productivity/catalog/product/edit/button.phtml" />
+    </reference>
+  </adminhtml_catalog_product_edit>
+  <adminhtml_catalog_category_edit>
+    <reference name="head">
+      <action method="addCss"><name>productivity.css</name></action>
+    </reference>
+    <reference name="content">
+      <block name="category.edit.frontview.button" type="productivity/adminhtml_catalog_category_edit_button" before="-" template="productivity/catalog/category/edit/button.phtml" />
+    </reference>
+  </adminhtml_catalog_category_edit>
+  <adminhtml_cms_page_edit>
+    <reference name="head">
+      <action method="addCss"><name>productivity.css</name></action>
+    </reference>
+    <reference name="content">
+      <block name="page.edit.frontview.button" type="productivity/adminhtml_cms_page_edit_button" before="-" template="productivity/cms/page/edit/button.phtml" />
+    </reference>
+  </adminhtml_cms_page_edit>
 
 
 Adds middle click for Attributes
 Adds middle click for Attribute Sets
   - Done by js code in update_grid.js file which is appended to the page in
-    adminhtml's zetaprints_mvproductivitypack.xml:
+    adminhtml's productivity.xml:
 
-    <adminhtml_catalog_product_attribute_index>
-        <reference name="head">
-            <action method="addJs"><script>mvproductivitypack/update_grid.js</script></action>
-            <action method="addCss"><name>mvproductivitypack/mvproductivitypack.css</name></action>
-        </reference>
-    </adminhtml_catalog_product_attribute_index>
-    <adminhtml_catalog_product_set_index>
-        <reference name="head">
-            <action method="addJs"><script>mvproductivitypack/update_grid.js</script></action>
-        </reference>
-    </adminhtml_catalog_product_set_index>
+  <adminhtml_catalog_product_attribute_index>
+    <reference name="head">
+      <action method="addJs"><script>productivity/adminhtml/update_grid.js</script></action>
+      <action method="addCss"><name>productivity.css</name></action>
+    </reference>
+  </adminhtml_catalog_product_attribute_index>
+  <adminhtml_catalog_product_set_index>
+    <reference name="head">
+      <action method="addJs"><script>productivity/adminhtml/update_grid.js</script></action>
+    </reference>
+  </adminhtml_catalog_product_set_index>
 
 Adds middle click for attributes in editing attribute set
   - Done by js code in script.js.phtml file which is appended to the page in
-    adminhtml's zetaprints_mvproductivitypack.xml:
+    adminhtml's productivity.xml:
 
-    <adminhtml_catalog_product_set_edit>
-        <reference name="js">
-            <block type="core/template" template="mvproductivitypack/catalog/product/attribute/set/edit/script.js.phtml" name="attribute.script.js" />
-        </reference>
-    </adminhtml_catalog_product_set_edit>
+  <adminhtml_catalog_product_set_edit>
+    <reference name="js">
+      <block type="productivity/adminhtml_catalog_product_attribute_set_edit_script" template="productivity/catalog/product/attribute/set/edit/script.js.phtml" name="attribute.script.js" />
+    </reference>
+  </adminhtml_catalog_product_set_edit>
 
 
 # RSS feeds
@@ -171,7 +199,7 @@ Example url: http://offsider.co.nz/index.php/catalog/category/top
 
 # Slideshow widget
 
-*Widget type:* `MvProductivityPack/slideshow`
+*Widget type:* `productivity/slideshow`
 
 This widget is available in CMS pages to output a list with product info for inclusion in a slideshow. Wrap the widget into arbitrary HTML, add scripts via the layout XML and the page gets a slideshow of your choosing without digging into magento code.
 
@@ -193,7 +221,7 @@ As of now it outputs a random list of products in stock.
 ### Widget example
 
 
-	{{widget type="MvProductivityPack/slideshow" products_count="40" item_template="<li>
+	{{widget type="productivity/slideshow" products_count="40" item_template="<li>
 	  <a href=\"%url%\">
 		<img src=\"%img%\" alt=\"%name% %price%\"/>
 	  </a>
@@ -207,7 +235,7 @@ As of now it outputs a random list of products in stock.
 *Content: *
 
 
-	<div id="ri-grid" class="ri-grid ri-shadow">{{widget type="MvProductivityPack/slideshow" products_count="40" item_template="<li><a href=\"%url%\"><img src=\"%img%\" alt=\"%name% %price%\"/></a></li>" image_size="215x170"}}</div>
+	<div id="ri-grid" class="ri-grid ri-shadow">{{widget type="productivity/slideshow" products_count="40" item_template="<li><a href=\"%url%\"><img src=\"%img%\" alt=\"%name% %price%\"/></a></li>" image_size="215x170"}}</div>
 	<script type="text/javascript">// <![CDATA[
 	jQuery(function ($) {
 	  $('#ri-grid').gridrotator();
@@ -226,7 +254,7 @@ As of now it outputs a random list of products in stock.
 
 # Attribute values widget
 
-*Widget type:* `MvProductivityPack/widget_attribute`
+*Widget type:* `productivity/widget_attribute`
 
 This widget is available in CMS pages to output a list with attribute values for inclusion in a slideshow. Wrap the widget into arbitrary HTML, add scripts via the layout XML and the page gets a slideshow of your choosing without digging into magento code.
 
@@ -242,7 +270,7 @@ This widget is available in CMS pages to output a list with attribute values for
 ### Widget example
 
 
-	{{widget type="MvProductivityPack/widget_attribute" item_template="<li>%code%: %label% (%value%)</li>" code="brands"}}
+	{{widget type="productivity/widget_attribute" item_template="<li>%code%: %label% (%value%)</li>" code="brands"}}
 
 
 ### Full example
@@ -250,12 +278,12 @@ This widget is available in CMS pages to output a list with attribute values for
 *Content: *
 
 
-	{{widget type="MvProductivityPack/widget_attribute" item_template="<a href=\"/fashion/clothing.html?%code%=%value%\">%label%</a> " code="cloth_brand_"}}
+	{{widget type="productivity/widget_attribute" item_template="<a href=\"/fashion/clothing.html?%code%=%value%\">%label%</a> " code="cloth_brand_"}}
 
 
 # Related products block
 
-*Block type:* `MvProductivityPack/product_related`
+*Block type:* `productivity/product_related`
 
 This block is used to show related products based on a shared attribute and its value in the current product. It can be used only on a product details page.
 
@@ -268,7 +296,7 @@ The block returns a list of all products that have a matching value of the same 
 ### Block example
 
 
-	<block type="MvProductivityPack/product_related" name="product.info.related" as="related_products" template="catalog/product/list/related.phtml">
+	<block type="productivity/product_related" name="product.info.related" as="related_products" template="catalog/product/list/related.phtml">
 	  <action method="setAttributeCode">
 		<attribute_code>color</attribute_code>
 	  </action>
@@ -284,7 +312,7 @@ The block returns a list of all products that have a matching value of the same 
 *Layout file* (for example local.xml):
 
 
-	<block type="MvProductivityPack/product_related" name="product.info.related" as="related_products" template="catalog/product/list/related.phtml">
+	<block type="productivity/product_related" name="product.info.related" as="related_products" template="catalog/product/list/related.phtml">
 	  <action method="setAttributeCode">
 		<attribute_code>color</attribute_code>
 	  </action>
