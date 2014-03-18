@@ -59,7 +59,7 @@
         <use>standard</use>
         <args>
           <module>ZetaPrints_Productivity</module>
-          <frontName>mvproductivitypackf</frontName>
+          <frontName>productivity</frontName>
         </args>
       </productivity>
 
@@ -137,7 +137,7 @@
         <use>admin</use>
         <args>
           <module>ZetaPrints_Productivity</module>
-          <frontName>mvproductivitypack</frontName>
+          <frontName>productivity_admin</frontName>
         </args>
       </productivity>
     </routers>

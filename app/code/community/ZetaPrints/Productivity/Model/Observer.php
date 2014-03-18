@@ -14,7 +14,7 @@ class ZetaPrints_Productivity_Model_Observer {
     $helper = Mage::helper('productivity/rss');
 
     $title = $helper->__('Latest products');
-    $url = Mage::getUrl('mvproductivitypackf/rss_product/latest');
+    $url = Mage::getUrl('productivity/rss_product/latest');
 
     $helper->addFeedToHeader($url, $title);
   }

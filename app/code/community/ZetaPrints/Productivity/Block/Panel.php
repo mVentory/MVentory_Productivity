@@ -31,7 +31,7 @@ class ZetaPrints_Productivity_Block_Panel
     $params['page_id'] = $pageId;
 
     return Mage::helper('adminhtml')
-             ->getUrl('mvproductivitypack/adminhtml_index/index/', $params);
+             ->getUrl('productivity_admin/adminhtml_index/index/', $params);
   }
 
   protected function _getCategoryLink () {
