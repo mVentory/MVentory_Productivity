@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <ZetaPrints_Productivity>
+            <active>true</active>
+            <codePool>community</codePool>
+        </ZetaPrints_Productivity>
+    </modules>
+</config>
