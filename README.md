@@ -1,76 +1,43 @@
-mvProductivity
-==============
+# Productivity
 
-The Productivity extension contains different features which make life of store administrator easier. It includes fast cross-switching between products, categories and respective editors, basic editing of product images in the frontend.
+The Productivity extension contains different features which make life of store administrator easier. It includes fast cross-switching between products, categories, CMS pages and respective editors, basic editing of product and its images, uploading new images to product in the frontend.
 
+## Frontend features
 
-# Frontend features
+### Productivity panel
+The panel is shown on _Category_, _Product_ and _CMS_ pages in the front end. It contains various buttons such as:
 
-  * _Category_, _Product_ and _Static_ pages in the front end display a small button-like link at the top right corner of the page if the user is logged in as an admin to the same domain. The link opens a corresponding page in the admin.
-  * Images on a product page in the front end can be manipulated (_delete, rotate, make main_) if the user is logged in as an admin to the same domain.
+* Button for fast editing pages in the admin. It opens a corresponding page in the admin if the user is logged in as an admin to the same domain.
+* Button for basic editing of product in the front-end
+* Button for uploading new images for product
+* Button for fast opening analytics page
+* Help button
 
-## Fast access to editors
+### Simple image editor
+Pop-up panel which is shown when the mouse pointer is over product image. It allows to delete, rotate and make main images.
 
-Add button to the CMS, product and category pages for fast editing pages in the admin panel. Done by updating page's layout in frontend interface with following XML code (see app/design/frontend/base/default/layout/productivity.xml):
+The editor is enabled by default but only configured for the default theme. Custom themes with modified HTML layout or sizes of product images require additional configuration.
 
+The editor is configured via theme's layout files such as local.xml. Place following code in that file to adjust it for the custom theme:
 
-  <productivity_panel>
-    <reference name="head">
-      <action method="addCss">
-        <stylesheet>productivity/css/styles.css</stylesheet>
-      </action>
-    </reference>
-
-    <reference name="after_body_start">
-      <block type="productivity/panel" name="admin_panel" after="-" template="productivity/panel.phtml" />
-    </reference>
-  </productivity_panel>
-
-  <catalog_category_default>
-    <update handle="productivity_panel" />
-  </catalog_category_default>
-
-  <catalog_category_layered>
-    <update handle="productivity_panel" />
-  </catalog_category_layered>
-
-  <catalog_product_view>
-    <update handle="productivity_panel" />
-  </catalog_product_view>
-
-  <cms_page>
-    <update handle="productivity_panel" />
-  </cms_page>>
-
-
-## Simple image editor
-
-Add simple image editor to the product page. JS code for the image editor is appended via page layout (see app/design/frontend/base/default/layout/productivity.xml)
-
-
-  <catalog_product_view>
-    <reference name="head">
-      <action method="addJs">
-        <script>jquery/jquery-min.js</script>
-      </action>
-
-      <action method="addJs">
-        <script>jquery/jquery-fineuploader-min.js</script>
-      </action>
-
-      <action method="addJs">
-        <script>productivity/image/edit.js</script>
-      </action>
-    </reference>
-
-    <reference name="before_body_end">
-      <block type="productivity/image_edit" name="productivity.image.edit" template="productivity/image/edit.phtml">
-        <action method="setImageSelector">
-          <selector><![CDATA[#product_addtocart_form > .product-img-box > .product-image > img]]></selector>
+    <catalog_product_view>
+      <reference name="productivity.image.edit">
+        <action method="setTemplate">
+          <template>custom/template_for/image_edit.phtml</template>
         </action>
 
+        <action method="setImageWrapperSelector">
+          <selector><![CDATA[#product_addtocart_form .product-image]]></selector>
+        </action>
+        <action method="setImageSelector">
+          <selector><![CDATA[img]]></selector>
+        </action>
+
+        <action method="setThumbWrapperSelector">
+          <selector><![CDATA[#product_addtocart_form .more-views li]]></selector>
+        </action>
         <action method="setThumbSelector">
-          <selector><![CDATA[#product_addtocart_form > .product-img-box > .more-views > ul > li > a > img]]></selector>
+          <selector><![CDATA[a img]]></selector>
         </action>
 
         <action method="setImageSize">
@@ -82,13 +49,12 @@ Add simple image editor to the product page. JS code for the image editor is app
           <width>56</width>
           <height></height>
         </action>
-      </block>
-  </catalog_product_view>
+      </reference>
+    </catalog_product_view>
 
+### RSS import
 
-## RSS import
-
-Allow to import content (content:encoded tag) of first item from feed. Add 'productivity/rss_import' block to the layout in necessary place to show content of feed's item.
+Allow to import content (content:encoded tag) of first item from feed. Add 'productivity/rss_import' block to the layout in necessary place to show content of the item.
 
 Using example:
 
@@ -115,7 +81,7 @@ Using example:
 	</reference>
 
 
-# Backend features =
+## Backend features
 
   * "View in frontend" button appears on Product, Category and other admin pages above the main block of buttons to quickly jump from the admin to the front end page
 
