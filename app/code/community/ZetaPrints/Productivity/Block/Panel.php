@@ -33,6 +33,13 @@ class ZetaPrints_Productivity_Block_Panel
     return $this->getRequest()->getControllerName();
   }
 
+  protected function _getCurrentUrl () {
+    return $this->getUrl(
+      null,
+      array('_use_rewrite' => true, '_current' => true)
+    );
+  }
+
   protected function _getProductLink () {
     $params['id'] = Mage::registry('product')->getId();
 

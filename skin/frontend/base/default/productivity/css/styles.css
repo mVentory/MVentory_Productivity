@@ -24,25 +24,26 @@
   transition: height 0.3s ease-in-out;
 }
 
-#productivity-panel * {
+.productivity,
+.productivity * {
   margin: 0;
   padding: 0;
 }
 
-#productivity-panel input.input-text,
-#productivity-panel textarea {
+.productivity input.input-text,
+.productivity textarea {
   padding: 2px;
 }
 
-#productivity-panel select {
+.productivity select {
   padding: 1px;
 }
 
-#productivity-panel select option {
+.productivity select option {
   padding-right: 10px;
 }
 
-#productivity-panel select.multiselect option {
+.productivity select.multiselect option {
   padding: 2px 5px;
 }
 
@@ -67,29 +68,35 @@
   height: 28px;
 }
 
-#productivity-tasks {
-  float: right;
+.productivity-set {
   list-style: none outside none;
 }
 
-#productivity-tasks li {
+#productivity-context {
+  float: left;
+}
+
+#productivity-tasks {
+  float: right;
+}
+
+.productivity-set li {
   border-left: 1px solid #555555;
   float: left;
 }
 
-#productivity-tasks li:first-child {
+.productivity-set li:first-child {
   border: none;
 }
 
-#productivity-tasks a,
-#productivity-tasks span {
+.productivity-set li:hover {
+  background: linear-gradient(to top, #3a3a3a, #222) repeat scroll 0 0 #222;
+}
+
+.productivity-set a {
   display: block;
   padding: 0 12px;
   text-decoration: none;
-}
-
-#productivity-tasks li:hover {
-  background: linear-gradient(to top, #3a3a3a, #222) repeat scroll 0 0 #222;
 }
 
 .productivity-task-upload-on #productivity-task-upload,
@@ -241,6 +248,28 @@
   display: none;
 }
 
+#productivity-uploader-notice {
+  display: none;
+}
+
+.productivity-state-uploaded #productivity-uploader-notice {
+  display: block;
+  -moz-animation: blink 1s 250ms 2;
+  -webkit-animation: blink 1s 250ms 2;
+  -o-animation: blink 1s 250ms 2;
+  -ms-animation: blink 1s 250ms 2;
+  animation: blink 1s 250ms 2;
+}
+
+#productivity-uploader-notice a {
+  background: url(../images/icon-attention.png) no-repeat 12px 7px;
+  padding: 0 12px 0 34px;
+}
+
+#productivity-uploader-notice span {
+  text-decoration: underline;
+}
+
 .productivity-task-edit-form-on #productivity-uploader {
   float: left;
   width: 104px;
@@ -387,3 +416,11 @@
   padding: 2px 10px;
   font-weight: bold;
 }
+
+/* Animations */
+
+@-webkit-keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+@-moz-keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+@-o-keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+@-ms-keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+@keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }

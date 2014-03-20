@@ -32,6 +32,7 @@ $_url = $this->getUrl('productivity/image/upload');
 
 jQuery(function ($) {
 
+var $panel = $('#productivity-panel');
 var $upload_elem = $('#productivity-uploader-element');
 var $upload_btn = $('#productivity-uploader-button-upload');
 
@@ -74,6 +75,8 @@ $upload_elem
   .on('complete', function (event, id, name, response, xhr) {
     if (!response.success)
       return;
+
+    $panel.addClass('productivity-state-uploaded');
 
     if (typeof productivity === 'undefined')
       return;
