@@ -341,6 +341,15 @@
   border-color: greenyellow;
 }
 
+#productivity-uploader-previews .qq-upload-success:before {
+  background: url("../images/icon-edit.png") no-repeat 4px 3px rgba(255, 255, 255, 0.35);
+  border-radius: 0 0 3px 0;
+  content: "";
+  display: block;
+  height: 23px;
+  width: 23px;
+}
+
 #productivity-uploader-previews .qq-progress-bar {
   background: -moz-linear-gradient(top, rgba(30,87,153,1) 0%, rgba(41,137,216,1) 50%, rgba(32,124,202,1) 51%, rgba(125,185,232,1) 100%); /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(30,87,153,1)), color-stop(50%,rgba(41,137,216,1)), color-stop(51%,rgba(32,124,202,1)), color-stop(100%,rgba(125,185,232,1))); /* Chrome,Safari4+ */
