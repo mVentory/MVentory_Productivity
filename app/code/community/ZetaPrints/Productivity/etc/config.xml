@@ -31,6 +31,12 @@
         <class>ZetaPrints_Productivity_Block</class>
       </productivity>
 
+      <page>
+        <rewrite>
+          <html_breadcrumbs>ZetaPrints_Productivity_Block_Mage_Page_Html_Breadcrumbs</html_breadcrumbs>
+        </rewrite>
+      </page>
+
       <catalog>
         <rewrite>
           <product_view>ZetaPrints_Productivity_Block_Product_View</product_view>
@@ -61,6 +67,12 @@
         <class>ZetaPrints_Productivity_Model</class>
         <resourceModel>ZetaPrints_Productivity_resources</resourceModel>
       </productivity>
+
+      <catalog>
+        <rewrite>
+          <category>ZetaPrints_Productivity_Model_Mage_Catalog_Category</category>
+        </rewrite>
+      </catalog>
     </models>
   </global>
 

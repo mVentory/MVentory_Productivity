@@ -20,6 +20,53 @@
 
 <config>
   <sections>
+    <catalog>
+      <groups>
+        <frontend>
+          <fields>
+            <display_descending_products translate="label" module="productivity">
+              <label>Display all descending products</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+
+              <sort_order>300</sort_order>
+            </display_descending_products>
+          </fields>
+        </frontend>
+
+        <navigation>
+          <fields>
+            <hide_empty_categories translate="label" module="productivity">
+              <label>Show categories only with 2 or more sub-categories</label>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+
+              <sort_order>100</sort_order>
+            </hide_empty_categories>
+
+            <home_url translate="label" module="productivity">
+              <label>External Home URL</label>
+              <frontend_type>text</frontend_type>
+
+              <show_in_default>0</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+
+              <sort_order>101</sort_order>
+            </home_url>
+          </fields>
+        </navigation>
+      </groups>
+    </catalog>
+
     <google>
       <groups>
         <analytics>
