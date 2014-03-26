@@ -1,0 +1,195 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE-OSL.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * @package MVentory/Productivity
+ * @copyright Copyright (c) 2014 mVentory Ltd. (http://mventory.com)
+ * @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
+-->
+
+<config>
+  <modules>
+    <MVentory_Productivity>
+      <version>0</version>
+    </MVentory_Productivity>
+  </modules>
+
+  <global>
+    <blocks>
+      <productivity>
+        <class>MVentory_Productivity_Block</class>
+      </productivity>
+
+      <page>
+        <rewrite>
+          <html_breadcrumbs>MVentory_Productivity_Block_Mage_Page_Html_Breadcrumbs</html_breadcrumbs>
+        </rewrite>
+      </page>
+
+      <catalog>
+        <rewrite>
+          <product_view>MVentory_Productivity_Block_Product_View</product_view>
+        </rewrite>
+      </catalog>
+
+      <adminhtml>
+        <rewrite>
+          <catalog_product_attribute_edit_tab_options>MVentory_Productivity_Block_Catalog_Product_Attribute_Edit_Tab_Options</catalog_product_attribute_edit_tab_options>
+        </rewrite>
+      </adminhtml>
+    </blocks>
+
+    <helpers>
+      <productivity>
+        <class>MVentory_Productivity_Helper</class>
+      </productivity>
+
+      <catalog>
+        <rewrite>
+          <category>MVentory_Productivity_Helper_Mage_Catalog_Category</category>
+        </rewrite>
+      </catalog>
+    </helpers>
+
+    <models>
+      <productivity>
+        <class>MVentory_Productivity_Model</class>
+        <resourceModel>MVentory_Productivity_resources</resourceModel>
+      </productivity>
+
+      <catalog>
+        <rewrite>
+          <category>MVentory_Productivity_Model_Mage_Catalog_Category</category>
+        </rewrite>
+      </catalog>
+    </models>
+  </global>
+
+  <frontend>
+    <layout>
+      <updates>
+        <productivity>
+          <file>productivity.xml</file>
+        </productivity>
+      </updates>
+    </layout>
+
+    <routers>
+      <productivity>
+        <use>standard</use>
+        <args>
+          <module>MVentory_Productivity</module>
+          <frontName>productivity</frontName>
+        </args>
+      </productivity>
+
+      <catalog>
+        <args>
+          <modules>
+            <MVentory_Productivity before="Mage_Catalog">MVentory_Productivity</MVentory_Productivity>
+          </modules>
+        </args>
+      </catalog>
+    </routers>
+
+    <events>
+      <controller_action_layout_render_before_catalog_category_view>
+        <observers>
+          <productivity_add_category_feed>
+            <type>singleton</type>
+            <class>MVentory_Productivity_Model_Observer</class>
+            <method>addCategoryFeed</method>
+          </productivity_add_category_feed>
+        </observers>
+      </controller_action_layout_render_before_catalog_category_view>
+
+      <controller_action_layout_render_before_cms_index_index>
+        <observers>
+          <productivity_add_latest__product_feed>
+            <type>singleton</type>
+            <class>MVentory_Productivity_Model_Observer</class>
+            <method>addLatestProductsFeed</method>
+          </productivity_add_latest__product_feed>
+
+          <productivity_add_top_categories_feed>
+            <type>singleton</type>
+            <class>MVentory_Productivity_Model_Observer</class>
+            <method>addTopCategoriesFeed</method>
+          </productivity_add_top_categories_feed>
+        </observers>
+      </controller_action_layout_render_before_cms_index_index>
+
+      <controller_action_predispatch_catalog>
+        <observers>
+          <productivity_remember_admin_state>
+            <type>singleton</type>
+            <class>MVentory_Productivity_Model_Observer</class>
+            <method>rememberAdminState</method>
+          </productivity_remember_admin_state>
+        </observers>
+      </controller_action_predispatch_catalog>
+
+      <controller_action_predispatch_cms>
+        <observers>
+          <productivity_remember_admin_state>
+            <type>singleton</type>
+            <class>MVentory_Productivity_Model_Observer</class>
+            <method>rememberAdminState</method>
+          </productivity_remember_admin_state>
+        </observers>
+      </controller_action_predispatch_cms>
+
+      <catalog_block_product_list_collection>
+        <observers>
+          <productivity_show_products_without_small_image_only>
+            <type>singleton</type>
+            <class>MVentory_Productivity_Model_Observer</class>
+            <method>showProductsWithoutSmallImagesOnly</method>
+          </productivity_show_products_without_small_image_only>
+        </observers>
+      </catalog_block_product_list_collection>
+    </events>
+  </frontend>
+
+  <admin>
+    <routers>
+      <productivity>
+        <use>admin</use>
+        <args>
+          <module>MVentory_Productivity</module>
+          <frontName>productivity_admin</frontName>
+        </args>
+      </productivity>
+    </routers>
+  </admin>
+
+  <adminhtml>
+    <events>
+      <catalog_entity_attribute_save_before>
+        <observers>
+          <productivity_merge_attribute_options>
+            <type>singleton</type>
+            <class>MVentory_Productivity_Model_Observer</class>
+            <method>mergeAttributeOptions</method>
+          </productivity_merge_attribute_options>
+        </observers>
+      </catalog_entity_attribute_save_before>
+    </events>
+
+    <layout>
+      <updates>
+        <productivity>
+          <file>productivity.xml</file>
+        </productivity>
+      </updates>
+    </layout>
+  </adminhtml>
+</config>
