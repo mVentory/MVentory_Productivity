@@ -83,9 +83,18 @@ class MVentory_Productivity_Block_Slideshow
     list($width, $height) = explode('x', $this->getData('image_size'));
 
     $helper = Mage::helper('catalog/image');
+    $outputHelper = $this->helper('catalog/output');
     $coreHelper = Mage::helper('core');
 
-    $search = array('%name%', '%price%', '%price-block%', '%url%', '%img%');
+    $search = array(
+      '%name%',
+      '%description%',
+      '%price%',
+      '%price-block%',
+      '%url%',
+      '%img%',
+      '%add-to-cart-url%'
+    );
 
     $store = Mage::app()->getStore();
     $locale = Mage::app()->getLocale();
@@ -109,11 +118,32 @@ class MVentory_Productivity_Block_Slideshow
 
     foreach ($this->getProductCollection() as $product) {
       $replace = array(
+        //%name%
         $product->getName(),
+
+        //%description%
+        $outputHelper->productAttribute(
+          $product,
+          $product->getShortDescription(),
+          'short_description'
+        ),
+
+        //%price%
         $coreHelper->currency($product->getPrice(), true, false),
+
+        //%price-block%
         $this->getPriceHtml($product),
+
+        //%url%
         $product->getProductUrl(),
-        (string) $helper->init($product, 'small_image')->resize($width, $height)
+
+        //%img%
+        (string) $helper
+          ->init($product, 'small_image')
+          ->resize($width, $height),
+
+        //%add-to-cart-url%
+        $this->getAddToCartUrl($product)
       );
 
       $html .= preg_replace_callback(
