@@ -178,8 +178,10 @@ This widget is available in CMS pages to output a list with product info for inc
   * `%url%` - absolute URL of the product
   * `%img%` - absolute URL of the product image
   * `%name%` - product name
+  * `%description%` - product description
   * `%price%` - product price
   * `%price-block%` - block with product price as it's showed in category view
+ * `%add-to-cart-url%`- absolute URL for adding product to cart
   * `%if:sale% .. <content> .. %end:sale%` - shows its content if product has sale price at the moment
 
 As of now it outputs a random list of products in stock.
