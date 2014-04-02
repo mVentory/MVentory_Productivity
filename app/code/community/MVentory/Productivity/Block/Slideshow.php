@@ -35,7 +35,7 @@ class MVentory_Productivity_Block_Slideshow
 
   public function getCacheKeyInfo () {
     return array(
-      'CATALOG_PRODUCT_LATEST',
+      'CATALOG_PRODUCT_RANDOM',
       Mage::app()->getStore()->getId(),
       Mage::getSingleton('customer/session')->getCustomerGroupId(),
       'template' => $this->getData('item_template'),
