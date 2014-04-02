@@ -219,6 +219,53 @@ As of now it outputs a random list of products in stock.
 	  <action method="addJs"><script>gridrotator/jquery-gridrotator.js</script></action>
 	</reference>
 
+# Latest products widget
+
+*Widget type:* `productivity/widget_latest`
+
+This widget is available in CMS pages to output a list with product info for inclusion in a slideshow. Wrap the widget into arbitrary HTML, add scripts via the layout XML and the page gets a slideshow of your choosing without digging into magento code.
+
+*Parameters:*
+* `products_count` - how many products to return in the list
+* `item_template` - escaped HTML with variables
+* `image_size` - from the list of available sizes and no resizing is done
+
+*Template variables:*
+* `%url%` - absolute URL of the product
+* `%img%` - absolute URL of the product image
+* `%name%` - product name
+* `%description%` - product description
+* `%price%` - product price
+* `%price-block%` - block with product price as it's showed in category view
+* `%add-to-cart-url%`- absolute URL for adding product to cart
+* `%if:sale% .. <content> .. %end:sale%` - shows its content if product has sale price at the moment
+
+### Widget example
+
+    {{widget type="productivity/slideshow" products_count="40" item_template="<li>
+    <a href=\"%url%\">
+      <img src=\"%img%\" alt=\"%name% %price%\"/>
+    </a>
+    %if:sale%<span>(Sale!)</span>%end:sale%
+    </li>" image_size="215x170"}}
+
+### Full example
+
+*Content:*
+
+    <div id="ri-grid" class="ri-grid ri-shadow">{{widget type="productivity/slideshow" products_count="40" item_template="<li><a href=\"%url%\"><img src=\"%img%\" alt=\"%name% %price%\"/></a></li>" image_size="215x170"}}</div>
+    <script type="text/javascript">// <![CDATA[
+    jQuery(function ($) {
+      $('#ri-grid').gridrotator();
+    });
+    // ]]></script>
+
+*Layout XML:*
+
+    <reference name="head">
+      <action method="addItem"><type>js_css</type><name>gridrotator/gridrotator.css</name></action>
+      <action method="addJs"><script>gridrotator/jquery-gridrotator.js</script></action>
+    </reference>
 
 # Attribute values widget
 
