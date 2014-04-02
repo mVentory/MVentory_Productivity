@@ -50,6 +50,34 @@
     </parameters>
   </productivity_slideshow>
 
+  <productivity_latest type="productivity/widget_latest" translate="name description" module="productivity">
+    <name>Productivity: Display latest products</name>
+    <description>A generic way of inserting different dynamic slideshows and galleries into pages via the admin</description>
+    <parameters>
+      <products_count translate="label">
+        <required>1</required>
+        <visible>1</visible>
+        <value>10</value>
+        <label>Number of Products to Display</label>
+        <type>text</type>
+      </products_count>
+      <item_template translate="label">
+        <required>1</required>
+        <visible>1</visible>
+        <value><![CDATA[<li><a href=\"%url%\"><img src=\"%img%\" alt=\"%name% %price%\"/></a></li>]]></value>
+        <label>Item template</label>
+        <type>text</type>
+      </item_template>
+      <image_size translate="label">
+        <required>1</required>
+        <visible>1</visible>
+        <value>300x200</value>
+        <label>Size of product image</label>
+        <type>text</type>
+      </image_size>
+    </parameters>
+  </productivity_latest>
+
   <productivity_attribute type="productivity/widget_attribute" translate="name description" module="productivity">
     <name>Productivity: Output values of attributes</name>
     <description>A generic way to output values of attribute into pages via the admin</description>
