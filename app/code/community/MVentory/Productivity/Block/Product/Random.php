@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Productivity
- *
  * NOTICE OF LICENSE
  *
  * This source file is subject to the Open Software License (OSL 3.0)
@@ -10,21 +8,18 @@
  * It is also available through the world-wide-web at this URL:
  * http://opensource.org/licenses/osl-3.0.php
  *
- * @category  ZetaPrints
- * @package   ZetaPrints_Productivity
- * @copyright Copyright (c) 2014 ZetaPrints Ltd. (http://www.zetaprints.com)
- * @license   http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ * @package MVentory/Productivity
+ * @copyright Copyright (c) 2014 mVentory Ltd. (http://mventory.com)
+ * @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
 /**
  * Block for displaying random products
  *
- * @category ZetaPrints
- * @package  ZetaPrints_Productivity
- * @author   Anatoly A. Kazantsev <anatoly@zetaprints.com>
+ * @package MVentory/Productivity
+ * @author Anatoly A. Kazantsev <anatoly@mventory.com>
  */
-
-class ZetaPrints_Productivity_Block_Product_Random
+class MVentory_Productivity_Block_Product_Random
   extends Mage_Catalog_Block_Product_Abstract {
 
   protected $_productsCount = null;
