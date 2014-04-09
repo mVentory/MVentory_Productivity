@@ -19,7 +19,7 @@
  * @package MVentory/Productivity
  * @author Anatoly A. Kazantsev <anatoly@mventory.com>
  */
-class MVentorys_Productivity_ImageController
+class MVentory_Productivity_ImageController
   extends Mage_Core_Controller_Front_Action {
 
   const ATTRIBUTE_CODE = 'media_gallery';
