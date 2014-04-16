@@ -2,6 +2,25 @@
 
 The Productivity extension contains different features which make life of store administrator easier. It includes fast cross-switching between products, categories, CMS pages and respective editors, basic editing of product and its images, uploading new images to product in the frontend.
 
+
+## Configuration
+
+The extension doesn't require any initial configuration. The toolbar is displayed on the front end for all authorised users.
+
+#### Admin access
+Users logged in as an admin to the same domain as the frontend gets access to all productivity features.
+
+#### Customer access
+Logged in customers that a members of a customer group `Reviewer` have access to all productivity features, except those that link directly to the backend.
+
+1. Create a customer group called `Reviewer`
+2. Assign a customer to this group
+3. Log in as that customer via the front end to see the productivity toolbar
+
+#### Additional features
+More configuration options are available in ... tab under System/Configuration menu.
+
+
 ## Frontend features
 
 ### Productivity panel
