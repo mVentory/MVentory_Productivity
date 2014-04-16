@@ -17,9 +17,9 @@
 
 <config>
     <modules>
-        <ZetaPrints_Productivity>
+        <MVentory_Productivity>
             <active>true</active>
             <codePool>community</codePool>
-        </ZetaPrints_Productivity>
+        </MVentory_Productivity>
     </modules>
 </config>
