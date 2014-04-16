@@ -21,6 +21,15 @@ Logged in customers that a members of a customer group `Reviewer` have access to
 More configuration options are available in ... tab under System/Configuration menu.
 
 
+#### Troubleshooting
+If the extension is installed, you are logged in as an admin and the toolbar is not displayed you may check for:
+
+1. Check that the extension is properly installed in Magento Connect
+2. Check if there is mVentory group of tabs with Productivity tab under System / Configuration.
+2. Javascript errors in the browser console
+2. Check the HTML source for presence of productivity CSS/JS files (view page source, Ctrl+F, type in productivity in the search box)
+
+
 ## Frontend features
 
 ### Productivity panel
