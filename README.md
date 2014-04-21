@@ -30,7 +30,7 @@ The toolbar is shown when the mouse pointer is hovering over a product image (ma
 
 **Note:**
 
-   Image editing toolbar may not always work in custom themes with modified HTML layout or product image sizes require additional configuration, as outlined in XXX.
+   Image editing toolbar may not always work in custom themes (with modified HTML layout or product image sizes) and may require some additional configuration, as outlined in XXX.
 	
 ## Back-end features
 
