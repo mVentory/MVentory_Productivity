@@ -44,6 +44,14 @@ Use middle button on your mouse in lists to open the item in a new window.
 E.g. list of attributes in Attribute Set page, list of CMS pages, etc.
 
 
+####Attribute merging
+
+Attribute values can be merged across all products they are used in one step.
+
+Navigate to _Edit Product Attribute_ page, _Manage Label / Options_ tab, select _From_ value, _To_ value and save the attribute. The extension will replace _From_ values with _To_ values in all products for this attribute set.
+
+![merge](https://googledrive.com/host/0B5Pkcq-TVIqrWnl3WEFSdHNlaUU/attr-merge.png)
+
 
 
 ## Other features
