@@ -82,6 +82,9 @@ class MVentory_Productivity_Block_Slideshow
     $template = $this->getData('item_template');
     list($width, $height) = explode('x', $this->getData('image_size'));
 
+    ($width = (int) $width) || ($width = null);
+    ($height = (int) $height) || ($height = null);
+
     $helper = Mage::helper('catalog/image');
     $outputHelper = $this->helper('catalog/output');
     $coreHelper = Mage::helper('core');
