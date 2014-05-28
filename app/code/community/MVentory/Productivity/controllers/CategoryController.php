@@ -89,6 +89,10 @@ class MVentory_Productivity_CategoryController extends Mage_Catalog_CategoryCont
     if ($request->getParam($this->_rssGetVariable, 0) != 1)
       return;
 
+    if (($asJson = (bool) $request->getParam('json', false))
+        && (!$callback = $request->getParam('callback')))
+      return;
+
     $layout = $this->getLayout();
 
     $data = array(
@@ -132,18 +136,20 @@ class MVentory_Productivity_CategoryController extends Mage_Catalog_CategoryCont
                     ->getBlock("product_list")
                     ->getLoadedProductCollection();
 
-    $feed = Mage::helper('productivity/rss')
-              ->setLayout($layout)
-              ->generateFeedForProducts($collection, $data);
+    $helper = Mage::helper('productivity/rss')->setLayout($layout);
 
     $response = $this
-                  ->getResponse()
-                  ->setBody($feed);
+      ->getResponse()
+      ->setBody(
+          $asJson
+            ? $callback . '(' . $helper->asJson($collection, $data) . ');'
+              : $helper->generateFeedForProducts($collection, $data)
+        );
 
     $charset = Mage::getStoreConfig("api/config/charset");
+    $type = $asJson ? 'text/javascript' : 'application/rss+xml';
 
-    $response
-      ->setHeader('Content-Type','application/rss+xml; charset=' . $charset);
+    $response->setHeader('Content-Type', $type . '; charset=' . $charset);
   }
 
   public function allAction () {

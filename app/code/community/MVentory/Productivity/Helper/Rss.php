@@ -32,33 +32,13 @@ class MVentory_Productivity_Helper_Rss
   const THUMB_HEIGHT = 75;
 
   public function generateFeedForProducts ($products, $params) {
+    $params = $this->_prepareParams($params);
+
     $currency = Mage::app()
                   ->getStore(null)
                   ->getCurrentCurrency();
 
     $formatParams = array('display'=>Zend_Currency::NO_SYMBOL);
-
-    $defaults = array(
-      'images' => array(
-        'main' => array(
-          'width' => self::IMAGE_WIDTH,
-          'height' => self::IMAGE_HEIGHT
-        ),
-        'thumb' => array(
-          'width' => self::THUMB_WIDTH,
-          'height' => self::THUMB_HEIGHT
-        )
-      )
-    );
-
-    $params['images'] = array_merge($defaults['images'], $params['images']);
-    $params = array_merge($defaults, $params);
-
-    $params['images']['content'] = $params['images']['main'];
-    $params['images']['thumbnail'] = $params['images']['thumb'];
-
-    unset($params['images']['main']);
-    unset($params['images']['thumb']);
 
     $helper = Mage::helper('catalog/image');
 
@@ -132,6 +112,44 @@ class MVentory_Productivity_Helper_Rss
     return $this->formatXml($xml->asXML());
   }
 
+  /**
+   * Returns RSS data in JSON format
+   *
+   * @param array|Traversable $products List of products
+   * @param array $params Parameters
+   * @return string
+   */
+  public function asJson ($products, $params) {
+    $params = $this->_prepareParams($params);
+
+    $helper = Mage::helper('catalog/image');
+    $currency = Mage::app()
+      ->getStore(null)
+      ->getCurrentCurrency();
+
+    foreach($products as $product) {
+      $image = $helper->init($product, 'small_image');
+
+      if (count($params['images']['content']) == 2)
+        $image->resize(
+          $params['images']['content']['width'],
+          $params['images']['content']['height']
+        );
+
+      $_products[] = array(
+        'title' => $product->getName(),
+        'description' => $this->_getProductAttributes($product),
+        'url' => $product->getProductUrl(),
+        'image' => $image->__toString(),
+        'price' => $currency->format($product->getPrice(), array(), false)
+      );
+    }
+
+    return Mage::helper('core')->jsonEncode(
+      isset($_products) ? $_products : array()
+    );
+  }
+
   public function formatXml ($xml) {
     $dom = new DOMDocument('1.0');
 
@@ -188,5 +206,31 @@ class MVentory_Productivity_Helper_Rss
       $attrs .= $_attr['label'] . ': ' . $_attr['value'] . '<br />';
 
     return substr($attrs, 0, -6);
+  }
+
+  protected function _prepareParams ($params) {
+    $defaults = array(
+      'images' => array(
+        'main' => array(
+          'width' => self::IMAGE_WIDTH,
+          'height' => self::IMAGE_HEIGHT
+        ),
+        'thumb' => array(
+          'width' => self::THUMB_WIDTH,
+          'height' => self::THUMB_HEIGHT
+        )
+      )
+    );
+
+    $params['images'] = array_merge($defaults['images'], $params['images']);
+    $params = array_merge($defaults, $params);
+
+    $params['images']['content'] = $params['images']['main'];
+    $params['images']['thumbnail'] = $params['images']['thumb'];
+
+    unset($params['images']['main']);
+    unset($params['images']['thumb']);
+
+    return $params;
   }
 }
