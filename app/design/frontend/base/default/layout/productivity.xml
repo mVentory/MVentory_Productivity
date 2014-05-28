@@ -47,12 +47,20 @@
 
     <reference name="before_body_end">
       <block type="productivity/image_edit" name="productivity.image.edit" template="productivity/image/edit.phtml">
+        <action method="setImageWrapperSelector">
+          <selector><![CDATA[#product_addtocart_form > .product-img-box > .product-image]]></selector>
+        </action>
+
         <action method="setImageSelector">
-          <selector><![CDATA[#product_addtocart_form > .product-img-box > .product-image > img]]></selector>
+          <selector><![CDATA[> img]]></selector>
+        </action>
+
+        <action method="setThumbWrapperSelector">
+          <selector><![CDATA[#product_addtocart_form > .product-img-box > .more-views > ul > li > a]]></selector>
         </action>
 
         <action method="setThumbSelector">
-          <selector><![CDATA[#product_addtocart_form > .product-img-box > .more-views > ul > li > a > img]]></selector>
+          <selector><![CDATA[> img]]></selector>
         </action>
 
         <action method="setImageSize">

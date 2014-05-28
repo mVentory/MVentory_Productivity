@@ -228,6 +228,10 @@
   display: none;
 }
 
+.productivity-state-warning {
+  border: 2px solid red !important;
+}
+
 .image-editor-loader{
   display:none;
   /* !!!FIX: add image to the extension */
