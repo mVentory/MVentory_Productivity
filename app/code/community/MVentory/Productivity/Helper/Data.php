@@ -52,13 +52,12 @@ class MVentory_Productivity_Helper_Data
       return;
 
     $gallery = $attributes[self::ATTRIBUTE_CODE];
+    $backend = $gallery->getBackend();
 
-    if (!$gallery->getBackend()->getImage($product, $file))
+    if (!$backend->getImage($product, $file))
       return;
 
-    $gallery
-      ->getBackend()
-      ->removeImage($product, $file);
+    $backend->removeImage($product, $file);
 
     try {
       $product->save();
@@ -81,28 +80,23 @@ class MVentory_Productivity_Helper_Data
       return;
 
     $gallery = $attributes[self::ATTRIBUTE_CODE];
+    $backend = $gallery->getBackend();
 
-    if (!$gallery->getBackend()->getImage($product, $file))
+    if (!$backend->getImage($product, $file))
       return;
 
     $currentImage = $product->getImage();
 
     if ($currentImage)
-      $gallery
-        ->getBackend()
-        ->updateImage($product, $currentImage, array('exclude' => false));
+      $backend->updateImage($product, $currentImage, array('exclude' => false));
 
-    $gallery
-      ->getBackend()
-      ->updateImage($product, $file, array('exclude' => true));
+    $backend->updateImage($product, $file, array('exclude' => true));
 
-    $gallery
-      ->getBackend()
-      ->setMediaAttribute(
-          $product,
-          array('image', 'small_image', 'thumbnail'),
-          $file
-        );
+    $backend->setMediaAttribute(
+      $product,
+      array('image', 'small_image', 'thumbnail'),
+      $file
+    );
 
     try {
       $product->save();
@@ -129,14 +123,17 @@ class MVentory_Productivity_Helper_Data
       return;
 
     $gallery = $attributes[self::ATTRIBUTE_CODE];
+    $backend = $gallery->getBackend();
 
-    $gallery
-      ->getBackend()
-      ->removeImage($product, $oldFile);
+    $backend->removeImage($product, $oldFile);
 
-    $file = $gallery
-      ->getBackend()
-      ->addImage($product, $newFile, $mediaAttributes, $move, $exclude);
+    $file = $backend->addImage(
+      $product,
+      $newFile,
+      $mediaAttributes,
+      $move,
+      $exclude
+    );
 
     $product->save();
 
