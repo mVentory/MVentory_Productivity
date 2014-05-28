@@ -41,18 +41,8 @@ class MVentory_Productivity_Helper_Data
   }
 
   public function remove ($file, $product) {
-    if (!$product->getId())
+    if (!$backend = $this->_getMediaBackend($product))
       return;
-
-    $attributes = $product
-      ->getTypeInstance(true)
-      ->getSetAttributes($product);
-
-    if (!isset($attributes[self::ATTRIBUTE_CODE]))
-      return;
-
-    $gallery = $attributes[self::ATTRIBUTE_CODE];
-    $backend = $gallery->getBackend();
 
     if (!$backend->getImage($product, $file))
       return;
@@ -69,18 +59,8 @@ class MVentory_Productivity_Helper_Data
   }
 
   public function setMainImage ($file, $product) {
-    if (!$product->getId())
+    if (!$backend = $this->_getMediaBackend($product))
       return;
-
-    $attributes = $product
-      ->getTypeInstance(true)
-      ->getSetAttributes($product);
-
-    if (!isset($attributes[self::ATTRIBUTE_CODE]))
-      return;
-
-    $gallery = $attributes[self::ATTRIBUTE_CODE];
-    $backend = $gallery->getBackend();
 
     if (!$backend->getImage($product, $file))
       return;
@@ -112,18 +92,8 @@ class MVentory_Productivity_Helper_Data
                                         $mediaAttributes = null, $move = true,
                                         $exclude = false) {
 
-    if (!$product->getId())
+    if (!$backend = $this->_getMediaBackend($product))
       return;
-
-    $attributes = $product
-      ->getTypeInstance(true)
-      ->getSetAttributes($product);
-
-    if (!isset($attributes[self::ATTRIBUTE_CODE]))
-      return;
-
-    $gallery = $attributes[self::ATTRIBUTE_CODE];
-    $backend = $gallery->getBackend();
 
     $backend->removeImage($product, $oldFile);
 
