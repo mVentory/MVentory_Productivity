@@ -45,8 +45,8 @@ class MVentory_Productivity_Helper_Data
       return;
 
     $attributes = $product
-                    ->getTypeInstance(true)
-                    ->getSetAttributes($product);
+      ->getTypeInstance(true)
+      ->getSetAttributes($product);
 
     if (!isset($attributes[self::ATTRIBUTE_CODE]))
       return;
@@ -74,8 +74,8 @@ class MVentory_Productivity_Helper_Data
       return;
 
     $attributes = $product
-                    ->getTypeInstance(true)
-                    ->getSetAttributes($product);
+      ->getTypeInstance(true)
+      ->getSetAttributes($product);
 
     if (!isset($attributes[self::ATTRIBUTE_CODE]))
       return;
@@ -98,9 +98,11 @@ class MVentory_Productivity_Helper_Data
 
     $gallery
       ->getBackend()
-      ->setMediaAttribute($product,
-                array('image', 'small_image', 'thumbnail'),
-                $file);
+      ->setMediaAttribute(
+          $product,
+          array('image', 'small_image', 'thumbnail'),
+          $file
+        );
 
     try {
       $product->save();
@@ -120,8 +122,8 @@ class MVentory_Productivity_Helper_Data
       return;
 
     $attributes = $product
-                    ->getTypeInstance(true)
-                    ->getSetAttributes($product);
+      ->getTypeInstance(true)
+      ->getSetAttributes($product);
 
     if (!isset($attributes[self::ATTRIBUTE_CODE]))
       return;
@@ -133,8 +135,8 @@ class MVentory_Productivity_Helper_Data
       ->removeImage($product, $oldFile);
 
     $file = $mediaGalleryAttribute
-              ->getBackend()
-              ->addImage($product, $newFile, $mediaAttribute, $move, $exclude);
+      ->getBackend()
+      ->addImage($product, $newFile, $mediaAttribute, $move, $exclude);
 
     $product->save();
 
@@ -186,8 +188,8 @@ class MVentory_Productivity_Helper_Data
       return $this->_mediaBackend[$id];
 
     $attributes = $product
-                    ->getTypeInstance(true)
-                    ->getSetAttributes($product);
+      ->getTypeInstance(true)
+      ->getSetAttributes($product);
 
     if (!isset($attributes[self::ATTRIBUTE_CODE]))
       return;
