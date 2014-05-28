@@ -115,7 +115,7 @@ class MVentory_Productivity_Helper_Data
   }
 
   public function updateImageInGallery ($oldFile, $newFile, $product,
-                                        $mediaAttribute = null, $move = true,
+                                        $mediaAttributes = null, $move = true,
                                         $exclude = false) {
 
     if (!$product->getId())
@@ -128,15 +128,15 @@ class MVentory_Productivity_Helper_Data
     if (!isset($attributes[self::ATTRIBUTE_CODE]))
       return;
 
-    $mediaGalleryAttribute = $attributes[self::ATTRIBUTE_CODE];
+    $gallery = $attributes[self::ATTRIBUTE_CODE];
 
-    $mediaGalleryAttribute
+    $gallery
       ->getBackend()
       ->removeImage($product, $oldFile);
 
-    $file = $mediaGalleryAttribute
+    $file = $gallery
       ->getBackend()
-      ->addImage($product, $newFile, $mediaAttribute, $move, $exclude);
+      ->addImage($product, $newFile, $mediaAttributes, $move, $exclude);
 
     $product->save();
 
@@ -149,15 +149,15 @@ class MVentory_Productivity_Helper_Data
 
     $gallery = $product->getData(self::ATTRIBUTE_CODE);
 
-    $mediaAttribute = null;
+    $mediaAttributes = null;
 
     if (!(isset($gallery['images']) && $gallery['images']))
-      $mediaAttribute = array_keys($product->getMediaAttributes());
+      $mediaAttributes = array_keys($product->getMediaAttributes());
 
     $backend->addImage(
       $product,
       $data['path'] . $data['file'],
-      $mediaAttribute,
+      $mediaAttributes,
       true,
       false
     );
@@ -193,8 +193,8 @@ class MVentory_Productivity_Helper_Data
     if (!isset($attributes[self::ATTRIBUTE_CODE]))
       return;
 
-    $mediaGalleryAttribute = $attributes[self::ATTRIBUTE_CODE];
-    $backend = $mediaGalleryAttribute->getBackend();
+    $gallery = $attributes[self::ATTRIBUTE_CODE];
+    $backend = $gallery->getBackend();
 
     $this->_mediaBackend[$id] = $backend;
 
