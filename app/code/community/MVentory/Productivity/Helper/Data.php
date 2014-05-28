@@ -67,10 +67,17 @@ class MVentory_Productivity_Helper_Data
 
     $currentImage = $product->getImage();
 
-    if ($currentImage)
-      $backend->updateImage($product, $currentImage, array('exclude' => false));
+    if ($currentImage) {
+      $data = $backend->getImage($product, $currentImage);
+      $disabled = $data['disabled'];
 
-    $backend->updateImage($product, $file, array('exclude' => true));
+      unset($data);
+
+      $backend->updateImage($product, $currentImage, array('exclude' => false));
+    }
+
+    if (isset($disabled) && $disabled)
+      $backend->updateImage($product, $file, array('exclude' => true));
 
     $backend->setMediaAttribute(
       $product,
