@@ -144,10 +144,8 @@ class MVentory_Productivity_Helper_Data
   }
 
   public function add ($product, $data) {
-    if (!$product->getId())
+    if (!$backend = $this->_getMediaBackend($product))
       return;
-
-    $backend = $this->_getMediaBackend($product);
 
     $gallery = $product->getData(self::ATTRIBUTE_CODE);
 
@@ -182,7 +180,8 @@ class MVentory_Productivity_Helper_Data
   }
 
   protected function _getMediaBackend ($product) {
-    $id = $product->getId();
+    if (!$id = $product->getId())
+      return;
 
     if (isset($this->_mediaBackend[$id]))
       return $this->_mediaBackend[$id];
