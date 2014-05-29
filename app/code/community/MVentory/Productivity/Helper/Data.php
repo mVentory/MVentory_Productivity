@@ -48,12 +48,7 @@ class MVentory_Productivity_Helper_Data
       return;
 
     $backend->removeImage($product, $file);
-
-    try {
-      $product->save();
-    } catch (Mage_Core_Exception $e) {
-      return;
-    }
+    $product->save();
 
     return true;
   }
@@ -85,12 +80,7 @@ class MVentory_Productivity_Helper_Data
       $file
     );
 
-    try {
-      $product->save();
-    } catch (Mage_Core_Exception $e) {
-      Mage::log($product);
-      return;
-    }
+    $product->save();
 
     return true;
   }
