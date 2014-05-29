@@ -44,7 +44,7 @@ class MVentory_Productivity_Helper_Data
     $backend = $this->_getMediaBackend($product);
 
     if (!$backend->getImage($product, $file))
-      return;
+      throw new MVentory_Productivity_Exception('No image in the product');
 
     $backend->removeImage($product, $file);
     $product->save();
@@ -56,7 +56,7 @@ class MVentory_Productivity_Helper_Data
     $backend = $this->_getMediaBackend($product);
 
     if (!$backend->getImage($product, $file))
-      return;
+      throw new MVentory_Productivity_Exception('No image in the product');
 
     $currentImage = $product->getImage();
 
@@ -127,14 +127,16 @@ class MVentory_Productivity_Helper_Data
     $gallery = $product->getData(self::ATTRIBUTE_CODE);
 
     if (!(isset($gallery['images']) && $gallery['images']))
-      return;
+      throw new MVentory_Productivity_Exception('Image gallery is not loaded');
 
     $image = end($gallery['images']);
 
     if (!(isset($image['new_file'], $image['file'])
           && $image['new_file']
           && $image['file']))
-      return;
+      throw new MVentory_Productivity_Exception(
+        'No newly added image in the product'
+      );
 
     return $image['file'];
   }

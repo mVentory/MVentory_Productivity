@@ -238,8 +238,7 @@ class MVentory_Productivity_ImageController
     );
 
     try {
-      if (!$file = $helper->add($product, $result))
-        return $this->_error();
+      $file = $helper->add($product, $result);
     } catch (Exception $e) {
       Mage::logException($e);
       return $this->_error();
