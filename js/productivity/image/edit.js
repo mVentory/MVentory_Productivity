@@ -17,7 +17,24 @@
 productivity.image = {};
 productivity.edit = {};
 
+function __ (s) {
+  return window.Translator.translate(s);
+}
+
+function confirmRemove ($el) {
+  var answer;
+
+  $el.addClass('productivity-state-warning');
+  answer = confirm(__('Do you want to delete this image?'));
+  $el.removeClass('productivity-state-warning');
+
+  return answer;
+}
+
+
+
 $(function () {
+
   var $form = $('#product_addtocart_form');
   var $panel = $('#productivity-image-edit-panel');
   var $menus = $form.find('.tm-image-editor-menu');
@@ -302,6 +319,8 @@ $(function () {
       css.height = size.height;
     }
 
+    //Store elements for image and its wrapper
+    data.wrapper = { $: $this };
     data.element = {
       $: typeof data.panel.element === 'function'
           ? data.panel.element($this, data.image.type)
@@ -375,6 +394,9 @@ $(function () {
     event.preventDefault();
 
     var data = $panel.data();
+
+    if (!confirmRemove(data.wrapper.$))
+      return;
 
     var image = data.element.$.data('productivity');
 
