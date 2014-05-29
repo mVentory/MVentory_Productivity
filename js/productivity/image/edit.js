@@ -395,8 +395,13 @@ $(function () {
 
     var data = $panel.data();
 
-    if (!confirmRemove(data.wrapper.$))
-      return;
+    data.element.$.css('opacity', '0.5');
+
+    if (!confirmRemove(data.wrapper.$)) {
+      data.element.$.css('opacity', '1');
+
+      return false;
+    }
 
     var image = data.element.$.data('productivity');
 
@@ -421,6 +426,7 @@ $(function () {
                        .val();
 
     data.panel.action.remove.on_complete = function () {
+      data.element.$.css('opacity', '1');
       $panel.hide();
     };
 
