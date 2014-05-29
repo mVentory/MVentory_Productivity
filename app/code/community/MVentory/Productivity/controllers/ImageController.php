@@ -59,24 +59,29 @@ class MVentory_Productivity_ImageController
 
     unset($params);
 
-    // rotate image and get new file
-    $newFileAbsolute = $helper->rotate($file, $angels[$rotate]);
+    try {
+      // rotate image and get new file
+      $newFileAbsolute = $helper->rotate($file, $angels[$rotate]);
+    } catch (Exception $e) {
+      Mage::logException($e);
+      return $this->_error();
+    }
 
     $type = $request->get('thumb') == 'true'?'thumbnail':'image';
 
     $result = array();
 
-    if($type == 'image') {
-      // update main product image and get new base filename
-      $result['file']
-        = $helper
-            ->updateImageInGallery($file,
-                                   $newFileAbsolute,
-                                   $product,
-                                   array('image', 'small_image', 'thumbnail'));
-    } else {
-      $result['file'] = $helper
-                ->updateImageInGallery($file, $newFileAbsolute, $product);
+    try {
+      //Update product image and get new base filename
+      $result['file'] = $helper->updateImageInGallery(
+        $file,
+        $newFileAbsolute,
+        $product,
+        $type == 'image' ? array('image', 'small_image', 'thumbnail') : null
+      );
+    } catch (Exception $e) {
+      Mage::logException($e);
+      return $this->_error();
     }
 
     // get resized version of image
@@ -115,7 +120,12 @@ class MVentory_Productivity_ImageController
 
     unset($params);
 
-    $helper->remove($file, $product);
+    try {
+      $helper->remove($file, $product);
+    } catch (Exception $e) {
+      Mage::logException($e);
+      return $this->_error();
+    }
 
     $data = array();
 
@@ -157,7 +167,12 @@ class MVentory_Productivity_ImageController
     if (!$product = $this->_getProduct($request->getParam('product')))
       return $this->_error();
 
-    $helper->setMainImage($thumb['file'], $product);
+    try {
+      $helper->setMainImage($thumb['file'], $product);
+    } catch (Exception $e) {
+      Mage::logException($e);
+      return $this->_error();
+    }
 
     $result = array(
       'image' => array(
@@ -222,8 +237,13 @@ class MVentory_Productivity_ImageController
       )
     );
 
-    if (!$file = $helper->add($product, $result))
+    try {
+      if (!$file = $helper->add($product, $result))
+        return $this->_error();
+    } catch (Exception $e) {
+      Mage::logException($e);
       return $this->_error();
+    }
 
     $this->_success(array('file' => $file));
   }
