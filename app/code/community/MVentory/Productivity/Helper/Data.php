@@ -41,8 +41,7 @@ class MVentory_Productivity_Helper_Data
   }
 
   public function remove ($file, $product) {
-    if (!$backend = $this->_getMediaBackend($product))
-      return;
+    $backend = $this->_getMediaBackend($product);
 
     if (!$backend->getImage($product, $file))
       return;
@@ -54,8 +53,7 @@ class MVentory_Productivity_Helper_Data
   }
 
   public function setMainImage ($file, $product) {
-    if (!$backend = $this->_getMediaBackend($product))
-      return;
+    $backend = $this->_getMediaBackend($product);
 
     if (!$backend->getImage($product, $file))
       return;
@@ -89,8 +87,7 @@ class MVentory_Productivity_Helper_Data
                                         $mediaAttributes = null, $move = true,
                                         $exclude = false) {
 
-    if (!$backend = $this->_getMediaBackend($product))
-      return;
+    $backend = $this->_getMediaBackend($product);
 
     $backend->removeImage($product, $oldFile);
 
@@ -108,8 +105,7 @@ class MVentory_Productivity_Helper_Data
   }
 
   public function add ($product, $data) {
-    if (!$backend = $this->_getMediaBackend($product))
-      return;
+    $backend = $this->_getMediaBackend($product);
 
     $gallery = $product->getData(self::ATTRIBUTE_CODE);
 
@@ -145,7 +141,7 @@ class MVentory_Productivity_Helper_Data
 
   protected function _getMediaBackend ($product) {
     if (!$id = $product->getId())
-      return;
+      throw new MVentory_Productivity_Exception('Product is not loaded');
 
     if (isset($this->_mediaBackend[$id]))
       return $this->_mediaBackend[$id];
@@ -155,7 +151,10 @@ class MVentory_Productivity_Helper_Data
       ->getSetAttributes($product);
 
     if (!isset($attributes[self::ATTRIBUTE_CODE]))
-      return;
+      throw new MVentory_Productivity_Exception(
+        'Attribute ' . self::ATTRIBUTE_CODE . 'doesn\'t exist in product\'s '
+        . 'attribute set'
+      );
 
     $gallery = $attributes[self::ATTRIBUTE_CODE];
     $backend = $gallery->getBackend();
