@@ -255,7 +255,12 @@ class MVentory_Productivity_ImageController
 
     $product = Mage::getModel('catalog/product')->load($id);
 
-    return $product->getId() ? $product : null;
+    if (!$product->getId())
+      return null;
+
+    Mage::register('product', $product, true);
+
+    return $product;
   }
 
   private function _getImageUrl ($product,
