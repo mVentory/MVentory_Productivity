@@ -39,12 +39,9 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
 
     if ($helper->isReviewerLogged())
     {
-      // Product saves must be made from admin store
-      Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
-
-      //Don't set store ID to product because it has to be saved
-      //in a global scope
-      $product = Mage::getModel('catalog/product')->load($productId);
+      $product = Mage::getModel('catalog/product')
+        ->setStoreId($storeId)
+        ->load($productId);
 
       // Only allow certain attributes to be set, if missing product will not be changed.
       $data = array_intersect_key(
@@ -54,6 +51,19 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
       if (isset($data['description'])) {
         $data['short_description'] = $data['description'];
       }
+
+      //Find all attributes which value was changed in the editor by comparing
+      //data from request with product's data
+      //
+      //In admin interface it uses special Use default flag for every field
+      //which user removes before setting different value in selected scope.
+      //Productivity interface doesn't provide such flags, so it simply
+      //compares current product values with values entered in the form to
+      //find changed fields.
+      $changeAttrs = array();
+      foreach ($data as $code => $value)
+        if ($product->getData($code) != $value)
+          $changeAttrs[$code] = true;
 
       if ($product->getTypeId() != 'configurable') {
         $qty = (float) $request->getParam('qty');
@@ -70,11 +80,42 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
             );
       }
 
-      $product->addData($data)
-          ->save();
+      if ($data) {
+        $product->addData($data);
 
-      // Reset store to be neat
-      Mage::app()->setCurrentStore($storeId);
+        //Set value of not changed attributes to false to prevents from copying
+        //attribute's values to current scope.
+        //
+        //Filter out following attributes:
+        //  - Gallery attr (is a complex attr with it's own editor)
+        //  - Global (setting value of global attr to false removes it globally)
+        //  - Non-visible (non-visible attributes can't be edited directly)
+        //  - Without input field (this attributes can'be edited directly)
+        //
+        //Filtering rules are taken from:
+        //  - Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes::_prepareForm()
+        //  - Mage_Adminhtml_Block_Widget_Form::_setFieldset()
+        foreach ($product->getAttributes() as $code => $attr) {
+          $allow = $code != 'gallery'
+                   && $attr->getIsGlobal()
+                        != Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL
+                   && $attr->getIsVisible()
+                   && $attr->getFrontend()->getInputType();
+
+          if (!$allow || isset($changeAttrs[$code]))
+            continue;
+
+          $product->setData($code, false);
+        }
+
+        //Product saves must be made from admin store
+        Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+
+        $product->save();
+
+        //Reset store to be neat
+        Mage::app()->setCurrentStore($storeId);
+      }
     }
 
     // Always show same page, even if nothing has changed
