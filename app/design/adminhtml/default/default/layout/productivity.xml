@@ -16,44 +16,49 @@
 -->
 
 <layout>
-    <adminhtml_catalog_product_set_edit>
-        <reference name="js">
-            <block type="productivity/adminhtml_catalog_product_attribute_set_edit_script" template="productivity/catalog/product/attribute/set/edit/script.js.phtml" name="attribute.script.js" />
-        </reference>
-    </adminhtml_catalog_product_set_edit>
-    <adminhtml_catalog_product_attribute_index>
-        <reference name="head">
-            <action method="addJs"><script>productivity/adminhtml/update_grid.js</script></action>
-            <action method="addCss"><name>productivity.css</name></action>
-        </reference>
-    </adminhtml_catalog_product_attribute_index>
-    <adminhtml_catalog_product_set_index>
-        <reference name="head">
-            <action method="addJs"><script>productivity/adminhtml/update_grid.js</script></action>
-        </reference>
-    </adminhtml_catalog_product_set_index>
-    <adminhtml_catalog_product_edit>
-        <reference name="head">
-            <action method="addCss"><name>productivity.css</name></action>
-        </reference>
-        <reference name="content">
-            <block name="product.edit.frontview.button" type="productivity/adminhtml_catalog_product_edit_button" before="-" template="productivity/catalog/product/edit/button.phtml" />
-        </reference>
-    </adminhtml_catalog_product_edit>
-    <adminhtml_catalog_category_edit>
-        <reference name="head">
-            <action method="addCss"><name>productivity.css</name></action>
-        </reference>
-        <reference name="content">
-            <block name="category.edit.frontview.button" type="productivity/adminhtml_catalog_category_edit_button" before="-" template="productivity/catalog/category/edit/button.phtml" />
-        </reference>
-    </adminhtml_catalog_category_edit>
-    <adminhtml_cms_page_edit>
-        <reference name="head">
-            <action method="addCss"><name>productivity.css</name></action>
-        </reference>
-        <reference name="content">
-            <block name="page.edit.frontview.button" type="productivity/adminhtml_cms_page_edit_button" before="-" template="productivity/cms/page/edit/button.phtml" />
-        </reference>
-    </adminhtml_cms_page_edit>
+  <adminhtml_catalog_product_set_edit>
+    <reference name="js">
+      <block type="productivity/adminhtml_catalog_product_attribute_set_edit_script" template="productivity/catalog/product/attribute/set/edit/script.js.phtml" name="attribute.script.js" />
+    </reference>
+  </adminhtml_catalog_product_set_edit>
+
+  <adminhtml_catalog_product_attribute_index>
+    <reference name="head">
+      <action method="addJs"><script>productivity/adminhtml/update_grid.js</script></action>
+      <action method="addCss"><name>productivity.css</name></action>
+    </reference>
+  </adminhtml_catalog_product_attribute_index>
+
+  <adminhtml_catalog_product_set_index>
+    <reference name="head">
+      <action method="addJs"><script>productivity/adminhtml/update_grid.js</script></action>
+    </reference>
+  </adminhtml_catalog_product_set_index>
+
+  <adminhtml_catalog_product_edit>
+    <reference name="head">
+      <action method="addCss"><name>productivity.css</name></action>
+    </reference>
+    <reference name="content">
+      <block name="product.edit.frontview.button" type="productivity/adminhtml_catalog_product_edit_button" before="-" template="productivity/catalog/product/edit/button.phtml" />
+    </reference>
+  </adminhtml_catalog_product_edit>
+
+  <adminhtml_catalog_category_edit>
+    <reference name="head">
+      <action method="addCss"><name>productivity.css</name></action>
+    </reference>
+    <reference name="content">
+      <block name="category.edit.frontview.button" type="productivity/adminhtml_catalog_category_edit_button" before="-" template="productivity/catalog/category/edit/button.phtml" />
+    </reference>
+  </adminhtml_catalog_category_edit>
+
+  <adminhtml_cms_page_edit>
+    <reference name="head">
+      <action method="addCss"><name>productivity.css</name></action>
+    </reference>
+    <reference name="content">
+      <block name="page.edit.frontview.button" type="productivity/adminhtml_cms_page_edit_button" before="-" template="productivity/cms/page/edit/button.phtml" />
+    </reference>
+  </adminhtml_cms_page_edit>
 </layout>
