@@ -16,10 +16,10 @@
 -->
 
 <config>
-    <modules>
-        <MVentory_Productivity>
-            <active>true</active>
-            <codePool>community</codePool>
-        </MVentory_Productivity>
-    </modules>
+  <modules>
+    <MVentory_Productivity>
+      <active>true</active>
+      <codePool>community</codePool>
+    </MVentory_Productivity>
+  </modules>
 </config>
