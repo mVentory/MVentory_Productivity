@@ -191,5 +191,33 @@
         </productivity>
       </updates>
     </layout>
+
+    <acl>
+      <resources>
+        <admin>
+          <children>
+            <system>
+              <children>
+                <config>
+                  <children>
+                    <productivity>
+                      <title>mVentory Productivity</title>
+                    </productivity>
+                  </children>
+                </config>
+              </children>
+            </system>
+          </children>
+        </admin>
+      </resources>
+    </acl>
   </adminhtml>
+
+  <default>
+   <productivity>
+      <product>
+        <save_scope>2</save_scope>
+      </product>
+    </productivity>
+  </default>
 </config>

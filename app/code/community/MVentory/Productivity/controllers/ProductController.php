@@ -39,9 +39,22 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
 
     if ($helper->isReviewerLogged())
     {
-      $product = Mage::getModel('catalog/product')
-        ->setStoreId($storeId)
-        ->load($productId);
+      //Check if save scope is set and we need to load product
+      //with dara from current store
+      $hasScope = (int) Mage::getStoreConfig(
+        MVentory_Productivity_Model_Config::_PRODUCT_SAVE_SCOPE
+      );
+      $hasScope = MVentory_Productivity_Model_Config::PRODUCT_SCOPE_CURRENT
+                    == $hasScope;
+
+      $product = Mage::getModel('catalog/product');
+
+      //Set current store ID before laoding product if save scope is set,
+      //e.g. user selected Current scope optin in admin interface
+      if ($hasScope)
+        $product->setStoreId($storeId);
+
+      $product->load($productId);
 
       // Only allow certain attributes to be set, if missing product will not be changed.
       $data = array_intersect_key(
@@ -84,7 +97,8 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
         $product->addData($data);
 
         //Set value of not changed attributes to false to prevents from copying
-        //attribute's values to current scope.
+        //attribute's values to current scope if user selected Current store
+        //option of Save edits to setting in admin interface
         //
         //Filter out following attributes:
         //  - Gallery attr (is a complex attr with it's own editor)
@@ -95,7 +109,7 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
         //Filtering rules are taken from:
         //  - Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes::_prepareForm()
         //  - Mage_Adminhtml_Block_Widget_Form::_setFieldset()
-        foreach ($product->getAttributes() as $code => $attr) {
+        if ($hasScope) foreach ($product->getAttributes() as $code => $attr) {
           $allow = $code != 'gallery'
                    && $attr->getIsGlobal()
                         != Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL

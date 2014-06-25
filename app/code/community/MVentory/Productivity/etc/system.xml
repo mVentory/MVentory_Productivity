@@ -16,7 +16,61 @@
 -->
 
 <config>
+  <tabs>
+    <mventory translate="label">
+      <label>mVentory</label>
+      <sort_order>100</sort_order>
+    </mventory>
+  </tabs>
+
   <sections>
+    <productivity translate="label">
+      <label>Productivity</label>
+      <tab>mventory</tab>
+      <frontend_type>text</frontend_type>
+
+      <show_in_default>1</show_in_default>
+      <show_in_website>1</show_in_website>
+      <show_in_store>1</show_in_store>
+
+      <sort_order>0</sort_order>
+
+      <groups>
+        <product translate="label">
+          <label>Product</label>
+
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+
+          <sort_order>1</sort_order>
+
+          <fields>
+            <save_scope translate="label comment">
+              <label>Save edits to</label>
+              <comment><![CDATA[
+                Recommended default: Current store, other recommended settings:
+                <ul style="list-style: disc inside none; padding: 0 0 0 13px">
+                  <li>1-store config: Current store</li>
+                  <li>1-website, multiple stores: Current store</li>
+                  <li>Multiple websites, 1 store per site: Default scope</li>
+                  <li>Multiple websites, multiple stores: Current store</li>
+                </ul>
+              ]]></comment>
+              <frontend_type>select</frontend_type>
+              <source_model>productivity/setting_source_savescope</source_model>
+
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>1</show_in_store>
+
+              <sort_order>1</sort_order>
+            </save_scope>
+          </fields>
+        </product>
+      </groups>
+    </productivity>
+
     <catalog>
       <groups>
         <frontend>
