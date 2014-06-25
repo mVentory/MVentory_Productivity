@@ -61,4 +61,10 @@
       <block name="page.edit.frontview.button" type="productivity/adminhtml_cms_page_edit_button" before="-" template="productivity/cms/page/edit/button.phtml" />
     </reference>
   </adminhtml_cms_page_edit>
+
+  <adminhtml_system_config_edit>
+    <reference name="head">
+      <action method="addCss"><name>productivity.css</name></action>
+    </reference>
+  </adminhtml_system_config_edit>
 </layout>

@@ -36,6 +36,16 @@
       <sort_order>0</sort_order>
 
       <groups>
+        <hint>
+          <frontend_model>productivity/config_hint</frontend_model>
+
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>1</show_in_store>
+
+          <sort_order>0</sort_order>
+        </hint>
+
         <product translate="label">
           <label>Product</label>
 
