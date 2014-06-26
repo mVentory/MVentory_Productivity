@@ -22,7 +22,11 @@
 class MVentory_Productivity_Model_Config {
 
   //Config paths
+  const _CATEGORY_FLATTEN_TREE = 'productivity/category/flatten_tree';
+  const _CATEGORY_HOME_URL = 'productivity/category/home_url';
+  const _DISPLAY_PRODUCTS = 'productivity/category/display_descending_products';
   const _PRODUCT_SAVE_SCOPE = 'productivity/product/save_scope';
+  const _ANALYTICS_URL = 'productivity/analytics/url';
 
   //Product save scopes
   const PRODUCT_SCOPE_GLOBAL = 1;

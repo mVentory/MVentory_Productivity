@@ -46,6 +46,60 @@
           <sort_order>0</sort_order>
         </hint>
 
+        <category translate="label">
+          <label>Category</label>
+
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>0</show_in_store>
+
+          <sort_order>1</sort_order>
+
+          <fields>
+            <flatten_tree translate="label comment tooltip">
+              <label>Flatten categories tree</label>
+              <comment>Skip tree nodes with no products and only a single sub-category.</comment>
+              <tooltip>E.g. if category Furniture has no products assigned to it, but has a single sub-category Tables then Furniture is removed from the tree and Tables is shown in its place.</tooltip>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+
+              <sort_order>0</sort_order>
+            </flatten_tree>
+
+            <home_url translate="label comment tooltip">
+              <label>External Homepage URL</label>
+              <comment>Replace the URL of HOME in breadcrubms with this URL.</comment>
+              <tooltip>E.g. if the Magento store is in a subdomain and the main website is in the root domain then it is logical that clicking Home takes the user to the main website.</tooltip>
+              <frontend_type>text</frontend_type>
+              <validate>validate-url</validate>
+
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+
+              <sort_order>1</sort_order>
+            </home_url>
+
+            <display_descending_products translate="label comment tooltip">
+              <label>Display products from subcategories</label>
+              <comment>Display all products from all subcategories.</comment>
+              <tooltip>E.g. category Furniture has no products assigned to it, but it will still show all products from subcategories Tables, Shelves, etc.</tooltip>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+
+              <sort_order>2</sort_order>
+            </display_descending_products>
+          </fields>
+        </category>
+
         <product translate="label">
           <label>Product</label>
 
@@ -53,20 +107,13 @@
           <show_in_website>1</show_in_website>
           <show_in_store>1</show_in_store>
 
-          <sort_order>1</sort_order>
+          <sort_order>2</sort_order>
 
           <fields>
-            <save_scope translate="label comment">
+            <save_scope translate="label comment tooltip">
               <label>Save edits to</label>
-              <comment><![CDATA[
-                Recommended default: Current store, other recommended settings:
-                <ul style="list-style: disc inside none; padding: 0 0 0 13px">
-                  <li>1-store config: Current store</li>
-                  <li>1-website, multiple stores: Current store</li>
-                  <li>Multiple websites, 1 store per site: Default scope</li>
-                  <li>Multiple websites, multiple stores: Current store</li>
-                </ul>
-              ]]></comment>
+              <comment>Recommended: Current store. Use 'Default scope' for multiple websites with 1 store each.</comment>
+              <tooltip>Magento can save attribute values at Default or Store level. It may cause data discrepancies depending on your site config. Consider where front end edits should be saved or use 'Store level' if in doubt.</tooltip>
               <frontend_type>select</frontend_type>
               <source_model>productivity/setting_source_savescope</source_model>
 
@@ -78,75 +125,33 @@
             </save_scope>
           </fields>
         </product>
-      </groups>
-    </productivity>
 
-    <catalog>
-      <groups>
-        <frontend>
-          <fields>
-            <display_descending_products translate="label" module="productivity">
-              <label>Display all descending products</label>
-              <frontend_type>select</frontend_type>
-              <source_model>adminhtml/system_config_source_yesno</source_model>
-
-              <show_in_default>1</show_in_default>
-              <show_in_website>1</show_in_website>
-              <show_in_store>0</show_in_store>
-
-              <sort_order>300</sort_order>
-            </display_descending_products>
-          </fields>
-        </frontend>
-
-        <navigation>
-          <fields>
-            <hide_empty_categories translate="label" module="productivity">
-              <label>Show categories only with 2 or more sub-categories</label>
-              <frontend_type>select</frontend_type>
-              <source_model>adminhtml/system_config_source_yesno</source_model>
-
-              <show_in_default>1</show_in_default>
-              <show_in_website>1</show_in_website>
-              <show_in_store>0</show_in_store>
-
-              <sort_order>100</sort_order>
-            </hide_empty_categories>
-
-            <home_url translate="label" module="productivity">
-              <label>External Home URL</label>
-              <frontend_type>text</frontend_type>
-
-              <show_in_default>0</show_in_default>
-              <show_in_website>1</show_in_website>
-              <show_in_store>0</show_in_store>
-
-              <sort_order>101</sort_order>
-            </home_url>
-          </fields>
-        </navigation>
-      </groups>
-    </catalog>
-
-    <google>
-      <groups>
         <analytics>
+          <label>Google Analytics</label>
+
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>0</show_in_store>
+
+          <sort_order>3</sort_order>
+
           <fields>
-            <productivity_analytics_url translate="label comment" module="productivity">
+            <url translate="label comment tooltip">
               <label>Analytics Reports URL</label>
+              <comment>Direct link to reports in Google Analytics.</comment>
+              <tooltip>Log in to Google Analytics, navigate to the default report page and copy the URL into this text box. Any user with access to the reports will be able to jump there with one click in the toolbar.</tooltip>
               <frontend_type>text</frontend_type>
               <validate>validate-url</validate>
-              <comment>Link to analytics reports for Productivity toolbar.</comment>
 
-              <show_in_default>0</show_in_default>
+              <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
               <show_in_store>0</show_in_store>
 
-              <sort_order>30</sort_order>
-            </productivity_analytics_url>
+              <sort_order>0</sort_order>
+            </url>
           </fields>
         </analytics>
       </groups>
-    </google>
+    </productivity>
   </sections>
 </config>

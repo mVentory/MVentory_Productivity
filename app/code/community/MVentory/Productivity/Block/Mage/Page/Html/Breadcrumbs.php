@@ -22,8 +22,6 @@
 class MVentory_Productivity_Block_Mage_Page_Html_Breadcrumbs
   extends Mage_Page_Block_Html_Breadcrumbs {
 
-  const PATH_HOME_URL = 'catalog/navigation/home_url';
-
   /*
    * Replaces link in 'home' crumb with external home URL if it's set
    * and adds 'shop' crumb with link to Magento's home page
@@ -32,10 +30,13 @@ class MVentory_Productivity_Block_Mage_Page_Html_Breadcrumbs
    * @return Mage_Core_Block_Abstract
    */
   protected function _beforeToHtml () {
-    if (is_array($this->_crumbs)
-        && isset($this->_crumbs['home'])
-        && ($url = Mage::getStoreConfig(self::PATH_HOME_URL))) {
+    $replace = is_array($this->_crumbs)
+               && isset($this->_crumbs['home'])
+               && ($url = Mage::getStoreConfig(
+                    MVentory_Productivity_Model_Config::_CATEGORY_HOME_URL
+                  ));
 
+    if ($replace) {
       $shopUrl = $this->_crumbs['home']['link'];
 
       $this->_crumbs['home']['link'] = $url;

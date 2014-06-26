@@ -22,8 +22,6 @@
 class MVentory_Productivity_Block_Panel
   extends Mage_Core_Block_Template {
 
-  const CONFIG_ANALYTICS_URL = 'google/analytics/productivity_analytics_url';
-
   protected function _getType () {
     return $this->getRequest()->getControllerName();
   }
@@ -79,7 +77,9 @@ class MVentory_Productivity_Block_Panel
   }
 
   public function _getAnalyticsUrl () {
-    return Mage::getStoreConfig(self::CONFIG_ANALYTICS_URL);
+    return Mage::getStoreConfig(
+      MVentory_Productivity_Model_Config::_ANALYTICS_URL
+    );
   }
 
   public function _getHelpUrl () {

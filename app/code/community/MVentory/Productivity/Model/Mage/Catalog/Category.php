@@ -22,11 +22,6 @@
 class MVentory_Productivity_Model_Mage_Catalog_Category
   extends Mage_Catalog_Model_Category {
 
-  const DISPLAY_DESCENDING_PRODUCTS
-    = 'catalog/frontend/display_descending_products';
-
-  const HIDE_EMPTY_CATEGORIES = 'catalog/navigation/hide_empty_categories';
-
   /**
    * Get category products collection
    *
@@ -37,8 +32,12 @@ class MVentory_Productivity_Model_Mage_Catalog_Category
    * @return Varien_Data_Collection_Db
    */
   public function getProductCollection () {
-    if ($this->getIsAnchor()
-        || !Mage::getStoreConfig(self::DISPLAY_DESCENDING_PRODUCTS))
+    $default = $this->getIsAnchor()
+               || !Mage::getStoreConfig(
+                     MVentory_Productivity_Model_Config::_DISPLAY_PRODUCTS
+                   );
+
+    if ($default)
       return parent::getProductCollection();
 
     return Mage::getResourceModel('catalog/product_collection')
@@ -80,7 +79,9 @@ class MVentory_Productivity_Model_Mage_Catalog_Category
       $toLoad
     );
 
-    return Mage::getStoreConfig(self::HIDE_EMPTY_CATEGORIES)
+    return Mage::getStoreConfig(
+             MVentory_Productivity_Model_Config::_CATEGORY_FLATTEN_TREE
+           )
              ? $this->_removeParentCategories($categories)
                : $categories;
   }
