@@ -1,0 +1,174 @@
+<_>
+   <form_key>owzsD9Us2MIe03XT</form_key>
+   <name>mVentory_Productivity</name>
+   <channel>community</channel>
+   <version_ids>
+      <version_ids>2</version_ids>
+   </version_ids>
+   <summary>Edit products details, upload and manage photos via front end or use shortcuts directly to admin pages.</summary>
+   <description>A front-end toolbar for admins and nominated customers to perform site management via the front end:
+
+The extension provides simple admin functionality to a group of site admins or power users without them accessing the admin interface as often or not at all.
+
+The shortcuts allow quick navigation between front-end and admin interfaces. E.g. if you are looking at a product details page and need to make changes to it via the admin you can jump there in one click instead of searching for the product in the admin.
+The same applies to category and CMS pages.
+
+* Edit product details, price, attributes, etc.
+* Upload product images
+* Set main product image
+* Delete, rotate product images
+* Shortcuts to the admin interface for the page
+* Easily find products with missing images
+* Shortcut to Google Analytics
+
+Theme compatibility
+
+Most well designed themes are compatible with the extension. You may need to make a few minor changes. See documentation on GitHub.
+
+Enable / Disable the Toolbar
+
+1. Log in to the admin interface.
+2. Come back to the front end.
+3. You should see the toolbar at the top.
+
+Customers assigned to customer group called &quot;Reviewers&quot; can see most of the functions. They need to log in as customers via the front end.
+
+Source code and documentation
+
+https://github.com/mVentory/MVentory_Productivity
+
+Support
+
+Bug reports are welcome at support@zetaprints.com
+
+License
+
+The extension is free open source released under OSL 3 license. Please, contribute your code if you make useful changes.</description>
+   <license>Open Software License version 3.0</license>
+   <license_uri>http://opensource.org/licenses/osl-3.0.php</license_uri>
+   <version>1.1.0</version>
+   <stability>stable</stability>
+   <notes>* Better compatibility with mVentory API extension
+* Allow user to set scope for product save
+* Move settings into single tab
+* Workaround for bug in Magento code</notes>
+   <authors>
+      <name>
+         <name>Anatoly A. Kazantsev</name>
+      </name>
+      <user>
+         <user>anatoly</user>
+      </user>
+      <email>
+         <email>anatoly@mventory.com</email>
+      </email>
+   </authors>
+   <depends_php_min>5.2.0</depends_php_min>
+   <depends_php_max>6.0.0</depends_php_max>
+   <depends>
+      <package>
+         <name>
+            <name/>
+            <name>MVentory_JQuery</name>
+         </name>
+         <channel>
+            <channel/>
+            <channel>community</channel>
+         </channel>
+         <min>
+            <min/>
+            <min/>
+         </min>
+         <max>
+            <max/>
+            <max/>
+         </max>
+         <files>
+            <files>                        </files>
+            <files>                        </files>
+         </files>
+      </package>
+      <extension>
+         <name>
+            <name>Core</name>
+         </name>
+         <min>
+            <min/>
+         </min>
+         <max>
+            <max/>
+         </max>
+      </extension>
+   </depends>
+   <contents>
+      <target>
+         <target>magelocal</target>
+         <target>mageetc</target>
+         <target>magecommunity</target>
+         <target>magedesign</target>
+         <target>magedesign</target>
+         <target>magedesign</target>
+         <target>magedesign</target>
+         <target>mageweb</target>
+         <target>mageweb</target>
+         <target>mageskin</target>
+         <target>mageskin</target>
+      </target>
+      <path>
+         <path/>
+         <path>modules/MVentory_Productivity.xml</path>
+         <path>MVentory/Productivity</path>
+         <path>adminhtml/default/default/layout/productivity.xml</path>
+         <path>adminhtml/default/default/template/productivity</path>
+         <path>frontend/base/default/layout/productivity.xml</path>
+         <path>frontend/base/default/template/productivity</path>
+         <path>js/jquery/jquery-fineuploader-min.js</path>
+         <path>js/productivity</path>
+         <path>adminhtml/default/default/productivity.css</path>
+         <path>frontend/base/default/productivity</path>
+      </path>
+      <type>
+         <type>file</type>
+         <type>file</type>
+         <type>dir</type>
+         <type>file</type>
+         <type>dir</type>
+         <type>file</type>
+         <type>dir</type>
+         <type>file</type>
+         <type>dir</type>
+         <type>file</type>
+         <type>dir</type>
+      </type>
+      <include>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+      </include>
+      <ignore>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+      </ignore>
+   </contents>
+   <page>1</page>
+   <limit>200</limit>
+   <folder/>
+   <package/>
+</_>
