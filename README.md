@@ -47,12 +47,14 @@ E.g. list of attributes in Attribute Set page, list of CMS pages, etc.
 
 ## Other features
 ### RSS Feeds
-* List of products per category
-* List of top categories per store
-
+* List of latest products (e.g. http://try.mventory.com/productivity_admin/rss_product/latest/)
+* List of products per category (e.g. http://try.mventory.com/books.html?rss=1)
+* List of top categories per store (e.g. http://try.mventory.com/catalog/category/top/)
+ 
 ### Widgets
 * Slideshow widget
 * Attribute values widget
+* Related products widget
 
 ### Blocks
 * Related products block
