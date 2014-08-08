@@ -1,17 +1,16 @@
-app/code/community/MVentory/Productivity				    app/code/community/MVentory/Productivity
+app/code/community/MVentory/Productivity                    app/code/community/MVentory/Productivity
 
-app/design/adminhtml/default/default/layout/*				app/design/adminhtml/default/default/layout/
+app/design/adminhtml/default/default/layout/*               app/design/adminhtml/default/default/layout/
 app/design/adminhtml/default/default/template/productivity  app/design/adminhtml/default/default/template/productivity
 
-
-app/design/frontend/base/default/layout/*					app/design/frontend/base/default/layout/
+app/design/frontend/base/default/layout/*                   app/design/frontend/base/default/layout/
 app/design/frontend/base/default/template/productivity      app/design/frontend/base/default/template/productivity
 
-app/etc/modules/*						                    app/etc/modules/
+app/etc/modules/*                                           app/etc/modules/
 
-js/*									                    js/
+js/*                                                        js/
 
-skin/adminhtml/default/default/*		                    skin/adminhtml/default/default/
-skin/frontend/base/default/productivity		                skin/frontend/base/default/productivity
+skin/adminhtml/default/default/*                            skin/adminhtml/default/default/
+skin/frontend/base/default/productivity                     skin/frontend/base/default/productivity
 
-ZetaPrints_Productivity.xml				                    var/connect/ZetaPrints_Productivity.xml
+ZetaPrints_Productivity.xml                                 var/connect/ZetaPrints_Productivity.xml
