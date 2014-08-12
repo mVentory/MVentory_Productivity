@@ -67,3 +67,10 @@ Most well designed themes are compatible with this extension. You may need to ma
 
 ## Configuration
 The extension doesn't require any initial configuration. The front-end toolbar is displayed on the front end for all authorised users.
+
+#### User configuration
+
+1. Create a user group called `Reviewer`
+2. Assign an active user to that group to give them access to the productivity toolbar.
+
+The user should the bar after logging it to the front-end.
