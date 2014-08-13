@@ -78,8 +78,10 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
         if ($product->getData($code) != $value)
           $changeAttrs[$code] = true;
 
-      if ($product->getTypeId() != 'configurable') {
-        $qty = (float) $request->getParam('qty');
+      if ($product->getTypeId() != 'configurable'
+          && ($qty = $request->getParam('qty')) !== null) {
+
+        $qty = (float) $qty;
 
         $data['stock_data'] = array(
           'qty'

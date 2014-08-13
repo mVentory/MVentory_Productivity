@@ -26,6 +26,7 @@ class MVentory_Productivity_Model_Config {
   const _CATEGORY_HOME_URL = 'productivity/category/home_url';
   const _DISPLAY_PRODUCTS = 'productivity/category/display_descending_products';
   const _PRODUCT_SAVE_SCOPE = 'productivity/product/save_scope';
+  const _EDITABLE_ATTRS = 'productivity/product/editable_attr';
   const _ANALYTICS_URL = 'productivity/analytics/url';
 
   //Product save scopes

@@ -222,6 +222,8 @@ class MVentory_Productivity_Helper_Data
   /**
    * List attributes likely to be shown on product page.
    *
+   * !!!TODO: update method to return final list of editable attributes
+   *
    * @param Mage_Catalog_Model_Product $product
    * @return array of Mage_Catalog_Model_Resource_Eav_Attribute
    */
@@ -230,6 +232,8 @@ class MVentory_Productivity_Helper_Data
     if (!$product) return $result;
 
     $attributes = $product->getAttributes();
+    $editable = $this->getEditableAttr();
+
     // these attrs are always shown somewhere even if not "visible on front"
     $result['name'] = $attributes['name'];
     $result['description'] = $attributes['description'];
@@ -238,11 +242,34 @@ class MVentory_Productivity_Helper_Data
     foreach ($attributes as $attribute) {
       $code = $attribute->getAttributeCode();
 
-      if ($attribute->getIsVisibleOnFront() || substr($code, -1) === '_')
+      if ($attribute->getIsVisibleOnFront()
+          || substr($code, -1) === '_'
+          || ($editable && isset($editable[$code])))
         $result[$code] = $attribute;
     }
 
     return $result;
+  }
+
+  /**
+   * Get list of codes of attributes allowed to be edited
+   *
+   * @return array Key based list of codes of editable attributes
+   */
+  public function getEditableAttr () {
+    $attrs = trim(
+      Mage::getStoreConfig(MVentory_Productivity_Model_Config::_EDITABLE_ATTRS)
+    );
+
+    $_attrs = array();
+
+    if (!$attrs)
+      return $_attrs;
+
+    foreach (explode(',', $attrs) as $attr)
+      $_attrs[strtolower(trim($attr))] = true;
+
+    return $_attrs;
   }
 
 }

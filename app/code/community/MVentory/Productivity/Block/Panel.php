@@ -94,16 +94,22 @@ class MVentory_Productivity_Block_Panel
   public function getEditForm() {
     /* @var $product Mage_Catalog_Model_Product */
   	$product = Mage::registry('product');
+    $helper = Mage::helper('productivity');
+
   	$form = new Varien_Data_Form();
     $form->setUseContainer(true)
          ->setMethod('post')
          // see MVentory_Productivity_ProductController::saveAction()
          ->setAction(Mage::getUrl('catalog/product/save', array('id' => $product->getId())));
-    $attributes = Mage::helper('productivity')->getVisibleAttributes($product);
+    $attributes = $helper->getVisibleAttributes($product);
+    $editable = $helper->getEditableAttr();
     $allowedInputs = array('text', 'textarea', 'date', 'select', 'multiselect');
 
     /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-    foreach ($attributes as $attribute) {
+    foreach ($attributes as $code => $attribute) {
+      if ($editable && !isset($editable[$code]))
+        continue;
+
       $label = trim($attribute->getStoreLabel());
 
       //Support for features of MVentory extension
@@ -128,7 +134,7 @@ class MVentory_Productivity_Block_Panel
       }
 
       $field = array(
-        'name'   => $attribute->getAttributeCode(),
+        'name' => $code,
         'label'  => $label,
         'values' => $values
       );
@@ -144,21 +150,22 @@ class MVentory_Productivity_Block_Panel
 
     $isConfigurable = $product->getTypeId() == 'configurable';
 
-    $form
-      ->addField(
-          'qty',
-          $isConfigurable ? 'label' : 'text',
-          array(
-            'name' => 'qty',
-            'label'  => 'Qty',
-          ),
-          'price'
-        )
-      ->setValue(
-          $isConfigurable
-            ? $this->__('Edit individual sub-products')
-              : $product->getStockItem()->getQty() * 1
-        );
+    if (!$editable || isset($editable['qty']))
+      $form
+        ->addField(
+            'qty',
+            $isConfigurable ? 'label' : 'text',
+            array(
+              'name' => 'qty',
+              'label'  => 'Qty',
+            ),
+            'price'
+          )
+        ->setValue(
+            $isConfigurable
+              ? $this->__('Edit individual sub-products')
+                : $product->getStockItem()->getQty() * 1
+          );
 
     // add field after values so "Submit" value is not overwritten
     $form->addField('submit', 'submit', array(
