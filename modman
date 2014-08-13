@@ -8,7 +8,8 @@ app/design/frontend/base/default/template/productivity      app/design/frontend/
 
 app/etc/modules/*                                           app/etc/modules/
 
-js/*                                                        js/
+js/jquery/*                                                 js/jquery/
+js/productivity                                             js/productivity
 
 skin/adminhtml/default/default/*                            skin/adminhtml/default/default/
 skin/frontend/base/default/productivity                     skin/frontend/base/default/productivity
