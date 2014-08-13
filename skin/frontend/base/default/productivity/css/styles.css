@@ -97,18 +97,21 @@
 }
 
 .productivity-task-upload-on #productivity-task-upload,
-.productivity-task-edit-form-on #productivity-task-edit-form {
+.productivity-task-edit-form-on #productivity-task-edit-form,
+.productivity-task-generate-on #productivity-task-generate {
   background: #fff;
   color: #333333;
 }
 
 .productivity-task-upload-on #productivity-panel-content,
-.productivity-task-edit-form-on #productivity-panel-content {
+.productivity-task-edit-form-on #productivity-panel-content,
+.productivity-task-generate-on #productivity-panel-content {
   height: auto;
 }
 
 .productivity-task-upload-on #productivity-uploader,
-.productivity-task-edit-form-on #productivity-edit-attributes {
+.productivity-task-edit-form-on #productivity-edit-attributes,
+.productivity-task-generate-on #productivity-generate-links {
   display: block;
 }
 
@@ -243,6 +246,10 @@
   margin-top: -16px;
   left: 50%;
   margin-left: -16px;
+}
+
+#productivity-generate-links {
+    display:none;
 }
 
 #productivity-uploader {

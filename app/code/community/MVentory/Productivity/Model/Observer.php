@@ -49,25 +49,30 @@ class MVentory_Productivity_Model_Observer {
 
   public function showProductsWithoutSmallImagesOnly ($observer) {
     $param = Mage::app()
-                ->getRequest()
-                ->getParam('without_images_only');
+        ->getRequest()
+        ->getParam('without_images_only');
 
     if ($param != 1)
       return;
 
     $collection = $observer->getCollection();
 
-    $select = $collection->getSelect();
-    $wherePart = $select->getPart(Zend_Db_Select::WHERE);
-
-    foreach ($wherePart as $i => $condition)
-      if (strpos($condition, 'small_image') !== false)
-        unset($wherePart[$i]);
-
-    $select->setPart(Zend_Db_Select::WHERE, $wherePart);
-
-    $collection->addAttributeToFilter('small_image',
-                                      array('in' => array('no_selection', '')));
+    $collection->addAttributeToFilter(
+        array(
+            array(
+                'attribute' => 'image',
+                'eq' => 'no_selection'
+            ),
+            array(
+                'attribute' => 'small_image',
+                'eq' => 'no_selection'
+            ),
+            array(
+                'attribute' => 'thumbnail',
+                'eq' => 'no_selection'
+            ),
+        )
+    );
   }
 
   public function rememberAdminState($observer) {

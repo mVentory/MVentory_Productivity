@@ -179,4 +179,8 @@ class MVentory_Productivity_Block_Panel
     return $form;
   }
 
+  public function isApiEnabled(){
+    return Mage::helper('core')->isModuleEnabled('MVentory_API');
+  }
+
 }
