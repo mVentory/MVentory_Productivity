@@ -73,6 +73,9 @@ if ($_type == 'product') {
       <?php endif; ?>
 
       <?php endif; ?>
+      <li>
+        <a title="<?php echo $this->__(' Generate and print unique product codes'); ?>" id="productivity-task-generate" class="productivity-panel-task" href="#"><?php echo $this->__('QR tags')?></a>
+      </li>
 
       <li>
         <a title="<?php echo $this->__('View products with no images'); ?>" href="<?php echo $this->_getWithoutImagesLink() ?>"><?php echo $this->__('No-image products'); ?></a>
@@ -125,6 +128,22 @@ if ($_type == 'product') {
         </div>
       </div>
 
+      <?php //Links generation ?>
+      <div id="productivity-generate-links">
+        <?php if(!$this->isApiEnabled()):?>
+        <h6>TODO: mode this text to cms static block or to config variable</h6>
+        <?php else: ?>
+         <select id="generate-labels-select">
+           <option value="labels/1" selected>Generate Labels</option>
+           <option value="links/1">Generate Links</option>
+           <option value="links/1/codes/1">Generate Links And Codes</option>
+           <option value="images/1">Generate Image Links</option>
+           <option value="images/1/codes/1">Generate Image Links And Codes</option>
+         </select>
+          <button id="generate-labels-button">Go!</button>
+        <?php endif; ?>
+      </div>
+
     </div>
   </div>
   <?php endif; ?>
@@ -139,6 +158,7 @@ if ($_type == 'product') {
 jQuery(function ($) {
   var $panel = $('#productivity-panel');
   var $content = $('#productivity-panel-content');
+  var $select = $('#generate-labels-select');
 
   var menu_height = $('#productivity-panel-menu').height();
 
@@ -153,6 +173,10 @@ jQuery(function ($) {
   $panel.on('mouseenter drop', resize_panel)
 
   var tasks = '';
+  $('#generate-labels-button').click(function(event){
+    console.log($select.val());
+    window.open("<?php echo Mage::getUrl('mventory/qr/generate');?>"+$select.val());
+  })
 
   $('#productivity-tasks .productivity-panel-task').each(function () {
     var $this = $(this);
@@ -167,6 +191,7 @@ jQuery(function ($) {
           : $panel.addClass(task);
 
       resize_panel();
+      console.log(task);
 
       return false;
     });
