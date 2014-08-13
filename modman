@@ -13,4 +13,4 @@ js/*                                                        js/
 skin/adminhtml/default/default/*                            skin/adminhtml/default/default/
 skin/frontend/base/default/productivity                     skin/frontend/base/default/productivity
 
-ZetaPrints_Productivity.xml                                 var/connect/ZetaPrints_Productivity.xml
+build.xml                                                   var/connect/mVentory_Productivity.xml
