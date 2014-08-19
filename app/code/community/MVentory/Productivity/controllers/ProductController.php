@@ -126,6 +126,7 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
         Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
 
         $product->save();
+        $this->_copyDataToSimpleProducts($product);
 
         //Reset store to be neat
         Mage::app()->setCurrentStore($storeId);
@@ -134,6 +135,46 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
 
     // Always show same page, even if nothing has changed
     $this->_redirectUrl($product->setData('url', null)->getProductUrl());
+  }
+
+  /**
+   * Copy data from configurable product to it associated
+   * simple products
+   * @param $product configurable product
+   */
+  protected function _copyDataToSimpleProducts($product){
+    if($product->getTypeId() != 'configurable') return;
+    $data = $this->_getDataForCopy($product);
+
+    $childProducts = Mage::getModel('catalog/product_type_configurable')
+        ->getUsedProducts(null, $product);
+
+    //merge data from parent product to children and save them
+    foreach($childProducts as $child) {
+      $childData = $child->getData();
+      $childData = array_merge($childData, $data);
+      //print_r($childData);
+      $child->setData($childData);
+      $child->save();
+    }
+  }
+
+  /**
+   * Get data from configurable product with only selected
+   * in configuration fields
+   *
+   * @param $product configurable product
+   * @return array Data for copying to child(associated) simple products
+   */
+  protected function _getDataForCopy($product){
+    $data = $product->getData();
+    $fieldsForCopy = array('name','description');
+    $dataForCopy = array();
+    foreach($fieldsForCopy as $field){
+      $dataForCopy[$field] = $data[$field];
+    }
+
+    return $dataForCopy;
   }
 
 }
