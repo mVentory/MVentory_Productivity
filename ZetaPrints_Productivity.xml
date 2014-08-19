@@ -1,12 +1,12 @@
 <_>
-   <form_key>ssFmQJgYuUyt7mjg</form_key>
-   <name>ZetaPrints_Productivity</name>
+   <form_key>U0FwrpBWqScqCjIM</form_key>
+   <name>MVentory_CDN</name>
    <channel>community</channel>
    <version_ids>
       <version_ids>2</version_ids>
    </version_ids>
-   <summary>ZetaPrints_Productivity</summary>
-   <description>ZetaPrints_Productivity</description>
+   <summary>MVentory_CDN</summary>
+   <description>MVentory_CDN</description>
    <license>OSL v3.0</license>
    <license_uri/>
    <version>0.0.0-r1196</version>
@@ -14,15 +14,12 @@
    <notes>Development releases</notes>
    <authors>
       <name>
-         <name>anemets1</name>
          <name>Anatoly A. Kazantsev</name>
       </name>
       <user>
-         <user>anemets1</user>
          <user>jimcrow</user>
       </user>
       <email>
-         <email>anemets1@gmail.com</email>
          <email>anatoly@zetaprints.com</email>
       </email>
    </authors>
@@ -43,7 +40,7 @@
             <max/>
          </max>
          <files>
-            <files>                                                                                                                        </files>
+            <files>                                                                                                                         </files>
          </files>
       </package>
       <extension>
@@ -61,100 +58,25 @@
    <contents>
       <target>
          <target>magelocal</target>
-         <target>magelocal</target>
+         <target>magecommunity</target>
          <target>mageetc</target>
-         <target>magedesign</target>
-         <target>magedesign</target>
-         <target>magedesign</target>
-         <target>magedesign</target>
-         <target>magedesign</target>
-         <target>magedesign</target>
-         <target>mageweb</target>
-         <target>mageskin</target>
-         <target>mageskin</target>
-         <target>mageskin</target>
-         <target>magedesign</target>
-         <target>mageskin</target>
-         <target>magedesign</target>
-         <target>magedesign</target>
-         <target>mageweb</target>
       </target>
       <path>
          <path/>
-         <path>ZetaPrints/MvProductivityPack</path>
-         <path>modules/ZetaPrints_MvProductivityPack.xml</path>
-         <path>adminhtml/default/default/layout/zetaprints_mvproductivitypack.xml</path>
-         <path>adminhtml/default/default/template/mvproductivitypack</path>
-         <path>frontend/base/default/template/catalog/product/view/media/mvproductivity_editor.phtml</path>
-         <path>frontend/base/default/template/catalog/product/view/media/mvproductivity_editor</path>
-         <path>frontend/default/default/layout/zetaprints_mvproductivitypack.xml</path>
-         <path>frontend/default/default/template/mvproductivitypack</path>
-         <path>js/mvproductivitypack</path>
-         <path>frontend/default/default/css/mvproductivitypack.css</path>
-         <path>frontend/default/default/images/mvproductivitypack</path>
-         <path>frontend/default/default/js/mvproductivitypack</path>
-         <path>frontend/base/default/layout/productivity.xml</path>
-         <path>adminhtml/default/default/mvproductivitypack</path>
-         <path>frontend/base/default/template/catalog/product/latest.phtml</path>
-         <path>frontend/default/default/template/catalog/product/view/media.phtml</path>
-         <path>js/jquery/jquery-min.js</path>
+         <path>MVentory/CDN</path>
+         <path>modules/MVentory_CDN.xml</path>
       </path>
       <type>
          <type>file</type>
          <type>dir</type>
-         <type>file</type>
-         <type>file</type>
-         <type>dir</type>
-         <type>file</type>
-         <type>dir</type>
-         <type>file</type>
-         <type>dir</type>
-         <type>dir</type>
-         <type>file</type>
-         <type>dir</type>
-         <type>dir</type>
-         <type>file</type>
-         <type>dir</type>
-         <type>file</type>
-         <type>file</type>
          <type>file</type>
       </type>
       <include>
          <include/>
          <include/>
          <include/>
-         <include/>
-         <include/>
-         <include/>
-         <include/>
-         <include/>
-         <include/>
-         <include/>
-         <include/>
-         <include/>
-         <include/>
-         <include/>
-         <include/>
-         <include/>
-         <include/>
-         <include/>
       </include>
       <ignore>
-         <ignore/>
-         <ignore/>
-         <ignore/>
-         <ignore/>
-         <ignore/>
-         <ignore/>
-         <ignore/>
-         <ignore/>
-         <ignore/>
-         <ignore/>
-         <ignore/>
-         <ignore/>
-         <ignore/>
-         <ignore/>
-         <ignore/>
          <ignore/>
          <ignore/>
          <ignore/>

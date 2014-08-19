@@ -153,7 +153,7 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
     foreach($childProducts as $child) {
       $childData = $child->getData();
       $childData = array_merge($childData, $data);
-      //print_r($childData);
+
       $child->setData($childData);
       $child->save();
     }
@@ -168,8 +168,16 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
    */
   protected function _getDataForCopy($product){
     $data = $product->getData();
-    $fieldsForCopy = array('name','description');
+
+    //get field names from config
+    $config = Mage::getStoreConfig(
+        MVentory_Productivity_Model_Config::_PRODUCT_COPY_FIELDS
+    );
+
+    $fieldsForCopy = explode(',',$config);
     $dataForCopy = array();
+
+    //copy field values
     foreach($fieldsForCopy as $field){
       $dataForCopy[$field] = $data[$field];
     }
