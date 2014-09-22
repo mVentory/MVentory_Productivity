@@ -129,6 +129,10 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
 
         $product->save();
 
+        if ($product->getTypeId()
+              == Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE)
+          $this->_copyDataToSimpleProducts($product);
+
         //Reset store to be neat
         Mage::app()->setCurrentStore($storeId);
       }
@@ -138,5 +142,50 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
     $this->_redirectUrl($product->setData('url', null)->getProductUrl());
   }
 
+  /**
+   * Copy data from configurable product to it associated
+   * simple products
+   *
+   * @param $configurable Configurable product
+   */
+  protected function _copyDataToSimpleProducts ($configurable) {
+    $children = Mage::getModel('catalog/product_type_configurable')
+      ->getUsedProducts(null, $configurable);
+
+    if (!$children)
+      return;
+
+    if (!$data = $this->_getDataForCopying($configurable))
+      return;
+
+    //merge data from parent product to children and save them
+    foreach ($children as $child)
+      $child
+        ->setData(array_merge($child->getData(), $data))
+        ->save();
+  }
+
+  /**
+   * Get data from configurable product with only selected attributes
+   * on the extension settings
+   *
+   * @param $configurable Configurable product
+   * @return array|null Data for copying into associated simple products
+   */
+  protected function _getDataForCopying ($configurable) {
+
+    //Get selected attributes
+    $attrs = Mage::getStoreConfig(
+      MVentory_Productivity_Model_Config::_COPY_ATTRS
+    );
+
+    if (!$attrs)
+      return;
+
+    return array_intersect_key(
+      $configurable->getData(),
+      array_flip(explode(',', $attrs))
+    );
+  }
 }
 
