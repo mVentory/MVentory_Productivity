@@ -61,13 +61,29 @@ class MVentory_Productivity_Model_Observer {
     $wherePart = $select->getPart(Zend_Db_Select::WHERE);
 
     foreach ($wherePart as $i => $condition)
-      if (strpos($condition, 'small_image') !== false)
+      if (strpos($condition, 'image') !== false
+          || strpos($condition, 'small_image') !== false
+          || strpos($condition, 'thumbnail') !== false)
         unset($wherePart[$i]);
 
     $select->setPart(Zend_Db_Select::WHERE, $wherePart);
 
-    $collection->addAttributeToFilter('small_image',
-                                      array('in' => array('no_selection', '')));
+    $collection->addAttributeToFilter(
+      array(
+        array(
+          'attribute' => 'image',
+          'in' => array('no_selection', '')
+        ),
+        array(
+          'attribute' => 'small_image',
+          'in' => array('no_selection', '')
+        ),
+        array(
+          'attribute' => 'thumbnail',
+          'in' => array('no_selection', '')
+        )
+      )
+    );
   }
 
   public function rememberAdminState($observer) {
