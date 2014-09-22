@@ -272,4 +272,7 @@ class MVentory_Productivity_Helper_Data
     return $_attrs;
   }
 
+  public function isMVentoryModuleEnabled () {
+    return parent::isModuleEnabled('MVentory_API');
+  }
 }

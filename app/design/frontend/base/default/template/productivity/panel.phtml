@@ -75,6 +75,10 @@ if ($_type == 'product') {
       <?php endif; ?>
 
       <li>
+        <a title="<?php echo $this->__('Generate and print unique product codes'); ?>" id="productivity-task-qr" class="productivity-panel-task" href="#"><?php echo $this->__('QR tags')?></a>
+      </li>
+
+      <li>
         <a title="<?php echo $this->__('View products with no images'); ?>" href="<?php echo $this->_getWithoutImagesLink() ?>"><?php echo $this->__('No-image products'); ?></a>
       </li>
 
@@ -99,10 +103,33 @@ if ($_type == 'product') {
     </ul>
   </div>
 
-  <?php if ($_type == 'product'): ?>
   <div id="productivity-panel-content">
     <div id="productivity-panel-content-inner" class="clearer">
 
+      <?php //Panel for QR labels generating ?>
+
+      <div id="productivity-qr">
+        <?php if ($_helper->isMVentoryModuleEnabled() || true): ?>
+
+        <select id="productivity-qr-select">
+          <option value="labels/1" selected>Generate Labels</option>
+          <option value="links/1">Generate Links</option>
+          <option value="links/1/codes/1">Generate Links And Codes</option>
+          <option value="images/1">Generate Image Links</option>
+          <option value="images/1/codes/1">Generate Image Links And Codes</option>
+        </select>
+        <button id="productivity-qr-button">Go!</button>
+
+        <?php else: ?>
+
+        <p>Did you know you can use QR codes instead of barcodes?</p>
+        <p>It is much cheaper, faster and more user friendly. A barcode is just a meaningless number. A QR code can be a product SKU and a direct link to that product at the same time - scan it with our <a href="http://try.mventory.com">Admin/PoS/Inventory app</a> for Magento or any other generic scanner.</p>
+        <p>Using this feature requires installation of <a href="http://mventory.com/magento-extensions/">free mVentory API extension</a>.</p>
+
+        <?php endif; ?>
+      </div>
+
+      <?php if ($_type == 'product'): ?>
       <div id="productivity-uploader">
         <div id="productivity-uploader-element"></div>
 
@@ -124,21 +151,20 @@ if ($_type == 'product') {
           <?php echo $this->getEditForm()->setHtmlIdPrefix('productivity_edit_form_')->toHtml() ?>
         </div>
       </div>
+      <?php endif; ?>
 
     </div>
   </div>
-  <?php endif; ?>
 
 </div>
-
-<?php if ($_type == 'product'): ?>
 
 <script type="text/javascript">
 //<![CDATA[
 
 jQuery(function ($) {
   var $panel = $('#productivity-panel');
-  var $content = $('#productivity-panel-content');
+  var $content = $('#productivity-panel-content'),
+      $qr_select = $('#productivity-qr-select');
 
   var menu_height = $('#productivity-panel-menu').height();
 
@@ -180,6 +206,12 @@ jQuery(function ($) {
     return false;
   });
 
+  $('#productivity-qr-button').on('click', function () {
+    window.open(
+      '<?php echo Mage::getUrl('mventory/qr/generate'); ?>' + $qr_select.val()
+    );
+  })
+
   $('#productivity_edit_form_cancel').on('click', function () {
     $panel.removeClass('productivity-task-edit-form-on');
 
@@ -191,7 +223,5 @@ jQuery(function ($) {
 
 //]]>
 </script>
-
-<?php endif; ?>
 
 <?php endif; ?>

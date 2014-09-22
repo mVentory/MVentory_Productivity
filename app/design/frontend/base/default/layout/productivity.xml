@@ -21,6 +21,8 @@
   </productivity_rss_product_latest>
 
   <productivity_panel>
+    <update handle="jquery" />
+
     <reference name="head">
       <action method="addCss">
         <stylesheet>productivity/css/styles.css</stylesheet>
@@ -33,8 +35,6 @@
   </productivity_panel>
 
   <catalog_product_view>
-    <update handle="jquery" />
-
     <reference name="head">
       <action method="addJs">
         <script>jquery/jquery-fineuploader-min.js</script>
