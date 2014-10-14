@@ -217,6 +217,9 @@
    <productivity>
       <product>
         <save_scope>2</save_scope>
+
+        <!-- '.' - Don't copy any attributes -->
+        <copy_attrs>.</copy_attrs>
       </product>
     </productivity>
   </default>
