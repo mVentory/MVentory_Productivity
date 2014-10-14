@@ -173,18 +173,9 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
    * @return array|null Data for copying into associated simple products
    */
   protected function _getDataForCopying ($configurable) {
-
-    //Get selected attributes
-    $attrs = Mage::getStoreConfig(
-      MVentory_Productivity_Model_Config::_COPY_ATTRS
-    );
-
-    if (!$attrs)
-      return;
-
     return array_intersect_key(
       $configurable->getData(),
-      array_flip(explode(',', $attrs))
+      Mage::helper('productivity')->getCopyableAttr($configurable)
     );
   }
 }

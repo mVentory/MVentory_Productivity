@@ -272,6 +272,31 @@ class MVentory_Productivity_Helper_Data
     return $_attrs;
   }
 
+  /**
+   * Get list of codes of attributes allowed to be copied from configurable
+   * product to its assigned simple products
+   *
+   * @param Mage_Catalog_Model_Product $product
+   * @return array Key based list of codes of copyable attributes
+   */
+  public function getCopyableAttr ($product) {
+    $attrs = strtolower(trim(
+      Mage::getStoreConfig(MVentory_Productivity_Model_Config::_COPY_ATTRS)
+    ));
+
+    if ($attrs == '')
+      return ($attrs = $this->getEditableAttr())
+               ? $attrs
+                 : $this->getVisibleAttributes($product);
+
+    $_attrs = array();
+
+    foreach (explode(',', $attrs) as $attr)
+      $_attrs[trim($attr)] = true;
+
+    return $_attrs;
+  }
+
   public function isMVentoryModuleEnabled () {
     return parent::isModuleEnabled('MVentory_API');
   }

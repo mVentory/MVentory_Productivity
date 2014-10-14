@@ -141,8 +141,11 @@
               <label>Copy from configurable to simple products</label>
               <comment>Copy changes in configurable prods to associated simple products</comment>
               <tooltip>Changes in configurable products are always saved in the config product itself, but can also be copied to all associated products.</tooltip>
-              <frontend_type>multiselect</frontend_type>
+              <frontend_type>text</frontend_type>
+
+              <!--
               <source_model>productivity/setting_source_copyattrs</source_model>
+              -->
 
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>
