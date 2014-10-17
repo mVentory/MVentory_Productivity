@@ -1,5 +1,5 @@
 <_>
-   <form_key>owzsD9Us2MIe03XT</form_key>
+   <form_key>B1XChlcPDZjE5Ay3</form_key>
    <name>mVentory_Productivity</name>
    <channel>community</channel>
    <version_ids>
@@ -48,10 +48,11 @@ The extension is free open source released under OSL 3 license. Please, contribu
    <license_uri>http://opensource.org/licenses/osl-3.0.php</license_uri>
    <version>1.1.0</version>
    <stability>stable</stability>
-   <notes>* Better compatibility with mVentory API extension
-* Allow user to set scope for product save
-* Move settings into single tab
-* Workaround for bug in Magento code</notes>
+   <notes>* Add setting to limit the list of fields available for editing via the frontend
+* Add initial support for editing of configurable products
+* Add tabs for quick generating of QR labels (works only when MVentory_API extesion is installed)
+* Extend filtering by all image types (i.e. base image, small image and thumbnail) in the list of products with missing images
+* Allow to expand categories with &apos;Include in Navigation Menu&apos; set to No</notes>
    <authors>
       <name>
          <name>Anatoly A. Kazantsev</name>
@@ -84,8 +85,8 @@ The extension is free open source released under OSL 3 license. Please, contribu
             <max/>
          </max>
          <files>
-            <files>                        </files>
-            <files>                        </files>
+            <files>                                  </files>
+            <files>                                  </files>
          </files>
       </package>
       <extension>
@@ -167,8 +168,4 @@ The extension is free open source released under OSL 3 license. Please, contribu
          <ignore/>
       </ignore>
    </contents>
-   <page>1</page>
-   <limit>200</limit>
-   <folder/>
-   <package/>
 </_>
