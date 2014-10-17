@@ -62,8 +62,12 @@
     <models>
       <productivity>
         <class>MVentory_Productivity_Model</class>
-        <resourceModel>MVentory_Productivity_resources</resourceModel>
+        <resourceModel>productivity_resources</resourceModel>
       </productivity>
+
+      <productivity_resources>
+        <class>MVentory_Productivity_Model_Resource</class>
+      </productivity_resources>
 
       <catalog>
         <rewrite>

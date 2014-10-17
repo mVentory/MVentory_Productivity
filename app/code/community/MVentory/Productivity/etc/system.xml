@@ -58,10 +58,18 @@
           <fields>
             <flatten_tree translate="label comment tooltip">
               <label>Flatten categories tree</label>
-              <comment>Skip tree nodes with no products and only a single sub-category.</comment>
-              <tooltip>E.g. if category Furniture has no products assigned to it, but has a single sub-category Tables then Furniture is removed from the tree and Tables is shown in its place.</tooltip>
+              <comment>Behavior of categories tree</comment>
+              <tooltip>
+                <![CDATA[
+                  <ul class="productivity-tooltip-list">
+                    <li>No - default Magento behavior</li>
+                    <li>Flatten single branch paths - Do not show parents with only a single subcategory to show the subcategory in its place. E.g. Cat A only one subcategory Cat AA. Category Cat AA will show in place of Cat A</li>
+                    <li>Show children of hidden parents - If Cat A has "Include in Navigation Menu" set to NO then exclude it, but show it's subcategories at the level of Cat A</li>
+                  </ul>
+                ]]>
+              </tooltip>
               <frontend_type>select</frontend_type>
-              <source_model>adminhtml/system_config_source_yesno</source_model>
+              <source_model>productivity/setting_source_flattentype</source_model>
 
               <show_in_default>1</show_in_default>
               <show_in_website>1</show_in_website>

@@ -33,4 +33,9 @@ class MVentory_Productivity_Model_Config {
   //Product save scopes
   const PRODUCT_SCOPE_GLOBAL = 1;
   const PRODUCT_SCOPE_CURRENT = 2;
+
+  //Types of flatten category tree
+  const FLATTEN_NO = 0;
+  const FLATTEN_PATHS = 1;
+  const FLATTEN_EXPAND = 2;
 }

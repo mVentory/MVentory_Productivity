@@ -71,6 +71,19 @@ class MVentory_Productivity_Model_Mage_Catalog_Category
                                 $asCollection = false,
                                 $toLoad = true) {
 
+    $flattenType = (int) Mage::getStoreConfig(
+      MVentory_Productivity_Model_Config::_CATEGORY_FLATTEN_TREE
+    );
+
+    if ($flattenType == MVentory_Productivity_Model_Config::FLATTEN_EXPAND)
+      return $this->_expandCategories($this->_getCategories(
+        $parent,
+        $recursionLevel,
+        $sorted,
+        $asCollection,
+        $toLoad
+      ));
+
     $categories = parent::getCategories(
       $parent,
       $recursionLevel,
@@ -79,9 +92,7 @@ class MVentory_Productivity_Model_Mage_Catalog_Category
       $toLoad
     );
 
-    return Mage::getStoreConfig(
-             MVentory_Productivity_Model_Config::_CATEGORY_FLATTEN_TREE
-           )
+    return $flattenType == MVentory_Productivity_Model_Config::FLATTEN_PATHS
              ? $this->_removeParentCategories($categories)
                : $categories;
   }
@@ -107,5 +118,102 @@ class MVentory_Productivity_Model_Mage_Catalog_Category
       return $categories;
 
     return $this->_removeParentCategories($children);
+  }
+
+  /**
+   * Expand recursively hidden (include_in_menu = 0) categories. Preserve
+   * order of categories. Hide empty (no subcategories) and hidden categories.
+   *
+   * @param Varien_Data_Tree_Node_Collection $categories Collection of nodes
+   * @return Varien_Data_Tree_Node_Collection
+   */
+  protected function _expandCategories ($categories) {
+    if (!$categories->count())
+      return $categories;
+
+    foreach ($categories as $id => $category) {
+      $children = $this->_expandCategories($category->getChildren());
+
+      $noChildren = !$children->count();
+      $notIncludeInMenu = !$category->getIncludeInMenu();
+
+      //Hide empty and not included in menu categories
+      if ($notIncludeInMenu && $noChildren) {
+        $categories->delete($category);
+
+        continue;
+      }
+
+      //Ignore empty categories
+      if ($noChildren)
+        continue;
+
+      //Remember hidden category to expand on next step
+      if ($notIncludeInMenu)
+        $replace[$id] = true;
+    }
+
+    if (isset($replace)) {
+
+      //Expand hidden categories and re-add visible categories as is to preserve
+      //original order
+      foreach ($categories as $id => $category) {
+        $categories->delete($category);
+
+        if (isset($replace[$id])) {
+
+          //Copy level and position values of expanded category to it's children
+          $level = $category->getLevel();
+          $position = $category->getPosition();
+
+          foreach ($category->getChildren() as $child) {
+            $child
+              ->setLevel($level)
+              ->setPosition($position);
+
+            $category->removeChild($child);
+            $categories->add($child);
+          }
+        } else
+          $categories->add($category);
+      }
+    }
+
+    return $categories;
+  }
+
+  /**
+   * Retrieve categories
+   *
+   * This method is copy of
+   * Mage_Catalog_Model_Resource_Category::getCategories(), but with changed
+   * category tree model for expanding hidden categories functionality.
+   *
+   * !!!TODO: move to some helper class to minimize confusion with
+   *          getCategories() method of this class
+   *
+   * @param integer $parent
+   * @param integer $recursionLevel
+   * @param boolean|string $sorted
+   * @param boolean $asCollection
+   * @param boolean $toLoad
+   * @return Varien_Data_Tree_Node_Collection|Mage_Catalog_Model_Resource_Category_Collection
+   */
+  protected function _getCategories ($parent,
+                                     $recursionLevel = 0,
+                                     $sorted = false,
+                                     $asCollection = false,
+                                     $toLoad = true)
+  {
+    /* @var $tree MVentory_Productivity_Model_Resource_Category_Tree */
+    $tree = Mage::getResourceModel('productivity/category_tree');
+
+    $node = $tree
+      ->loadNode($parent)
+      ->loadChildren($recursionLevel);
+
+    $tree->addCollectionData(null, $sorted, $parent, $toLoad, true);
+
+    return $asCollection ? $tree->getCollection() : $node->getChildren();
   }
 }
