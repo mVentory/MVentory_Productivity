@@ -92,90 +92,73 @@ class MVentory_Productivity_Block_Panel
    * @return Varien_Data_Form
    */
   public function getEditForm() {
-    /* @var $product Mage_Catalog_Model_Product */
-  	$product = Mage::registry('product');
-    $helper = Mage::helper('productivity');
+    $helper = Mage::helper('productivity/attribute');
 
-  	$form = new Varien_Data_Form();
-    $form->setUseContainer(true)
-         ->setMethod('post')
-         // see MVentory_Productivity_ProductController::saveAction()
-         ->setAction(Mage::getUrl('catalog/product/save', array('id' => $product->getId())));
-    $attributes = $helper->getVisibleAttributes($product);
-    $editable = $helper->getEditableAttr();
-    $allowedInputs = array('text', 'textarea', 'date', 'select', 'multiselect');
+    /* @var $product Mage_Catalog_Model_Product */
+    $product = Mage::registry('product');
+
+    $dateFormat = Mage::app()->getLocale()->getDateFormat();
+    $isConfigurable
+      = $product->getTypeId()
+          == Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE;
+
+    $allowedInputs = array(
+      'label' => true,
+      'text' => true,
+      'textarea' => true,
+      'date' => true,
+      'select' => true,
+      'multiselect' => true
+    );
+
+    $product['qty'] = $isConfigurable
+                        ? $this->__('Edit individual sub-products')
+                          : (int) $product->getStockItem()->getQty();
+
+    $form = new Varien_Data_Form();
+
+    $form
+      ->setUseContainer(true)
+      ->setMethod('post')
+      /* @see MVentory_Productivity_ProductController::saveAction() */
+      ->setAction(
+          Mage::getUrl('catalog/product/save', array('id' => $product->getId()))
+        );
 
     /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
-    foreach ($attributes as $code => $attribute) {
-      if ($editable && !isset($editable[$code]))
-        continue;
+    foreach ($helper->getEditables($product) as $code => $attribute) {
+      $input = $attribute->getFrontendInput();
 
-      $label = trim($attribute->getStoreLabel());
+      $form->addField(
+        $code,
+        isset($allowedInputs[$input]) ? $input : 'text',
+        array(
+          'name' => $code,
+          'label'  => trim($attribute->getStoreLabel()),
+          'values' => $values = $attribute->usesSource()
+                        ? $attribute->getSource()->getAllOptions()
+                          : null,
 
-      //Support for features of MVentory extension
-      //Hide attributes which are disabled in the current store
-      if ($label == '~')
-        continue;
-
-      $values = $attribute->usesSource()
-                  ? $attribute->getSource()->getAllOptions()
-                    : null;
-
-      //Support for features of MVentory extension
-      //Hide attribute's values which are disabled in the current store
-      if ($values) {
-        foreach ($values as $i => $value)
-          if (strpos($value['label'], '~') === 0)
-            unset($values[$i]);
-
-        //Also hide attribute if it doesn't have allowed values
-        if (count($values) < 2)
-          continue;
-      }
-
-      $field = array(
-        'name' => $code,
-        'label'  => $label,
-        'values' => $values
+          //In case it's a textarea, make it taller
+          'rows' => 5
+        ),
+        ($after = $attribute['_insert_after']) ? $after : false
       );
-      $input = in_array($attribute->getFrontendInput(), $allowedInputs)
-               ? $attribute->getFrontendInput()
-               : 'text';
-      $form->addField($field['name'], $input, $field)
-           ->setFormat(Mage::app()->getLocale()->getDateFormat()) // for date, time & datetime fields
-           ->setRows(5); // in case it's a textarea, make it taller
     }
 
     $form->setValues($product->getData());
 
-    $isConfigurable = $product->getTypeId() == 'configurable';
-
-    if (!$editable || isset($editable['qty']))
-      $form
-        ->addField(
-            'qty',
-            $isConfigurable ? 'label' : 'text',
-            array(
-              'name' => 'qty',
-              'label'  => 'Qty',
-            ),
-            'price'
-          )
-        ->setValue(
-            $isConfigurable
-              ? $this->__('Edit individual sub-products')
-                : $product->getStockItem()->getQty() * 1
-          );
-
-    // add field after values so "Submit" value is not overwritten
+    //Add field after values so "Submit" value is not overwritten
     $form->addField('submit', 'submit', array(
       'value'   => 'Save',
       'no_span' => true,
     ));
+
     $form->addField('cancel', 'button', array(
       'value'   => 'Cancel',
       'no_span' => true,
     ));
+
     return $form;
   }
 

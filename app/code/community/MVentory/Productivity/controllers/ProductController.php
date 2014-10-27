@@ -35,34 +35,50 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
     $productId = $request->getParam('id');
     // Useful stuff
     $storeId = Mage::app()->getStore()->getId();
-    $helper = Mage::helper('productivity');
+    $helper = Mage::helper('productivity/attribute');
 
     if ($helper->isReviewerLogged())
     {
       //Check if save scope is set and we need to load product
       //with dara from current store
-      $hasScope = (int) Mage::getStoreConfig(
+      $saveScope = (int) Mage::getStoreConfig(
         MVentory_Productivity_Model_Config::_PRODUCT_SAVE_SCOPE
       );
-      $hasScope = MVentory_Productivity_Model_Config::PRODUCT_SCOPE_CURRENT
-                    == $hasScope;
+
+      if ($saveScope
+            != MVentory_Productivity_Model_Config::PRODUCT_SCOPE_CURRENT)
+        $storeId = false;
+
+      unset($saveScope);
+
+      //Product loads and saves must be made from admin store
+      //- Magento doesn't fill origData array when product is loaded from
+      //  non admin scope, so some core comparing function (for comparing
+      //  original and current product data) won't work as expected
+      Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
 
       $product = Mage::getModel('catalog/product');
 
-      //Set current store ID before laoding product if save scope is set,
+      //Set current store ID before loading product if save scope is set,
       //e.g. user selected Current scope optin in admin interface
-      if ($hasScope)
+      if ($storeId !== false)
         $product->setStoreId($storeId);
 
-      $product->load($productId);
+      $isConfigurable = $product
+        ->load($productId)
+        ->isConfigurable();
 
       // Only allow certain attributes to be set, if missing product will not be changed.
       $data = array_intersect_key(
         $request->getPost(),
-        $helper->getVisibleAttributes($product)
+        $helper->getEditables($product)
       );
-      if (isset($data['description'])) {
-        $data['short_description'] = $data['description'];
+
+      if (isset($data['qty'])) {
+        if (!$isConfigurable)
+          $qty = $data['qty'];
+
+        unset($data['qty']);
       }
 
       //Find all attributes which value was changed in the editor by comparing
@@ -78,9 +94,7 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
         if ($product->getData($code) != $value)
           $changeAttrs[$code] = true;
 
-      if ($product->getTypeId() != 'configurable'
-          && ($qty = $request->getParam('qty')) !== null) {
-
+      if (isset($qty)) {
         $qty = (float) $qty;
 
         $data['stock_data'] = array(
@@ -95,87 +109,108 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
             );
       }
 
-      if ($data) {
+      if ($changeAttrs || isset($qty)) {
         $product->addData($data);
 
-        //Set value of not changed attributes to false to prevents from copying
-        //attribute's values to current scope if user selected Current store
-        //option of Save edits to setting in admin interface
-        //
-        //Filter out following attributes:
-        //  - Gallery attr (is a complex attr with it's own editor)
-        //  - Global (setting value of global attr to false removes it globally)
-        //  - Non-visible (non-visible attributes can't be edited directly)
-        //  - Without input field (this attributes can'be edited directly)
-        //
-        //Filtering rules are taken from:
-        //  - Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes::_prepareForm()
-        //  - Mage_Adminhtml_Block_Widget_Form::_setFieldset()
-        if ($hasScope) foreach ($product->getAttributes() as $code => $attr) {
-          $allow = $code != 'gallery'
-                   && $attr->getIsGlobal()
-                        != Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL
-                   && $attr->getIsVisible()
-                   && $attr->getFrontend()->getInputType();
-
-          if (!$allow || isset($changeAttrs[$code]))
-            continue;
-
-          $product->setData($code, false);
-        }
-
-        //Product saves must be made from admin store
-        Mage::app()->setCurrentStore(Mage_Core_Model_App::ADMIN_STORE_ID);
+        if ($storeId !== false)
+          $this->_unsetValues($product, $changeAttrs);
 
         $product->save();
 
-        if ($product->getTypeId()
-              == Mage_Catalog_Model_Product_Type_Configurable::TYPE_CODE)
-          $this->_copyDataToSimpleProducts($product);
+        if ($isConfigurable)
+          $this->_copyDataToSimpleProducts($product, $changeAttrs, $storeId);
 
         //Reset store to be neat
         Mage::app()->setCurrentStore($storeId);
       }
     }
 
-    // Always show same page, even if nothing has changed
+    //Always show same page, even if nothing has changed
     $this->_redirectUrl($product->setData('url', null)->getProductUrl());
+  }
+
+  /**
+   * Set value of not changed attributes to false to prevents from copying
+   * attribute's values to current scope if user selected Current store
+   * option of Save edits to setting in admin interface
+   *
+   * Filter out following attributes:
+   * - Gallery attr (is a complex attr with it's own editor)
+   * - Global (setting value of global attr to false removes it globally)
+   * - Non-visible (non-visible attributes can't be edited directly)
+   * - Without input field (this attributes can'be edited directly)
+   *
+   * Filtering rules are taken from:
+   * - Mage_Adminhtml_Block_Catalog_Product_Edit_Tab_Attributes::_prepareForm()
+   * - Mage_Adminhtml_Block_Widget_Form::_setFieldset()
+   *
+   * @param Mage_Catalog_Model_Product $product Product
+   * @param array $changed Key-based list of updated attributes
+   */
+  protected function _unsetValues ($product, $changed) {
+    foreach ($product->getAttributes() as $code => $attr) {
+      $allow = $code != 'gallery'
+               && $attr->getIsGlobal()
+                    != Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL
+               && $attr->getIsVisible()
+               && $attr->getFrontend()->getInputType();
+
+      if (!$allow || isset($changed[$code]))
+        continue;
+
+      $product
+        ->setData($code, false)
+        ->setOrigData($code, false);
+    }
   }
 
   /**
    * Copy data from configurable product to it associated
    * simple products
    *
-   * @param $configurable Configurable product
+   * @param Mage_Catalog_Model_Product $configurable Configurable product
+   * @param array $changed Key-based list of updated attributes
+   * @param int|bool $storeId Current store ID
    */
-  protected function _copyDataToSimpleProducts ($configurable) {
-    $children = Mage::getModel('catalog/product_type_configurable')
-      ->getUsedProducts(null, $configurable);
-
-    if (!$children)
+  protected function _copyDataToSimpleProducts ($configurable,
+                                                $changed,
+                                                $storeId = false)
+  {
+    if (!$data = $this->_getDataForCopying($configurable, $changed))
       return;
 
-    if (!$data = $this->_getDataForCopying($configurable))
+    $childrenIds = Mage::getModel('catalog/product_type_configurable')
+      ->getUsedProductIds($configurable);
+
+    if (!$childrenIds)
       return;
 
-    //merge data from parent product to children and save them
-    foreach ($children as $child)
-      $child
-        ->setData(array_merge($child->getData(), $data))
-        ->save();
+    //Merge data from parent product to children and save them
+    foreach ($childrenIds as $childId) {
+      $child = Mage::getModel('catalog/product')
+        ->setStoreId($storeId)
+        ->load($childId)
+        ->addData($data);
+
+      if ($storeId !== false)
+        $this->_unsetValues($child, $data);
+
+      $child->save();
+    }
   }
 
   /**
-   * Get data from configurable product with only selected attributes
-   * on the extension settings
+   * Get data from configurable product for updated attributes and only selected
+   * attributes on the extension settings
    *
    * @param $configurable Configurable product
    * @return array|null Data for copying into associated simple products
    */
-  protected function _getDataForCopying ($configurable) {
+  protected function _getDataForCopying ($configurable, $changed) {
     return array_intersect_key(
       $configurable->getData(),
-      Mage::helper('productivity')->getCopyableAttr($configurable)
+      $changed,
+      Mage::helper('productivity/attribute')->getReplicables($configurable)
     );
   }
 }
