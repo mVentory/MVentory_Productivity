@@ -7,7 +7,7 @@ The Productivity extension contains a number of productivity-related features to
 
 ### Productivity Toolbar
 
-The toolbar is shown in Product, Category and CMS pages in the front-end for all _authorised_ users. It contains a number of buttons that give access to the following functionality:
+The toolbar is shown at the top of Product, Category and CMS pages in the front-end for all _authorised_ users. It contains a number of buttons that give access to the following functionality:
 
 * Edit product details, prices, attributes, etc.
 * Upload product images.
@@ -73,4 +73,4 @@ The extension doesn't require any initial configuration. The front-end toolbar i
 1. Create a user group called `Reviewer`
 2. Assign an active user to that group to give them access to the productivity toolbar.
 
-The user should the bar after logging it to the front-end.
+The user should see the toolbar after logging it to the front-end.
