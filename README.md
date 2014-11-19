@@ -31,7 +31,16 @@ The toolbar is shown when the mouse pointer is hovering over a product image (ma
 **Note:**
 
    Image editing toolbar may not always work in custom themes (with modified HTML layout or product image sizes) and may require some additional configuration, as outlined in XXX.
-	
+
+### Expanding hidden category
+
+It's possible to replace hidden category with its child categories in the menu using _Flatten categories tree_ setting. To archive it follow instructions:
+
+1. Set _Flatten categories tree_ setting in the productivity settings to _Show children of hidden parents_
+2. Set _Use Include in Navigation Menu_ setting in the desired category's settings to _No_
+
+The category will be replaced with its child categories in the menu or will be hidden if it doesn't have children
+
 ## Back-end features
 
 #### Back-end to Front-end shortcuts
