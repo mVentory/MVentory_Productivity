@@ -134,7 +134,7 @@
 
             <editable_attr translate="label comment tooltip">
               <label>Editable fields</label>
-              <comment>Comma-separated list of attribute codes or leave empty to allow all.</comment>
+              <comment>One attribute code per line or leave empty to allow all.</comment>
               <tooltip>Only listed attributes can be edited via the front end. Leave empty to allow all attributes to be edited. Use qty code for product quantity.</tooltip>
               <frontend_type>textarea</frontend_type>
 
@@ -147,7 +147,7 @@
 
             <copy_attrs>
               <label>Copy from configurable to simple products</label>
-              <comment>Comma-separated list of attribute codes to copy into associated products, blank for all or . for none.</comment>
+              <comment>One attribute code per line to copy into associated products, blank for all or . for none.</comment>
               <tooltip><![CDATA[Changes in configurable products are always saved in the product itself, but the listed attributes can also be copied into all associated simple products.<br /><br />Leave blank to copy all attributes, except quantity.<br /><br />Use . or any other string that is not an attribute name to avoid copying any of the values.]]></tooltip>
               <frontend_type>textarea</frontend_type>
 

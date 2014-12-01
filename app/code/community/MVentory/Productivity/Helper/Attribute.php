@@ -170,15 +170,7 @@ class MVentory_Productivity_Helper_Attribute
       Mage::getStoreConfig(MVentory_Productivity_Model_Config::_EDITABLE_ATTRS)
     );
 
-    $_attrs = array();
-
-    if (!$attrs)
-      return $_attrs;
-
-    foreach (explode(',', $attrs) as $attr)
-      $_attrs[strtolower(trim($attr))] = true;
-
-    return $_attrs;
+    return $attrs ? $this->_parseListOfAttrs($attrs) : array();
   }
 
   /**
@@ -191,15 +183,25 @@ class MVentory_Productivity_Helper_Attribute
       Mage::getStoreConfig(MVentory_Productivity_Model_Config::_COPY_ATTRS)
     ));
 
-    if ($attrs == '')
-      return $this->_getAllowedAttrsByUser();
+    return $attrs
+             ? $this->_parseListOfAttrs($attrs)
+             : $this->_getAllowedAttrsByUser();
+  }
 
-    $_attrs = array();
-
-    foreach (explode(',', $attrs) as $attr)
-      $_attrs[trim($attr)] = true;
-
-    return $_attrs;
+  /**
+   * Parse user-defined list of attribute codes and return it as key-based array
+   *
+   * @param string $attrs
+   *   List of attribute coes. One attribute code per line
+   *
+   * @return array
+   *   Key-based list of attribute codes
+   */
+  protected function _parseListOfAttrs ($attrs) {
+    return array_flip(array_map(
+        'trim',
+        explode("\n", str_replace(array("\r\n", "\r"), "\n", trim($attrs)))
+    ));
   }
 
   /**
