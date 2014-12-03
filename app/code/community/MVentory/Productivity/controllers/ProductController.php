@@ -40,7 +40,7 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
     if ($helper->isReviewerLogged())
     {
       //Check if save scope is set and we need to load product
-      //with dara from current store
+      //with data from current store
       $saveScope = (int) Mage::getStoreConfig(
         MVentory_Productivity_Model_Config::_PRODUCT_SAVE_SCOPE
       );
@@ -112,8 +112,10 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
       if ($changeAttrs || isset($qty)) {
         $product->addData($data);
 
-        if ($storeId !== false)
-          $this->_unsetValues($product, $changeAttrs);
+        if ($storeId !== false) {
+          $globalData = $this->_getDefaultData($product);
+          $this->_unsetValues($product, $changeAttrs, $globalData);
+        }
 
         $product->save();
 
@@ -146,16 +148,31 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
    *
    * @param Mage_Catalog_Model_Product $product Product
    * @param array $changed Key-based list of updated attributes
+   * @param array $globalData Global values
    */
-  protected function _unsetValues ($product, $changed) {
+  protected function _unsetValues ($product, $changed, $globalData) {
+
     foreach ($product->getAttributes() as $code => $attr) {
+
+      if (isset($changed[$code]))
+        continue;
+
+      // We need to find out if an attribute has a per-store value that
+      // is different than the global value. If so, do Not mark the
+      // field as 'use default'.
+      // Global default is store_id==0
+      if (isset($globalData[$code])) {
+        if ($globalData[$code] != $product->getData($code))
+          continue;
+      }
+
       $allow = $code != 'gallery'
                && $attr->getIsGlobal()
                     != Mage_Catalog_Model_Resource_Eav_Attribute::SCOPE_GLOBAL
                && $attr->getIsVisible()
                && $attr->getFrontend()->getInputType();
 
-      if (!$allow || isset($changed[$code]))
+      if (!$allow)
         continue;
 
       $product
@@ -192,8 +209,10 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
         ->load($childId)
         ->addData($data);
 
-      if ($storeId !== false)
-        $this->_unsetValues($child, $data);
+      if ($storeId !== false) {
+        $globalData = $this->_getDefaultData($child);
+        $this->_unsetValues($child, $data, $globalData);
+      }
 
       $child->save();
     }
@@ -213,5 +232,22 @@ class MVentory_Productivity_ProductController extends Mage_Core_Controller_Front
       Mage::helper('productivity/attribute')->getReplicables($configurable)
     );
   }
+
+  /**
+   * Get product data in the global scope
+   * @param $product Product
+   * @return array Global scope data
+   */
+  protected function _getDefaultData ($product) {
+    $globalData = array();
+    if ($product->getStoreId() !== Mage_Core_Model_App::ADMIN_STORE_ID
+        && $product->getId()) {
+          $globalData = Mage::getModel('catalog/product')
+            ->setStoreId(Mage_Core_Model_App::ADMIN_STORE_ID)
+            ->load($product->getId())->getData();
+    }
+    return $globalData;
+  }
+
 }
 
