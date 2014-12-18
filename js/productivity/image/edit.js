@@ -44,6 +44,8 @@ $(function () {
   for (var type in productivity.edit.selector) {
     if (!productivity.edit.selector.hasOwnProperty(type))
       continue;
+      /* Added to remove panel from images*/
+      continue;
 
     var selector = productivity.edit.wrapper[type]
                     ? productivity.edit.wrapper[type]

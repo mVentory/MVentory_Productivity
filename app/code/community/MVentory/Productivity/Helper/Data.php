@@ -222,4 +222,28 @@ class MVentory_Productivity_Helper_Data
   public function isMVentoryModuleEnabled () {
     return parent::isModuleEnabled('MVentory_API');
   }
+
+  public function getProductImagesToHtml($productId = null){
+    $html = '';
+    foreach ($this->_getProductMediaGallery($productId) as $image) {
+      $u_id = uniqid();
+      $data = file_get_contents($image->getPath());
+      $type = pathinfo($image->getPath(), PATHINFO_EXTENSION);
+      $html .='<li id="image_'.$u_id.'" class="qq-upload-success product-media-image-gallery"  
+            image="'.$image->getFile().'" 
+            style="background-image: url(data:image/' . $type . ';base64,' 
+            . base64_encode($data).')"></li>';
+    }
+    return $html;
+  }
+
+  protected function _getProductMediaGallery($productId = null){
+    if ($productId == null) return array();
+    $imageList = array(); 
+    $_product = Mage::getSingleton('catalog/product')->load($productId);
+    foreach ($_product->getMediaGalleryImages() as $image){
+      $imageList[] = $image;
+    }
+    return $imageList;
+  }
 }
