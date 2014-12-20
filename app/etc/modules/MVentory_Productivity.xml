@@ -20,6 +20,9 @@
     <MVentory_Productivity>
       <active>true</active>
       <codePool>community</codePool>
+      <depends>
+        <MVentory_API />
+      </depends>
     </MVentory_Productivity>
 
     <Mage_Review>
