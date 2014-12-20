@@ -223,26 +223,44 @@ class MVentory_Productivity_Helper_Data
     return parent::isModuleEnabled('MVentory_API');
   }
 
+  /**
+   * Get Images html
+   *
+   * @param int $productId
+   * @return string $html
+   */
   public function getProductImagesToHtml($productId = null){
     $html = '';
-    foreach ($this->_getProductMediaGallery($productId) as $image) {
-      $u_id = uniqid();
-      $data = file_get_contents($image->getPath());
-      $type = pathinfo($image->getPath(), PATHINFO_EXTENSION);
-      $html .='<li id="image_'.$u_id.'" class="qq-upload-success product-media-image-gallery"  
-            image="'.$image->getFile().'" 
-            style="background-image: url(data:image/' . $type . ';base64,' 
-            . base64_encode($data).')"></li>';
+    if ($productId != null) {
+      $_product = Mage::getSingleton('catalog/product')->load($productId);
+
+      foreach ($this->_getProductMediaGallery($productId) as $imageUrl) {
+        $u_id = uniqid();
+        $path = Mage::getBaseDir('media').'/catalog/product'.$imageUrl;
+        $data = file_get_contents($path);
+        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $html .='<li id="image_'.$u_id.'" class="qq-upload-success product-media-image-gallery"  
+              image="'.$imageUrl.'" 
+              style="background-image: url(data:image/' . $type . ';base64,' 
+              . base64_encode($data).')"></li>';
+      }
     }
     return $html;
   }
 
-  protected function _getProductMediaGallery($productId = null){
-    if ($productId == null) return array();
+  /**
+   * Get Media Gellery array
+   *
+   * @param int $productId
+   * @return array $imageList
+   */
+  protected function _getProductMediaGallery($productId = null){    
     $imageList = array(); 
+    
     $_product = Mage::getSingleton('catalog/product')->load($productId);
+    
     foreach ($_product->getMediaGalleryImages() as $image){
-      $imageList[] = $image;
+      $imageList[] = $image->getFile();
     }
     return $imageList;
   }
