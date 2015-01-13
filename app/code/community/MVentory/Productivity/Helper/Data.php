@@ -173,7 +173,7 @@ class MVentory_Productivity_Helper_Data
   public function isReviewerLogged () {
     if ($this->isAdminLogged())
       return true;
-
+    
     $session = Mage::getSingleton('customer/session');
 
     $groupId = $session->getCustomerGroupId();
@@ -235,14 +235,10 @@ class MVentory_Productivity_Helper_Data
       $_product = Mage::getSingleton('catalog/product')->load($productId);
 
       foreach ($this->_getProductMediaGallery($productId) as $imageUrl) {
-        $u_id = uniqid();
-        $path = Mage::getBaseDir('media').'/catalog/product'.$imageUrl;
-        $data = file_get_contents($path);
-        $type = pathinfo($path, PATHINFO_EXTENSION);
+        $u_id = uniqid();        
         $html .='<li id="image_'.$u_id.'" class="qq-upload-success product-media-image-gallery"  
               image="'.$imageUrl.'" 
-              style="background-image: url(data:image/' . $type . ';base64,' 
-              . base64_encode($data).')"></li>';
+              style="background-image: url(media/catalog/product/'.$imageUrl.')"></li>';
       }
     }
     return $html;
