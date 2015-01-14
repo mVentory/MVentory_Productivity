@@ -1,5 +1,5 @@
 <_>
-   <form_key>B1XChlcPDZjE5Ay3</form_key>
+   <form_key>0wE1H58x24D0PCDr</form_key>
    <name>mVentory_Productivity</name>
    <channel>community</channel>
    <version_ids>
@@ -47,9 +47,9 @@ The extension is free open source released under OSL 3 license. Please, contribu
    <license>Open Software License version 3.0</license>
    <license_uri>http://opensource.org/licenses/osl-3.0.php</license_uri>
    <version>1.1.0</version>
-   <stability>stable</stability>
+   <stability>devel</stability>
    <notes>* Add setting to limit the list of fields available for editing via the frontend
-* Add initial support for editing of configurable products
+* Add support for editing of configurable products
 * Add tabs for quick generating of QR labels (works only when MVentory_API extesion is installed)
 * Extend filtering by all image types (i.e. base image, small image and thumbnail) in the list of products with missing images
 * Allow to expand categories with &apos;Include in Navigation Menu&apos; set to No</notes>
@@ -70,7 +70,7 @@ The extension is free open source released under OSL 3 license. Please, contribu
       <package>
          <name>
             <name/>
-            <name>MVentory_JQuery</name>
+            <name>MVentory_API</name>
          </name>
          <channel>
             <channel/>
@@ -85,8 +85,8 @@ The extension is free open source released under OSL 3 license. Please, contribu
             <max/>
          </max>
          <files>
-            <files>                                  </files>
-            <files>                                  </files>
+            <files>                                         </files>
+            <files>                                         </files>
          </files>
       </package>
       <extension>
