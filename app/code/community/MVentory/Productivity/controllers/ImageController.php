@@ -67,7 +67,8 @@ class MVentory_Productivity_ImageController
       return $this->_error();
     }
 
-    $type = $request->get('thumb') == 'true'?'thumbnail':'image';
+    /* Checks if  is the main image*/
+    $type = ($product->getImage() === $file)?'image':'thumbnail';    
 
     $result = array();
 
@@ -77,7 +78,9 @@ class MVentory_Productivity_ImageController
         $file,
         $newFileAbsolute,
         $product,
-        $type == 'image' ? array('image', 'small_image', 'thumbnail') : null
+        $type == 'image' ? array('image', 'small_image', 'thumbnail') : null,
+        true,
+        $type == 'image'
       );
     } catch (Exception $e) {
       Mage::logException($e);
