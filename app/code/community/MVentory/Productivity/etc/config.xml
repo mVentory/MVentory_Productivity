@@ -141,6 +141,16 @@
         </observers>
       </controller_action_predispatch_catalog>
 
+      <controller_action_predispatch_catalogsearch>
+        <observers>
+          <productivity_remember_admin_state>
+            <type>singleton</type>
+            <class>MVentory_Productivity_Model_Observer</class>
+            <method>rememberAdminState</method>
+          </productivity_remember_admin_state>
+        </observers>
+      </controller_action_predispatch_catalogsearch>
+
       <controller_action_predispatch_cms>
         <observers>
           <productivity_remember_admin_state>

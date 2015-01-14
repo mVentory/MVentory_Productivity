@@ -136,7 +136,71 @@ $upload_btn.on('click', function () {
 //  return { width: $element.width(), height: $element.height() };
 //}
 
+/* Selects all images from upload panel*/
+$(document).ready(function(){  
+  $('#productivity-uploader-previews').children().each(function( index, value ){
+
+      setPanel($(this), $(this).attr('image'));
+  })
+})
+
 });
+
+/* Set the panel in image*/
+function setPanel($element, image){
+
+  var img = image;
+  
+  productivity.func.add_panel(
+      $element,
+      {
+        panel: {
+          position: { top: 2, left: 2 },
+          scope: 'uploader', 
+
+          action: {
+            remove: {
+              on_error: on_error,
+              on_success: function ($element, data) {
+                $element.remove();
+              }
+            },
+            rotate: {
+              on_error: on_error,
+              on_success: function ($element, data) {
+                $element.css('background-image', 'url(' + data.url + ')');
+                $element.data('productivity').file = data.file;
+              }
+            },
+            setmain: {
+              on_error: on_error,
+              on_success: function ($element, data) {
+                $element.image.prop('src', data.image.url);
+                $element.image.data('productivity').file = data.image.file;
+              }
+            }
+          }
+        },
+        image: {
+          file: img,
+          type: 'thumbnail',
+          width: null,
+          height: null
+        }
+      }
+    );
+    
+    function on_error ($element, data) {
+      $element
+        .removeClass('qq-upload-success')
+        .addClass('qq-upload-fail');
+
+      setTimeout(
+        function () { $element.removeClass('qq-upload-fail'); },
+        5000
+      );
+    }
+}
 
 //]]>
 </script>

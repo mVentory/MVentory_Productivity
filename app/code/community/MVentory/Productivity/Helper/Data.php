@@ -173,7 +173,7 @@ class MVentory_Productivity_Helper_Data
   public function isReviewerLogged () {
     if ($this->isAdminLogged())
       return true;
-
+    
     $session = Mage::getSingleton('customer/session');
 
     $groupId = $session->getCustomerGroupId();
@@ -221,5 +221,46 @@ class MVentory_Productivity_Helper_Data
 
   public function isMVentoryModuleEnabled () {
     return parent::isModuleEnabled('MVentory_API');
+  }
+
+  /**
+   * Get Images html
+   *
+   * @param int $productId
+   * @return string $html
+   */
+  public function getProductImagesToHtml($productId = null){
+    $html = '';
+    if ($productId != null) {
+      $_product = Mage::getSingleton('catalog/product')->load($productId);
+      $base_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+      foreach ($this->_getProductMediaGallery($productId) as $imageUrl) {
+        $u_id = uniqid();        
+        $html .='<li id="image_'.$u_id.'" class="qq-upload-success product-media-image-gallery"  
+              image="'.$imageUrl.'" 
+              style="background-image: url('.$base_url.'catalog/product'.$imageUrl.')"></li>';
+      }
+    }
+    return $html;
+  }
+
+  /**
+   * Get Media Gellery array
+   *
+   * @param int $productId
+   * @return array $imageList
+   */
+  protected function _getProductMediaGallery($productId = null){    
+    $imageList = array(); 
+    
+    $_product = Mage::getSingleton('catalog/product')->load($productId);
+    if ($_product->getImage()!='no_selection'){
+      $imageList[] = $_product->getImage();
+    }
+      
+    foreach ($_product->getMediaGalleryImages() as $image){
+      $imageList[] = $image->getFile();
+    }
+    return $imageList;
   }
 }

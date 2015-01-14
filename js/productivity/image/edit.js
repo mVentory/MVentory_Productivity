@@ -36,46 +36,7 @@ function confirmRemove ($el) {
 $(function () {
 
   var $form = $('#product_addtocart_form');
-  var $panel = $('#productivity-image-edit-panel');
-  var $menus = $form.find('.tm-image-editor-menu');
-  var $updImage;
-  var $updImageEditor;
-
-  for (var type in productivity.edit.selector) {
-    if (!productivity.edit.selector.hasOwnProperty(type))
-      continue;
-
-    var selector = productivity.edit.wrapper[type]
-                    ? productivity.edit.wrapper[type]
-                      : productivity.edit.selector[type];
-
-    add_panel(
-      $(selector),
-      {
-        panel: {
-          position: get_panel_position,
-          element: get_element,
-          loader: show_loader,
-          scope: 'images',
-          action: {
-            remove: {
-              on_error: on_error,
-              on_success: on_remove
-            },
-            rotate: {
-              on_error: on_error,
-              on_success: on_rotate
-            },
-            setmain: {
-              on_error: on_error,
-              on_success: on_setmain
-            }
-          }
-        },
-        image: { type: type }
-      }
-    );
-  }
+  var $panel = $('#productivity-image-edit-panel');  
 
   $panel
     .on('mouseenter', function () {

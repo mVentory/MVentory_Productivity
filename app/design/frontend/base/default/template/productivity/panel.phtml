@@ -14,7 +14,14 @@
  */
 
 ?>
-
+<!-- Harcoded white background to avoid colors being inherited from the theme -->
+    <style>
+      #productivity-tasks {background-color:#ffffff;color: #000000}
+      #productivity-tasks :hover {background-color:#000000;color:white;}
+      #productivity-tasks li a {color: #000000}
+      #productivity-tasks li a :hover{color: #ffffff}
+    </style>
+<!-- Harcoded white background to avoid colors being inherited from the theme -->
 <?php
 /* @var $this MVentory_Productivity_Block_Panel */
 $_helper = Mage::helper('productivity');
@@ -83,7 +90,7 @@ if ($_type == 'product') {
       </li>
 
       <li>
-        <a title="<?php echo $__uploadTitle; ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClick; ?>><?php echo $this->__('Upload') ?></a>
+        <a title="<?php echo $__uploadTitle; ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClick; ?>><?php echo $this->__('Images') ?></a>
       </li>
 
       <li>
@@ -138,8 +145,15 @@ if ($_type == 'product') {
             <span><?php echo $this->__('Drag and drop product images to upload here'); ?></span>
           </div>
         </div>
-
-        <ul id="productivity-uploader-previews"></ul>
+        <ul id="productivity-uploader-previews">
+          <?php 
+            /* Populate upload panel with product images*/
+            if ($_type == 'product') {
+            echo $_helper->
+              getProductImagesToHtml(Mage::registry('product')->getId());
+            }
+          ?>
+        </ul>
       </div>
 
       <?php //A quick form for editing select attributes in a hurry. ?>
@@ -188,6 +202,9 @@ jQuery(function ($) {
     tasks += task + ' ';
 
     $(this).on('click', function () {
+      <!-- close all open panels-->
+      $panel.removeClass(tasks);
+      <!-- close all open panels-->
       $panel.hasClass(task)
         ? $panel.removeClass(task)
           : $panel.addClass(task);
