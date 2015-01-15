@@ -446,10 +446,14 @@ $(function () {
                        ? $(productivity.edit.wrapper.image)
                            .find(productivity.edit.selector.image)
                          : $(productivity.edit.selector.image);
-
+    // image-main
     var image = $mainImage.data('productivity');
-
+    
     if (!image) {
+        /* Main image fix for theme rwd */
+       if ($mainImage.prop('src') == undefined){
+          $mainImage = $("#image-main");
+       }        
       image = {
         file: get_filename_from_url($mainImage.prop('src')),
       };
