@@ -145,8 +145,7 @@ $(function () {
       type: 'POST',
       dataType: 'json',
       data: {
-        params: params,
-        thumb: type == 'thumbnail',
+        params: params,        
         productId: productId
       },
       error: function (jqXHR, status, errorThrown) {

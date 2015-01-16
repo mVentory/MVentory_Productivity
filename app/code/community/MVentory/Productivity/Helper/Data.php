@@ -231,15 +231,16 @@ class MVentory_Productivity_Helper_Data
    */
   public function getProductImagesToHtml($productId = null){
     $html = '';
-    if ($productId != null) {
-      $_product = Mage::getSingleton('catalog/product')->load($productId);
-      $base_url = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
-      foreach ($this->_getProductMediaGallery($productId) as $imageUrl) {
+    if ($productId != null) {     
+      $imageCollection = $this->_getProductMediaGallery($productId);   
+
+      foreach ($imageCollection as $key => $imageUrl) {        
         $u_id = uniqid();        
-        $html .='<li id="image_'.$u_id.'" class="qq-upload-success product-media-image-gallery"  
-              image="'.$imageUrl.'" 
-              style="background-image: url('.$base_url.'catalog/product'.$imageUrl.')"></li>';
+        $html .='<li id="image_'.$u_id.'" src="'.$key.'" class="product-media-image-gallery"  
+              image="'.$key.'" 
+              style="background-image: url('.$imageUrl.')"></li>';
       }
+
     }
     return $html;
   }
@@ -254,13 +255,33 @@ class MVentory_Productivity_Helper_Data
     $imageList = array(); 
     
     $_product = Mage::getSingleton('catalog/product')->load($productId);
+
+    /* Checks if product has default image */
     if ($_product->getImage()!='no_selection'){
-      $imageList[] = $_product->getImage();
+
+        $imageList[$_product->getImage()] = 
+                    $this->_getResizedImageUrl($_product, $_product->getImage());
     }
       
     foreach ($_product->getMediaGalleryImages() as $image){
-      $imageList[] = $image->getFile();
+      $resizedUrl = $this->_getResizedImageUrl($_product, $image->getFile());
+      $imageList[$image->getFile()] = $resizedUrl;            
     }
     return $imageList;
   }
+
+  /**
+   * Return resized image url 
+   *
+   * @param Mage_Catalog_Product $_product
+   * @param string $_file
+   * @return string
+   */
+  protected function _getResizedImageUrl($_product, $_file){
+      return (string)Mage::helper('catalog/image')
+        ->init($_product, 'image', $_file)
+        ->keepFrame(false)
+        ->resize(100);
+  }
+
 }
