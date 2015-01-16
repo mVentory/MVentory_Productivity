@@ -74,7 +74,16 @@
 }
 
 #productivity-tasks {
+  background-color:#ffffff;
   float: right;
+}
+
+#productivity-tasks :hover{
+  background-color:#ffffff;
+}
+
+#productivity-tasks li a {
+  color: #000000
 }
 
 .productivity-set li {
