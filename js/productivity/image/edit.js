@@ -290,7 +290,7 @@ $(function () {
     $panel
       .removeAttr('style')
       .css(css)
-      .addClass('productivity-scope-' + event.data.panel.scope)
+      .addClass('productivity-scope-uploader')
       .show()
       .data(data);
   }
