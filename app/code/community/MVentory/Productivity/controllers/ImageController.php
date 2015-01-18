@@ -94,16 +94,15 @@ class MVentory_Productivity_ImageController
       100
     );
     
-    /* Get Images for all sizes*/
-    foreach ($sizes as $key => $value) {
-      $result[$key] = $this->_getImageUrl(
-        $product,
-        $type,
-        $result['file'],
-        $value['width'],
-        $value['height']
+    /* Get original size image*/
+    $result['image'] = $this->_getImageUrl(
+      $product,
+      $type,
+      $result['file'],
+      null,
+      null
       );
-    }
+    
 
     $this->_success($result);
   }
@@ -162,16 +161,14 @@ class MVentory_Productivity_ImageController
 
     $request = $this->getRequest();
 
-    $hasRequiredParam = $request->has('params')
-                        && $request->has('main_image_params');
+    $hasRequiredParam = $request->has('params');
 
     if (!$hasRequiredParam)
       return $this->_error();
 
-    $thumb = $request->get('params');
-    $image = $request->get('main_image_params');
+    $thumb = $request->get('params');    
 
-    $hasRequiredValues = $thumb['file'] && $image['file'];
+    $hasRequiredValues = $thumb['file'];
 
     if (!$hasRequiredValues)
       return $this->_error();
@@ -198,16 +195,6 @@ class MVentory_Productivity_ImageController
           null
         )
       ),
-      'thumbnail' => array(
-        'file' => $image['file'],
-        'url' => $this->_getImageUrl(
-          $product,
-          'thumbnail',
-          $image['file'],
-          $thumb['width'] ? $thumb['width'] : null,
-          $thumb['height'] ? $thumb['height'] : null
-        )
-      )
     );
 
     $this->_success($result);

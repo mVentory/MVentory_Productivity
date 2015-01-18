@@ -236,7 +236,7 @@ class MVentory_Productivity_Helper_Data
 
       foreach ($imageCollection as $key => $image) {        
         $u_id = uniqid();        
-        $html .='<li id="image_'.$u_id.'" src="'.$key.'" class="product-media-image-gallery"  
+        $html .='<li id="'.$u_id.'" class="product-media-image-gallery"  
               image="'.$key.'" type="'.$image["type"].'" 
               style="background-image: url('.$image["url"].')"></li>';
       }
@@ -282,7 +282,7 @@ class MVentory_Productivity_Helper_Data
    */
   protected function _getResizedImageUrl($_product, $_file){
       return (string)Mage::helper('catalog/image')
-        ->init($_product, 'image', $_file)
+        ->init($_product, 'image', $_file)        
         ->resize(100);
   }
 

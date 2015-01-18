@@ -194,13 +194,14 @@ jQuery(function ($) {
     tasks += task + ' ';
 
     $(this).on('click', function () {
-      <!-- close all open panels-->
-      $panel.removeClass(tasks);
-      <!-- close all open panels-->
-      $panel.hasClass(task)
-        ? $panel.removeClass(task)
-          : $panel.addClass(task);
-
+      if ($panel.hasClass(task)){
+        $panel.removeClass(task);
+      }
+      else{
+        $panel.removeClass(tasks);
+        $panel.addClass(task);
+      }
+  
       resize_panel();
 
       return false;
