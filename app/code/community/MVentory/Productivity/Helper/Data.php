@@ -283,7 +283,6 @@ class MVentory_Productivity_Helper_Data
   protected function _getResizedImageUrl($_product, $_file){
       return (string)Mage::helper('catalog/image')
         ->init($_product, 'image', $_file)
-        ->keepFrame(false)
         ->resize(100);
   }
 
