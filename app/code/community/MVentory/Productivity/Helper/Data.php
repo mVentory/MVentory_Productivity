@@ -234,11 +234,11 @@ class MVentory_Productivity_Helper_Data
     if ($productId != null) {     
       $imageCollection = $this->_getProductMediaGallery($productId);   
 
-      foreach ($imageCollection as $key => $imageUrl) {        
+      foreach ($imageCollection as $key => $image) {        
         $u_id = uniqid();        
         $html .='<li id="image_'.$u_id.'" src="'.$key.'" class="product-media-image-gallery"  
-              image="'.$key.'" 
-              style="background-image: url('.$imageUrl.')"></li>';
+              image="'.$key.'" type="'.$image["type"].'" 
+              style="background-image: url('.$image["url"].')"></li>';
       }
 
     }
@@ -259,13 +259,16 @@ class MVentory_Productivity_Helper_Data
     /* Checks if product has default image */
     if ($_product->getImage()!='no_selection'){
 
-        $imageList[$_product->getImage()] = 
-                    $this->_getResizedImageUrl($_product, $_product->getImage());
+        $imageList[$_product->getImage()] = array('url'=>
+                    $this->_getResizedImageUrl($_product, $_product->getImage())
+                    ,'type'=>'image');        
     }
       
     foreach ($_product->getMediaGalleryImages() as $image){
-      $resizedUrl = $this->_getResizedImageUrl($_product, $image->getFile());
-      $imageList[$image->getFile()] = $resizedUrl;            
+      if(!array_key_exists($image->getFile(), $imageList)){
+        $resizedUrl = $this->_getResizedImageUrl($_product, $image->getFile());
+        $imageList[$image->getFile()] = array('url'=>$resizedUrl, 'type'=>'thumbnail');    
+      }        
     }
     return $imageList;
   }

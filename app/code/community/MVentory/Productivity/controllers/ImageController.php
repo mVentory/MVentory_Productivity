@@ -78,23 +78,32 @@ class MVentory_Productivity_ImageController
         $file,
         $newFileAbsolute,
         $product,
-        $type == 'image' ? array('image', 'small_image', 'thumbnail') : null,
-        true,
-        $type == 'image'
+        $type == 'image' ? array('image', 'small_image', 'thumbnail') : null
       );
     } catch (Exception $e) {
       Mage::logException($e);
       return $this->_error();
     }
 
-    // get resized version of image
+    // Get panel size image 100 x 100
     $result['url'] = $this->_getImageUrl(
       $product,
       $type,
       $result['file'],
-      $width ? $width : null,
-      $height ? $height : null
+      100,
+      100
     );
+    
+    /* Get Images for all sizes*/
+    foreach ($sizes as $key => $value) {
+      $result[$key] = $this->_getImageUrl(
+        $product,
+        $type,
+        $result['file'],
+        $value['width'],
+        $value['height']
+      );
+    }
 
     $this->_success($result);
   }
@@ -177,6 +186,7 @@ class MVentory_Productivity_ImageController
       return $this->_error();
     }
 
+    // Get base image size
     $result = array(
       'image' => array(
         'file' => $thumb['file'],
@@ -184,8 +194,8 @@ class MVentory_Productivity_ImageController
           $product,
           'image',
           $thumb['file'],
-          $image['width'] ? $image['width'] : null,
-          $image['height'] ? $image['height'] : null
+          null,
+          null
         )
       ),
       'thumbnail' => array(

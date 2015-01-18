@@ -38,6 +38,11 @@ $(function () {
   var $form = $('#product_addtocart_form');
   var $panel = $('#productivity-image-edit-panel');  
 
+  /* Set productivity panel in all images*/
+  $('#productivity-uploader-previews').children().each(function( index, value ){            
+      set_panel($(this), $(this).attr('image'), $(this).attr('type'));
+  });
+
   $panel
     .on('mouseenter', function () {
       $panel.show();
@@ -72,33 +77,10 @@ $(function () {
 
   productivity.func = { add_panel: add_panel };
 
-  function get_panel_position ($element) {
-    var position = $element.offset();
-
-    position.top += $element.height() - 10;
-    position.left += 10;
-
-    return position;
-  }
-
-  function get_element ($element, type) {
-    if (!productivity.edit.wrapper[type])
-      return $element;
-
-    $element = $element.find(productivity.edit.selector[type]);
-
-    if (!$element.length)
-      return;
-
-    return $element;
-  }
-
   function show_loader ($element, type) {
-    if (type != 'image')
-      return;
 
     var $loader = $('<div class="image-editor-loader" />')
-      .appendTo($element.parent())
+      .appendTo($element)
       .show();
 
     return function () {
@@ -113,22 +95,6 @@ $(function () {
       alert('Product ID: ' + data.product_id + '\nImage file: ' + data.file + '\nStatus: ' + data.status);
   }
 
-  function on_remove ($element, data) {
-    if (data.url)
-      $element.prop('src', data.url);
-    else
-      $element.remove();
-  }
-
-  function on_rotate ($element, data) {
-    $element.prop('src', data.url);
-
-    //!!!FIX: also return link to full size image
-    //$element.parent('a').prop('href', '/media/catalog/product' + data.base);
-
-    $element.data('productivity').file = data.file;
-  }
-
   function on_setmain ($element, data) {
     $element.image.prop('src', data.image.url);
     $element.thumb.prop('src', data.thumbnail.url);
@@ -138,8 +104,7 @@ $(function () {
   }
 
   function rotate_image ($img, params, type, cb) {
-    var productId = $form.find('input[name="product"]').val();
-
+    var productId = $form.find('input[name="product"]').val();       
     $.ajax({
       url: productivity.image.url.rotate,
       type: 'POST',
@@ -159,7 +124,7 @@ $(function () {
       },
       success: function (data, status, jqXHR) {
         if (data.success)
-          cb.on_success($img, data.data)
+          cb.on_success($img, data.data, params)
         else {
           var data = {
             product_id: productId,
@@ -193,7 +158,7 @@ $(function () {
       },
       success: function (data, status, jqXHR) {
         if (data.success)
-          cb.on_success($img, data.data)
+          cb.on_success($img, data.data, params)
         else {
           var data = {
             product_id: product_id,
@@ -233,7 +198,7 @@ $(function () {
       },
       success: function (data, status, jqXHR) {
         if (data.success)
-          cb.on_success({ image: $image, thumb: $thumb }, data.data)
+          cb.on_success({ image: $image, thumb: $thumb }, data.data, $thumb)
         else {
           var data = {
             product_id: product_id,
@@ -312,30 +277,32 @@ $(function () {
 
     if (typeof data.panel.loader === 'function')
       var hide_loader = data.panel.loader(data.element.$, data.image.type)
-
-    var image = data.element.$.data('productivity');
+    
+    var image = data.image;
 
     if (!image) {
-      image = {
-        file: data.image.file
-                ? data.image.file
-                  : get_filename_from_url(data.element.$.prop('src')),
-      };
+      //TODO: What if there is no image
+      return false;
     }
 
     data.element.$.data('productivity', image);
 
     var params = {
       file: image.file,
-      width: data.image.width === undefined
-               ? productivity.edit.size[data.image.type].width
-                 : data.image.width,
-      height: data.image.height === undefined
-               ? productivity.edit.size[data.image.type].height
-                 : data.image.height,
+      sizes: get_images_sizes(image.file),
       rotate: event.data.rotate
     };
 
+    data.panel.action.rotate.on_success = function ($element, data, params) {
+      $element.css('background-image', 'url(' + data.url + ')');
+      $element.data('productivity').file = data.file;
+      images = get_images_from_url(params.file);
+      images.each(function( index, image ){        
+        $(image).prop('src', data[index]);
+      
+     });
+      
+    };
     data.panel.action.rotate.on_complete = function () {
       if (hide_loader)
         hide_loader();
@@ -363,14 +330,11 @@ $(function () {
       return false;
     }
 
-    var image = data.element.$.data('productivity');
+    var image = data.image;
 
     if (!image) {
-      image = {
-        file: data.image.file
-                ? data.image.file
-                  : get_filename_from_url(data.element.$.prop('src')),
-      };
+      //TODO: What if there is no image
+      return false;
     }
 
     data.element.$.data('productivity', image);
@@ -385,6 +349,15 @@ $(function () {
                        .find('input[name="product"]')
                        .val();
 
+    data.panel.action.remove.on_success = function ($element, data, params) {
+      $element.remove();      
+      images = get_images_from_url(params.file);
+      images.each(function( index, image ){        
+        $(image).remove();
+      
+     });
+    };
+
     data.panel.action.remove.on_complete = function () {
       data.element.$.css('opacity', '1');
       $panel.hide();
@@ -395,7 +368,6 @@ $(function () {
     return false;
   }
 
-
   function set_main_button_click_handler (event) {
     event.preventDefault();
 
@@ -404,26 +376,14 @@ $(function () {
     if (data.image.type != 'thumbnail')
       return false;
 
-    $panel
-      .addClass('disabled')
-      .hide();
+    $panel.addClass('disabled').hide();
 
     if (typeof data.panel.loader === 'function')
       var hide_loader = data.panel.loader(data.element.$, data.image.type)
 
-    var $this = $(this);
+    var $this = $(this);    
 
-    /*$this.off('click', set_main_button_click_handler);*/
-
-    var thumb = data.element.$.data('productivity');
-
-    if (!thumb) {
-      thumb = {
-        file: data.image.file
-                ? data.image.file
-                  : get_filename_from_url(data.element.$.prop('src')),
-      };
-    }
+    var thumb = data.image;
 
     data.element.$.data('productivity', thumb);
 
@@ -437,45 +397,53 @@ $(function () {
                  : data.image.height
     };
 
-    var product_id = $form
-                       .find('input[name="product"]')
-                       .val();
+    var product_id = $form.find('input[name="product"]').val();
 
-    var $mainImage = productivity.edit.wrapper.image
-                       ? $(productivity.edit.wrapper.image)
-                           .find(productivity.edit.selector.image)
-                         : $(productivity.edit.selector.image);
-    // image-main
-    var image = $mainImage.data('productivity');
+    /* Find base image url */
+    var mainImageUrl = $("#productivity-panel").find("[type='image']").attr('src');  
+
+    if (mainImageUrl === undefined) {
+      mainImageUrl =$(get_images_from_url('placeholder/image.jpg')).first().attr('src');
+    };       
+
+    var $mainImage = $(get_images_from_url(mainImageUrl)).first();    
     
-    if (!image) {
-        /* Main image fix for theme rwd */
-       if ($mainImage.prop('src') == undefined){
-          $mainImage = $("#image-main");
-       }        
-      image = {
-        file: get_filename_from_url($mainImage.prop('src')),
-      };
-    }
+    // Get main image url
+    var imageUrl = $mainImage.first().attr('src');      
 
-    $mainImage.data('productivity', image);
+    $mainImage.data('productivity', imageUrl);
 
     var main_image_params = {
-      file: image.file,
-      width: productivity.edit.size.image.width,
-      height: productivity.edit.size.image.height
+      file: imageUrl,
+      width: $mainImage.width(),
+      height: $mainImage.height()
     };
 
     $mainImage.css('opacity', '0.5');
     data.element.$.css('opacity', '0.5');
-
-    $mainImage.parent().append('<div class="image-editor-loader"></div>');
+    
     $('.image-editor-loader').show();
 
+    data.panel.action.setmain.on_success = function ($element, data, thumb) {
+      $element.image.prop('src', data.image.url);
+
+      /* Sets all images to type "thumbnail"*/
+      $('#productivity-uploader-previews').children().each(function( index, value ){
+        $(value).attr('type', 'thumbnail');
+      });
+
+      /* Sets image to type "image"*/
+      $(thumb).attr('type', 'image');
+      
+      /* Set productivity panel in all images*/
+      $('#productivity-uploader-previews').children().each(function( index, value ){            
+          set_panel($(this), $(this).attr('image'), $(this).attr('type'));
+      });
+      
+      $element.image.data('productivity').file = data.image.file;
+    }
+
     data.panel.action.setmain.on_complete = function () {
-      var link = data.element.$.parent('a').prop('href');
-      data.element.$.parent('a').prop('href', $mainImage.parent('a').prop('href'));
-      $mainImage.parent('a').prop('href', link);
 
       if (hide_loader)
         hide_loader();
@@ -496,11 +464,51 @@ $(function () {
     );
   }
 
-  function get_filename_from_url (url) {
-    return url.substring(
-      url.lastIndexOf('/', url.lastIndexOf('/', url.lastIndexOf('/') - 1) - 1)
-    );
+  /* Sets Image edit Panel  */
+  function set_panel($element, image, type){
+    add_panel(
+      $element,
+            {
+              panel: {
+                position: { top: 2, left: 2 },
+                loader: show_loader,
+                action: {
+                  remove: {
+                    on_error: on_error,
+                  },
+                  rotate: {
+                    on_error: on_error,
+                  },
+                  setmain: {
+                    on_error: on_error,
+                  }
+                }
+              },
+              image: {
+                file: image,
+                type: type,
+                width: null,
+                height: null
+              }
+            }
+        );
   }
-});
+
+  /* Get Image objects by url from Magento page*/
+  function get_images_from_url(url){
+    return $(':not(#productivity-panel)').find('img[src$="' + url + '"]');
+  }
+
+  /* Returns images sizes (width & height) */
+  function get_images_sizes(url){
+    var images = get_images_from_url(url);
+    var sizes = [];
+    $(images).each(function( index, image ){     
+      sizes[index] = {width : $(image).width(), height : $(image).height()} ;   
+    });
+    return sizes;
+  }
+
+});  
 
 }(window.productivity = window.productivity || {}, jQuery));

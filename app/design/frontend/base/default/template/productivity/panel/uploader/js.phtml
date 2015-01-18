@@ -1,5 +1,4 @@
 <?php
-
 /**
  * NOTICE OF LICENSE
  *
@@ -12,45 +11,36 @@
  * @copyright Copyright (c) 2014 mVentory Ltd. (http://mventory.com)
  * @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
-
 ?>
 
 <?php if (Mage::helper('productivity')->isReviewerLogged()) : ?>
 
 <?php
-
 $_productId = Mage::registry('product')->getId();
 $_url = $this->getUrl('productivity/image/upload');
-
 ?>
 
 <script type="text/javascript">
 //<![CDATA[
-
 jQuery(function ($) {
-
 var $panel = $('#productivity-panel');
 var $upload_elem = $('#productivity-uploader-element');
 var $upload_btn = $('#productivity-uploader-button-upload');
-
 $upload_elem
   .fineUploader({
     button: $('#productivity-uploader-dropzone'),
     listElement: $('#productivity-uploader-previews'),
-
     request: {
       endpoint: '<?php echo $_url; ?>',
       params: {
         product_id: <?php echo $_productId; ?>
       }
     },
-
     dragAndDrop: {
       disableDefaultDropzone: true,
       hideDropzones: false,
       extraDropzones: [$('#productivity-uploader-dropzone')]
     },
-
     text: {
       cancelButton: ''
     }
@@ -58,37 +48,29 @@ $upload_elem
   .on('submitted', function (event, id, name) {
     var $this = $(this);
     var reader = new FileReader();
-
     reader.onload = function (e) {
       $this
         .fineUploader('getItemByFileId', id)
         .css('background-image', 'url(' + e.target.result + ')');
     };
-
     reader.readAsDataURL($this.fineUploader('getFile', id));
-
     $upload_btn.css('display', 'block');
   })
   .on('complete', function (event, id, name, response, xhr) {
     if (!response.success)
       return;
-
     $panel.addClass('productivity-state-uploaded');
-
     if (typeof productivity === 'undefined')
       return;
-
     function on_error ($element, data) {
       $element
         .removeClass('qq-upload-success')
         .addClass('qq-upload-fail');
-
       setTimeout(
         function () { $element.removeClass('qq-upload-fail'); },
         5000
       );
     }
-
     productivity.func.add_panel(
       $(this).fineUploader('getItemByFileId', id),
       {
@@ -127,80 +109,13 @@ $upload_elem
       }
     );
   });
-
 $upload_btn.on('click', function () {
   $upload_elem.fineUploader('uploadStoredFiles');
 });
-
 //function get_image_edit_panel_size ($element) {
 //  return { width: $element.width(), height: $element.height() };
 //}
-
-/* Selects all images from upload panel*/
-$(document).ready(function(){  
-  $('#productivity-uploader-previews').children().each(function( index, value ){
-
-      setPanel($(this), $(this).attr('image'));
-  })
-})
-
 });
-
-/* Set the panel in image*/
-function setPanel($element, image){
-
-  var img = image;
-  
-  productivity.func.add_panel(
-      $element,
-      {
-        panel: {
-          position: { top: 2, left: 2 },
-
-          action: {
-            remove: {
-              on_error: on_error,
-              on_success: function ($element, data) {
-                $element.remove();
-              }
-            },
-            rotate: {
-              on_error: on_error,
-              on_success: function ($element, data) {
-                $element.css('background-image', 'url(' + data.url + ')');
-                $element.data('productivity').file = data.file;
-              }
-            },
-            setmain: {
-              on_error: on_error,
-              on_success: function ($element, data) {
-                $element.image.prop('src', data.image.url);
-                $element.image.data('productivity').file = data.image.file;
-              }
-            }
-          }
-        },
-        image: {
-          file: img,
-          type: 'thumbnail',
-          width: null,
-          height: null
-        }
-      }
-    );
-    
-    function on_error ($element, data) {
-      $element
-        .removeClass('qq-upload-success')
-        .addClass('qq-upload-fail');
-
-      setTimeout(
-        function () { $element.removeClass('qq-upload-fail'); },
-        5000
-      );
-    }
-}
-
 //]]>
 </script>
 
