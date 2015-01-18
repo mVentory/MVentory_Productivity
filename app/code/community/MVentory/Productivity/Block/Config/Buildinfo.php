@@ -23,7 +23,7 @@
  * @author Andrew Gilman <andrew@mventory.com>
  */
 
-class MVentory_Productivity_Block_Setting_Buildinfo
+class MVentory_Productivity_Block_Config_Buildinfo
   extends Mage_Adminhtml_Block_Abstract
   implements Varien_Data_Form_Element_Renderer_Interface
 {
