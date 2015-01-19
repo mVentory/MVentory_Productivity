@@ -462,7 +462,7 @@ $(function () {
     var mainImage = undefined;
     
     get_images_id(imageId).each(function( index, image ){   
-      if(mainImage == undefined || $(mainImage).height() < $(image).height())           
+      if(mainImage == undefined || $(mainImage).width() < $(image).width())           
         mainImage = $(image);                
      });
     return mainImage;
