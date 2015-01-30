@@ -73,16 +73,16 @@
   float: left;
 }
 
-#productivity-tasks {
+#productivity-panel-menu > #productivity-tasks {
   background-color:#ffffff;
   float: right;
 }
 
-#productivity-tasks :hover{
+#productivity-panel-menu > #productivity-tasks :hover{
   background-color:#ffffff;
 }
 
-#productivity-tasks li a {
+#productivity-panel-menu > #productivity-tasks li a {
   color: #000000
 }
 
