@@ -137,7 +137,7 @@ $(function () {
 
   function remove_image ($img, params, product_id, type, cb) {
     var thumb = type == 'thumbnail';
-    console.log(thumb);return false;
+    
     $.ajax({
       url: productivity.image.url.remove,
       type: 'POST',
