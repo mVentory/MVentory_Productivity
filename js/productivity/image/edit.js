@@ -99,7 +99,7 @@ $(function () {
       alert('Product ID: ' + data.product_id + '\nImage file: ' + data.file + '\nStatus: ' + data.status);
   }
 
-  function rotate_image ($img, params, type, cb) {
+  function rotate_image ($img, params, cb) {
     var productId = $form.find('input[name="product"]').val();       
     $.ajax({
       url: productivity.image.url.rotate,
@@ -137,7 +137,7 @@ $(function () {
 
   function remove_image ($img, params, product_id, type, cb) {
     var thumb = type == 'thumbnail';
-
+    console.log(thumb);return false;
     $.ajax({
       url: productivity.image.url.remove,
       type: 'POST',
@@ -293,7 +293,7 @@ $(function () {
       $panel.removeClass('disabled');
     };
 
-    rotate_image(data.element.$, params, data.image.type, data.panel.action.rotate);
+    rotate_image(data.element.$, params, data.panel.action.rotate);
 
     return false;
   }
