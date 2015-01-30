@@ -248,13 +248,15 @@ class MVentory_Productivity_Helper_Data
   /**
    * Get Media Gellery array
    *
-   * @param int $productId
+   * @param Mage_Catalog_Model_Product $_product
    * @return array $imageList
    */
-  protected function _getProductMediaGallery($productId = null){    
-    $imageList = array(); 
-    
-    $_product = Mage::getSingleton('catalog/product')->load($productId);
+  protected function _getProductMediaGallery($_product){    
+    $imageList = array();         
+
+    if (!$_product instanceof Mage_Catalog_Model_Product) {
+      return  $imageList;
+    }
 
     /* Checks if product has default image */
     if ($_product->getImage()!='no_selection'){

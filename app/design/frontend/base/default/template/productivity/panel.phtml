@@ -141,8 +141,7 @@ if ($_type == 'product') {
           <?php 
             /* Populate upload panel with product images*/
             if ($_type == 'product') {
-            echo $_helper->
-              getProductImagesToHtml(Mage::registry('product')->getId());
+              echo $_helper->getProductImagesToHtml(Mage::registry('product'));
             }
           ?>
         </ul>
