@@ -237,8 +237,7 @@
 
 .image-editor-loader{
   display:none;
-  /* !!!FIX: add image to the extension */
-  background: url(/skin/frontend/default/default/images/loading.gif) no-repeat;
+  background: url(/skin/frontend/base/default/productivity/images/uploader/loading.gif) no-repeat;
   width: 32px;
   height: 32px;
   position: absolute;

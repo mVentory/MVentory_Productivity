@@ -98,7 +98,7 @@ if ($countQuote = Mage::helper('productivity/order')->isProductsInCart()) {
       </li>
 
       <li>
-        <a title="<?php echo $__uploadTitle; ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClickAction; ?>><?php echo $this->__('Upload') ?></a>
+        <a title="<?php echo $__uploadTitle; ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClickAction; ?>><?php echo $this->__('Images') ?></a>
       </li>
 
       <li>
@@ -157,8 +157,14 @@ if ($countQuote = Mage::helper('productivity/order')->isProductsInCart()) {
             <span><?php echo $this->__('Drag and drop product images to upload here'); ?></span>
           </div>
         </div>
-
-        <ul id="productivity-uploader-previews"></ul>
+        <ul id="productivity-uploader-previews">
+          <?php 
+            /* Populate upload panel with product images*/
+            if ($_type == 'product') {
+              echo $_helper->getProductImagesToHtml(Mage::registry('product'));
+            }
+          ?>
+        </ul>
       </div>
 
       <?php //A quick form for editing select attributes in a hurry. ?>
@@ -207,10 +213,14 @@ jQuery(function ($) {
     tasks += task + ' ';
 
     $(this).on('click', function () {
-      $panel.hasClass(task)
-        ? $panel.removeClass(task)
-          : $panel.addClass(task);
-
+      if ($panel.hasClass(task)){
+        $panel.removeClass(task);
+      }
+      else{
+        $panel.removeClass(tasks);
+        $panel.addClass(task);
+      }
+  
       resize_panel();
 
       return false;
