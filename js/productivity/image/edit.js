@@ -31,51 +31,22 @@ function confirmRemove ($el) {
   return answer;
 }
 
-
-
 $(function () {
 
   var $form = $('#product_addtocart_form');
-  var $panel = $('#productivity-image-edit-panel');
-  var $menus = $form.find('.tm-image-editor-menu');
-  var $updImage;
-  var $updImageEditor;
+  var $panel = $('#productivity-image-edit-panel');  
 
-  for (var type in productivity.edit.selector) {
-    if (!productivity.edit.selector.hasOwnProperty(type))
-      continue;
-
-    var selector = productivity.edit.wrapper[type]
-                    ? productivity.edit.wrapper[type]
-                      : productivity.edit.selector[type];
-
-    add_panel(
-      $(selector),
-      {
-        panel: {
-          position: get_panel_position,
-          element: get_element,
-          loader: show_loader,
-          scope: 'images',
-          action: {
-            remove: {
-              on_error: on_error,
-              on_success: on_remove
-            },
-            rotate: {
-              on_error: on_error,
-              on_success: on_rotate
-            },
-            setmain: {
-              on_error: on_error,
-              on_success: on_setmain
-            }
-          }
-        },
-        image: { type: type }
-      }
-    );
-  }
+  /* Set productivity panel in all images*/
+  $('#productivity-uploader-previews').children().each(function( index, value ){            
+      set_panel($(this), $(this).attr('data-image'), $(this).attr('data-type'));
+      /* Get images related to panel*/
+      images = get_images_from_url($(this).attr('data-image'));
+      
+      /* Set image parent id*/
+      images.each(function( index, image ){              
+        $(image).attr('imageid', value.id);               
+      });      
+  });
 
   $panel
     .on('mouseenter', function () {
@@ -111,33 +82,10 @@ $(function () {
 
   productivity.func = { add_panel: add_panel };
 
-  function get_panel_position ($element) {
-    var position = $element.offset();
-
-    position.top += $element.height() - 10;
-    position.left += 10;
-
-    return position;
-  }
-
-  function get_element ($element, type) {
-    if (!productivity.edit.wrapper[type])
-      return $element;
-
-    $element = $element.find(productivity.edit.selector[type]);
-
-    if (!$element.length)
-      return;
-
-    return $element;
-  }
-
   function show_loader ($element, type) {
-    if (type != 'image')
-      return;
 
     var $loader = $('<div class="image-editor-loader" />')
-      .appendTo($element.parent())
+      .appendTo($element)
       .show();
 
     return function () {
@@ -152,40 +100,14 @@ $(function () {
       alert('Product ID: ' + data.product_id + '\nImage file: ' + data.file + '\nStatus: ' + data.status);
   }
 
-  function on_remove ($element, data) {
-    if (data.url)
-      $element.prop('src', data.url);
-    else
-      $element.remove();
-  }
-
-  function on_rotate ($element, data) {
-    $element.prop('src', data.url);
-
-    //!!!FIX: also return link to full size image
-    //$element.parent('a').prop('href', '/media/catalog/product' + data.base);
-
-    $element.data('productivity').file = data.file;
-  }
-
-  function on_setmain ($element, data) {
-    $element.image.prop('src', data.image.url);
-    $element.thumb.prop('src', data.thumbnail.url);
-
-    $element.image.data('productivity').file = data.image.file;
-    $element.thumb.data('productivity').file = data.thumbnail.file;
-  }
-
-  function rotate_image ($img, params, type, cb) {
-    var productId = $form.find('input[name="product"]').val();
-
+  function rotate_image ($img, params, cb) {
+    var productId = $form.find('input[name="product"]').val();       
     $.ajax({
       url: productivity.image.url.rotate,
       type: 'POST',
       dataType: 'json',
       data: {
-        params: params,
-        thumb: type == 'thumbnail',
+        params: params,        
         productId: productId
       },
       error: function (jqXHR, status, errorThrown) {
@@ -216,7 +138,7 @@ $(function () {
 
   function remove_image ($img, params, product_id, type, cb) {
     var thumb = type == 'thumbnail';
-
+    
     $.ajax({
       url: productivity.image.url.remove,
       type: 'POST',
@@ -248,20 +170,17 @@ $(function () {
     });
   }
 
-  function set_main_image ($image,
-                           $thumb,
+  function set_main_image ($thumb,
                            params,
-                           main_image_params,
                            product_id,
                            cb) {
-
+    
     $.ajax({
       url: productivity.image.url.setmain,
       type: 'POST',
       dataType: 'json',
       data: { product: product_id,
-              params: params,
-              main_image_params: main_image_params },
+              params: params },
       error: function (jqXHR, status, errorThrown) {
         var data = {
           product_id: product_id,
@@ -269,11 +188,11 @@ $(function () {
           status: status
         };
 
-        cb.on_error($image, data);
+        cb.on_error($thumb, data);
       },
       success: function (data, status, jqXHR) {
         if (data.success)
-          cb.on_success({ image: $image, thumb: $thumb }, data.data)
+          cb.on_success({ thumb: $thumb }, data.data, $thumb)
         else {
           var data = {
             product_id: product_id,
@@ -281,7 +200,7 @@ $(function () {
             status: status
           };
 
-          cb.on_error($image, data);
+          cb.on_error($thumb, data);
         }
       },
       complete: cb.on_complete
@@ -330,7 +249,7 @@ $(function () {
     $panel
       .removeAttr('style')
       .css(css)
-      .addClass('productivity-scope-' + event.data.panel.scope)
+      .addClass('productivity-scope-uploader')
       .show()
       .data(data);
   }
@@ -344,36 +263,26 @@ $(function () {
 
     var data = $panel.data();
 
-    $panel
-      .addClass('disabled')
-      .hide();
+    $panel.addClass('disabled').hide();
 
     data.element.$.css('opacity', '0.5');
 
     if (typeof data.panel.loader === 'function')
       var hide_loader = data.panel.loader(data.element.$, data.image.type)
 
-    var image = data.element.$.data('productivity');
-
-    if (!image) {
-      image = {
-        file: data.image.file
-                ? data.image.file
-                  : get_filename_from_url(data.element.$.prop('src')),
-      };
-    }
-
-    data.element.$.data('productivity', image);
+    var image = data.image;
 
     var params = {
       file: image.file,
-      width: data.image.width === undefined
-               ? productivity.edit.size[data.image.type].width
-                 : data.image.width,
-      height: data.image.height === undefined
-               ? productivity.edit.size[data.image.type].height
-                 : data.image.height,
       rotate: event.data.rotate
+    };
+
+    data.panel.action.rotate.on_success = function ($element, data) {
+      $element.css('background-image', 'url(' + data.url + ')');
+      update_images('rotate', $element.attr('id'), data.image)
+      image.file = data.file;
+      $element.attr('data-image',data.file);
+      
     };
 
     data.panel.action.rotate.on_complete = function () {
@@ -385,7 +294,7 @@ $(function () {
       $panel.removeClass('disabled');
     };
 
-    rotate_image(data.element.$, params, data.image.type, data.panel.action.rotate);
+    rotate_image(data.element.$, params, data.panel.action.rotate);
 
     return false;
   }
@@ -403,17 +312,7 @@ $(function () {
       return false;
     }
 
-    var image = data.element.$.data('productivity');
-
-    if (!image) {
-      image = {
-        file: data.image.file
-                ? data.image.file
-                  : get_filename_from_url(data.element.$.prop('src')),
-      };
-    }
-
-    data.element.$.data('productivity', image);
+    var image = data.image;
 
     var params = {
       file: image.file,
@@ -425,6 +324,14 @@ $(function () {
                        .find('input[name="product"]')
                        .val();
 
+    data.panel.action.remove.on_success = function ($element, data) {                
+      /* Remove all  images */
+      update_images('remove',$element.attr('id'),'')
+
+      /* Remove panel image */
+      $element.remove();       
+    };
+
     data.panel.action.remove.on_complete = function () {
       data.element.$.css('opacity', '1');
       $panel.hide();
@@ -435,7 +342,6 @@ $(function () {
     return false;
   }
 
-
   function set_main_button_click_handler (event) {
     event.preventDefault();
 
@@ -444,28 +350,14 @@ $(function () {
     if (data.image.type != 'thumbnail')
       return false;
 
-    $panel
-      .addClass('disabled')
-      .hide();
+    $panel.addClass('disabled').hide();
 
     if (typeof data.panel.loader === 'function')
       var hide_loader = data.panel.loader(data.element.$, data.image.type)
 
-    var $this = $(this);
+    var $this = $(this);    
 
-    /*$this.off('click', set_main_button_click_handler);*/
-
-    var thumb = data.element.$.data('productivity');
-
-    if (!thumb) {
-      thumb = {
-        file: data.image.file
-                ? data.image.file
-                  : get_filename_from_url(data.element.$.prop('src')),
-      };
-    }
-
-    data.element.$.data('productivity', thumb);
+    var thumb = data.image;
 
     var params = {
       file: thumb.file,
@@ -476,67 +368,128 @@ $(function () {
                ? productivity.edit.size.thumbnail.height
                  : data.image.height
     };
+      
+    var product_id = $form.find('input[name="product"]').val();    
 
-    var product_id = $form
-                       .find('input[name="product"]')
-                       .val();
+    get_main_image().css('opacity', '0.5');    
 
-    var $mainImage = productivity.edit.wrapper.image
-                       ? $(productivity.edit.wrapper.image)
-                           .find(productivity.edit.selector.image)
-                         : $(productivity.edit.selector.image);
-
-    var image = $mainImage.data('productivity');
-
-    if (!image) {
-      image = {
-        file: get_filename_from_url($mainImage.prop('src')),
-      };
-    }
-
-    $mainImage.data('productivity', image);
-
-    var main_image_params = {
-      file: image.file,
-      width: productivity.edit.size.image.width,
-      height: productivity.edit.size.image.height
-    };
-
-    $mainImage.css('opacity', '0.5');
     data.element.$.css('opacity', '0.5');
-
-    $mainImage.parent().append('<div class="image-editor-loader"></div>');
+    
     $('.image-editor-loader').show();
 
-    data.panel.action.setmain.on_complete = function () {
-      var link = data.element.$.parent('a').prop('href');
-      data.element.$.parent('a').prop('href', $mainImage.parent('a').prop('href'));
-      $mainImage.parent('a').prop('href', link);
+    data.panel.action.setmain.on_success = function ($element, data, thumb) {          
+             
+      update_images('set_main',$(thumb).attr('id'), data.image.url);
 
+      /* Sets panel images to type "thumbnail"*/
+      $('#productivity-uploader-previews').children().each(function( index, value ){
+        $(value).attr('data-type', 'thumbnail');
+      });
+
+      /* Sets panel image to type "image" */
+      $(thumb).attr('data-type', 'image');
+
+      /* Reset productivity panel in all images*/
+      $('#productivity-uploader-previews').children().each(function( index, value ){            
+          set_panel($(this), $(this).attr('data-image'), $(this).attr('data-type'));
+      }); 
+      /* Sets opacity to images with same imageid*/
+      $(':not(#productivity-panel)').find('[imageid="' + $(thumb).attr('id') + '"]')
+      .css('opacity', '1');      
+    }
+
+    data.panel.action.setmain.on_complete = function () {
+      
+       data.element.$.css('opacity', '1');
+        
       if (hide_loader)
         hide_loader();
-
-      data.element.$.css('opacity', '1');
-      $mainImage.css('opacity', '1');
 
       $panel.removeClass('disabled');
     };
 
-    set_main_image(
-      $mainImage,
+    set_main_image(      
       data.element.$,
       params,
-      main_image_params,
       product_id,
       data.panel.action.setmain
     );
   }
 
-  function get_filename_from_url (url) {
-    return url.substring(
-      url.lastIndexOf('/', url.lastIndexOf('/', url.lastIndexOf('/') - 1) - 1)
-    );
+  /* Sets Image edit Panel  */
+  function set_panel($element, image, type){
+    add_panel(
+      $element,
+            {
+              panel: {
+                position: { top: 2, left: 2 },
+                loader: show_loader,
+                action: {
+                  remove: {
+                    on_error: on_error,
+                  },
+                  rotate: {
+                    on_error: on_error,
+                  },
+                  setmain: {
+                    on_error: on_error,
+                  }
+                }
+              },
+              image: {
+                file: image,
+                type: type,
+                width: null,
+                height: null
+              }
+            }
+        );
   }
-});
+
+  /* Get Image objects by url from Magento page*/
+  function get_images_from_url(url){     
+    return $(':not(#productivity-panel)').find('img[src$="' + url + '"]');
+  }
+
+  /* Get Images by id from Magento page*/
+  function get_images_id(imageid){     
+    return $(':not(#productivity-panel)').find('[imageid="' + imageid + '"]');
+  }
+
+  /* Get Main image by size*/
+  function get_main_image(){
+    /* Find base image url from panel*/
+    var imageId = $("#productivity-panel").find("[data-type='image']").attr('id');  
+    var mainImage = undefined;
+    
+    get_images_id(imageId).each(function( index, image ){   
+      if(mainImage == undefined || $(mainImage).width() < $(image).width())           
+        mainImage = $(image);                
+     });
+    return mainImage;
+  }
+
+  /* Update Page images*/ 
+   function update_images(action, imageid, src){
+    switch(action) {
+        case 'rotate':             
+            get_images_id(imageid).each(function( index, image ){   
+              $(image).attr('src', src);
+            });
+            break;
+        case 'remove':
+            get_images_id(imageid).each(function( index, image ){   
+              $(image).remove();
+            });
+            break;
+        default:
+            mainImage = get_main_image();
+            mainImage.attr('src', src);
+            mainImage.attr('imageid', imageid);                 
+            break;
+    }          
+  }  
+  
+});  
 
 }(window.productivity = window.productivity || {}, jQuery));

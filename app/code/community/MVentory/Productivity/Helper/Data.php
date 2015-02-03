@@ -173,7 +173,7 @@ class MVentory_Productivity_Helper_Data
   public function isReviewerLogged () {
     if ($this->isAdminLogged())
       return true;
-
+    
     $session = Mage::getSingleton('customer/session');
 
     $groupId = $session->getCustomerGroupId();
@@ -222,4 +222,70 @@ class MVentory_Productivity_Helper_Data
   public function isMVentoryModuleEnabled () {
     return parent::isModuleEnabled('MVentory_API');
   }
+
+  /**
+   * Get Images html
+   *
+   * @param int $productId
+   * @return string $html
+   */
+  public function getProductImagesToHtml($productId = null){
+    $html = '';
+    if ($productId != null) {     
+      $imageCollection = $this->_getProductMediaGallery($productId);   
+
+      foreach ($imageCollection as $key => $image) {        
+        $u_id = uniqid();        
+        $html .='<li id="'.$u_id.'" class="product-media-image-gallery"  
+              data-image="'.$key.'" data-type="'.$image["type"].'" 
+              style="background-image: url('.$image["url"].')"></li>';
+      }
+
+    }
+    return $html;
+  }
+
+  /**
+   * Get Media Gellery array
+   *
+   * @param Mage_Catalog_Model_Product $_product
+   * @return array $imageList
+   */
+  protected function _getProductMediaGallery($_product){    
+    $imageList = array();         
+
+    if (!$_product instanceof Mage_Catalog_Model_Product) {
+      return  $imageList;
+    }
+
+    /* Checks if product has default image */
+    if ($_product->getImage()!='no_selection'){
+
+        $imageList[$_product->getImage()] = array('url'=>
+                    $this->_getResizedImageUrl($_product, $_product->getImage())
+                    ,'type'=>'image');        
+    }
+      
+    foreach ($_product->getMediaGalleryImages() as $image){
+      if(!array_key_exists($image->getFile(), $imageList)){
+        $resizedUrl = $this->_getResizedImageUrl($_product, $image->getFile());
+        $imageList[$image->getFile()] = array('url'=>$resizedUrl, 'type'=>'thumbnail');    
+      }        
+    }
+    return $imageList;
+  }
+
+  /**
+   * Return resized image url 
+   *
+   * @param Mage_Catalog_Product $_product
+   * @param string $_file
+   * @return string
+   */
+  protected function _getResizedImageUrl($_product, $_file){
+      return (string)Mage::helper('catalog/image')
+        ->init($_product, 'image', $_file)        
+        ->resize(100);
+  }
+
 }

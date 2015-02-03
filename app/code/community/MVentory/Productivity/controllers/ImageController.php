@@ -67,7 +67,8 @@ class MVentory_Productivity_ImageController
       return $this->_error();
     }
 
-    $type = $request->get('thumb') == 'true'?'thumbnail':'image';
+    /* Checks if  is the main image*/
+    $type = ($product->getImage() === $file)?'image':'thumbnail';    
 
     $result = array();
 
@@ -84,14 +85,24 @@ class MVentory_Productivity_ImageController
       return $this->_error();
     }
 
-    // get resized version of image
+    // Get panel size image 100 x 100
     $result['url'] = $this->_getImageUrl(
       $product,
       $type,
       $result['file'],
-      $width ? $width : null,
-      $height ? $height : null
+      100,
+      100
     );
+    
+    /* Get original size image*/
+    $result['image'] = $this->_getImageUrl(
+      $product,
+      $type,
+      $result['file'],
+      null,
+      null
+      );
+    
 
     $this->_success($result);
   }
@@ -150,16 +161,14 @@ class MVentory_Productivity_ImageController
 
     $request = $this->getRequest();
 
-    $hasRequiredParam = $request->has('params')
-                        && $request->has('main_image_params');
+    $hasRequiredParam = $request->has('params');
 
     if (!$hasRequiredParam)
       return $this->_error();
 
-    $thumb = $request->get('params');
-    $image = $request->get('main_image_params');
+    $thumb = $request->get('params');    
 
-    $hasRequiredValues = $thumb['file'] && $image['file'];
+    $hasRequiredValues = $thumb['file'];
 
     if (!$hasRequiredValues)
       return $this->_error();
@@ -174,6 +183,7 @@ class MVentory_Productivity_ImageController
       return $this->_error();
     }
 
+    // Get base image size
     $result = array(
       'image' => array(
         'file' => $thumb['file'],
@@ -181,20 +191,10 @@ class MVentory_Productivity_ImageController
           $product,
           'image',
           $thumb['file'],
-          $image['width'] ? $image['width'] : null,
-          $image['height'] ? $image['height'] : null
+          null,
+          null
         )
       ),
-      'thumbnail' => array(
-        'file' => $image['file'],
-        'url' => $this->_getImageUrl(
-          $product,
-          'thumbnail',
-          $image['file'],
-          $thumb['width'] ? $thumb['width'] : null,
-          $thumb['height'] ? $thumb['height'] : null
-        )
-      )
     );
 
     $this->_success($result);
