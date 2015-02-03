@@ -226,13 +226,15 @@ class MVentory_Productivity_Helper_Data
   /**
    * Get Images html
    *
-   * @param int $productId
+   * @param Mage_Catalog_Model_Product $_product
    * @return string $html
    */
-  public function getProductImagesToHtml($productId = null){
+  public function getProductImagesToHtml($_product){
     $html = '';
-    if ($productId != null) {     
-      $imageCollection = $this->_getProductMediaGallery($productId);   
+    if (!$_product instanceof Mage_Catalog_Model_Product) {
+      return  $html;
+    }
+      $imageCollection = $this->_getProductMediaGallery($_product);   
 
       foreach ($imageCollection as $key => $image) {                    
         $html .='<li class="product-media-image-gallery"  
