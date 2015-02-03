@@ -38,9 +38,10 @@ $(function () {
 
   /* Set productivity panel in all images*/
   $('#productivity-uploader-previews').children().each(function( index, value ){            
-      set_panel($(this), $(this).attr('image'), $(this).attr('type'));
+      set_panel($(this), $(this).attr('data-image'), $(this).attr('data-type'));
       /* Get images related to panel*/
-      images = get_images_from_url($(this).attr('image'));
+      images = get_images_from_url($(this).attr('data-image'));
+      
       /* Set image parent id*/
       images.each(function( index, image ){              
         $(image).attr('imageid', value.id);               
@@ -280,7 +281,7 @@ $(function () {
       $element.css('background-image', 'url(' + data.url + ')');
       update_images('rotate', $element.attr('id'), data.image)
       image.file = data.file;
-      $element.attr('image',data.file);
+      $element.attr('data-image',data.file);
       
     };
 
@@ -382,15 +383,15 @@ $(function () {
 
       /* Sets panel images to type "thumbnail"*/
       $('#productivity-uploader-previews').children().each(function( index, value ){
-        $(value).attr('type', 'thumbnail');
+        $(value).attr('data-type', 'thumbnail');
       });
 
       /* Sets panel image to type "image" */
-      $(thumb).attr('type', 'image');
+      $(thumb).attr('data-type', 'image');
 
       /* Reset productivity panel in all images*/
       $('#productivity-uploader-previews').children().each(function( index, value ){            
-          set_panel($(this), $(this).attr('image'), $(this).attr('type'));
+          set_panel($(this), $(this).attr('data-image'), $(this).attr('data-type'));
       }); 
       /* Sets opacity to images with same imageid*/
       $(':not(#productivity-panel)').find('[imageid="' + $(thumb).attr('id') + '"]')
@@ -458,7 +459,7 @@ $(function () {
   /* Get Main image by size*/
   function get_main_image(){
     /* Find base image url from panel*/
-    var imageId = $("#productivity-panel").find("[type='image']").attr('id');  
+    var imageId = $("#productivity-panel").find("[data-type='image']").attr('id');  
     var mainImage = undefined;
     
     get_images_id(imageId).each(function( index, image ){   

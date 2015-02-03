@@ -237,7 +237,7 @@ class MVentory_Productivity_Helper_Data
       foreach ($imageCollection as $key => $image) {        
         $u_id = uniqid();        
         $html .='<li id="'.$u_id.'" class="product-media-image-gallery"  
-              image="'.$key.'" type="'.$image["type"].'" 
+              data-image="'.$key.'" data-type="'.$image["type"].'" 
               style="background-image: url('.$image["url"].')"></li>';
       }
 
