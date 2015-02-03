@@ -231,9 +231,8 @@ class MVentory_Productivity_Helper_Data
    */
   public function getProductImagesToHtml($_product){
     $html = '';
-    if (!$_product instanceof Mage_Catalog_Model_Product) {
-      return  $html;
-    }
+    if ($_product instanceof Mage_Catalog_Model_Product) {
+    
       $imageCollection = $this->_getProductMediaGallery($_product);   
 
       foreach ($imageCollection as $key => $image) {                    
