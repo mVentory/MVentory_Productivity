@@ -38,6 +38,7 @@
     <reference name="head">
       <action method="addJs">        
         <script>jquery/jquery-fineuploader-min.js</script>
+        <params><![CDATA[name="js001_jquery-fineuploader-min.js"]]></params>
       </action>
 
       <action method="addJs">
