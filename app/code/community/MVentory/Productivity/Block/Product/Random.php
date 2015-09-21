@@ -23,6 +23,7 @@ class MVentory_Productivity_Block_Product_Random
   extends Mage_Catalog_Block_Product_Abstract {
 
   protected $_productsCount = null;
+  protected $_category = null;
 
   const DEFAULT_PRODUCTS_COUNT = 6;
 
@@ -56,7 +57,8 @@ class MVentory_Productivity_Block_Product_Random
       Mage::getDesign()->getTheme('template'),
       Mage::getSingleton('customer/session')->getCustomerGroupId(),
       'template' => $this->getTemplate(),
-      $this->getProductsCount()
+      $this->getProductsCount(),
+      $this->_category
     );
   }
 
@@ -70,7 +72,7 @@ class MVentory_Productivity_Block_Product_Random
                     ->getVisibleInCatalogIds();
 
     $collection = Mage::getResourceModel('catalog/product_collection')
-                    ->setVisibility($visibility);
+        ->setVisibility($visibility);
 
     $imageFilter = array('nin' => array('no_selection', ''));
 
@@ -80,6 +82,8 @@ class MVentory_Productivity_Block_Product_Random
                     ->addStoreFilter()
                     ->setPageSize($this->getProductsCount())
                     ->setCurPage(1);
+
+    $this->_addCategoryFilter($collection);
 
     $collection
       ->getSelect()
@@ -97,10 +101,10 @@ class MVentory_Productivity_Block_Product_Random
    * @return Mage_Catalog_Block_Product_New
    */
   public function setProductsCount ($count) {
-    $this->_productsCount = $count;
+  $this->_productsCount = $count;
 
-    return $this;
-  }
+  return $this;
+}
 
   /**
    * Get how many products should be displayed at once.
@@ -113,4 +117,22 @@ class MVentory_Productivity_Block_Product_Random
 
     return $this->_productsCount;
   }
+
+  public function setCategory ($category) {
+    $this->_category = $category;
+
+    return $this;
+  }
+
+  public function _addCategoryFilter ($collection) {
+    if (!$this->_category)
+      return $collection;
+
+    $category = Mage::getModel('catalog/category')->load($this->_category);
+    if (!$category->getId())
+      return $collection;
+
+    return $collection->addCategoryFilter($category);
+  }
+
 }
