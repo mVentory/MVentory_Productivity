@@ -16,6 +16,8 @@
 /**
  * Block for displaying latest added products
  *
+ * Use cat_id to pass optional category id.
+ *  
  * @package MVentory/Productivity
  * @author Anatoly A. Kazantsev <anatoly@mventory.com>
  */
@@ -70,6 +72,10 @@ class MVentory_Productivity_Block_Product_Latest
 
     $collection = Mage::getResourceModel('catalog/product_collection')
                     ->setVisibility($visibility);
+    
+    $cat_id=$this->getData('cat_id');
+    if ($cat_id && $category=Mage::getModel('catalog/category')->load($cat_id))
+      $collection->addCategoryFilter($category);
 
     $imageFilter = array('nin' => array('no_selection', ''));
 
