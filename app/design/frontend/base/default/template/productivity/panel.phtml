@@ -40,7 +40,7 @@ if ($_type == 'product') {
     <?php if ($_type == 'product'): ?>
     <ul id="productivity-context" class="productivity-set">
       <li id="productivity-uploader-notice">
-        <a title="<?php echo $this->__('Refresh the page to see changes'); ?>" href="<?php echo $this->_getCurrentUrl(); ?>"><?php echo $this->__('<span>Refresh</span> the page to see changes'); ?></a>
+        <a title="<?php echo $this->__('Refresh the page to see changes'); ?>" href="#" onclick="location.reload(true);"><?php echo $this->__('<span>Refresh</span> the page to see changes'); ?></a>
       </li>
     </ul>
     <?php endif; ?>
@@ -83,7 +83,7 @@ if ($_type == 'product') {
       </li>
 
       <li>
-        <a title="<?php echo $__uploadTitle; ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClick; ?>><?php echo $this->__('Upload') ?></a>
+        <a title="<?php echo $__uploadTitle; ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClick; ?>><?php echo $this->__('Images') ?></a>
       </li>
 
       <li>
@@ -138,8 +138,14 @@ if ($_type == 'product') {
             <span><?php echo $this->__('Drag and drop product images to upload here'); ?></span>
           </div>
         </div>
-
-        <ul id="productivity-uploader-previews"></ul>
+        <ul id="productivity-uploader-previews">
+          <?php 
+            /* Populate upload panel with product images*/
+            if ($_type == 'product') {
+              echo $_helper->getProductImagesToHtml(Mage::registry('product'));
+            }
+          ?>
+        </ul>
       </div>
 
       <?php //A quick form for editing select attributes in a hurry. ?>
@@ -188,10 +194,14 @@ jQuery(function ($) {
     tasks += task + ' ';
 
     $(this).on('click', function () {
-      $panel.hasClass(task)
-        ? $panel.removeClass(task)
-          : $panel.addClass(task);
-
+      if ($panel.hasClass(task)){
+        $panel.removeClass(task);
+      }
+      else{
+        $panel.removeClass(tasks);
+        $panel.addClass(task);
+      }
+  
       resize_panel();
 
       return false;

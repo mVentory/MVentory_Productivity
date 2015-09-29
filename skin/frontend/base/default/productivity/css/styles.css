@@ -73,8 +73,17 @@
   float: left;
 }
 
-#productivity-tasks {
+#productivity-panel-menu > #productivity-tasks {
+  background-color:#ffffff;
   float: right;
+}
+
+#productivity-panel-menu > #productivity-tasks :hover{
+  background-color:#ffffff;
+}
+
+#productivity-panel-menu > #productivity-tasks li a {
+  color: #000000
 }
 
 .productivity-set li {
@@ -237,8 +246,7 @@
 
 .image-editor-loader{
   display:none;
-  /* !!!FIX: add image to the extension */
-  background: url(/skin/frontend/default/default/images/loading.gif) no-repeat;
+  background: url(/skin/frontend/base/default/productivity/images/uploader/loading.gif) no-repeat;
   width: 32px;
   height: 32px;
   position: absolute;
