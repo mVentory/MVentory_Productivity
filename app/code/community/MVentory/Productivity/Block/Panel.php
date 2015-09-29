@@ -87,6 +87,14 @@ class MVentory_Productivity_Block_Panel
   }
 
   /**
+   * Get sold url
+   * @return string
+   */
+  public function getSoldUrl () {
+    return Mage::getUrl('productivity/sales/sold');
+  }
+
+  /**
    * Build a form object populated with product data.
    *
    * @return Varien_Data_Form

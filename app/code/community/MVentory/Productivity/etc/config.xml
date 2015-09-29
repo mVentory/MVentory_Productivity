@@ -226,5 +226,24 @@
         <copy_attrs>.</copy_attrs>
       </product>
     </productivity>
+
+    <payment>
+      <productivity>
+        <model>productivity/payment</model>
+        <active>1</active>
+        <order_status>pending</order_status>
+        <title>mVentory Productivity Payment</title>
+      </productivity>
+    </payment>
+
+    <carriers>
+      <productivity>
+        <model>productivity/shipping</model>
+        <active>1</active>
+        <name>Productivity Shipping</name>
+        <title>mVentory</title>
+      </productivity>
+    </carriers>
+
   </default>
 </config>

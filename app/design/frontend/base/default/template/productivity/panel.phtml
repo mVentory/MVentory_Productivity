@@ -90,6 +90,12 @@ if ($_type == 'product') {
         <a title="<?php echo $__editTitle; ?>" id="productivity-task-edit-form" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClick; ?>><?php echo $this->__('Edit') ?></a>
       </li>
 
+      <?php if (Mage::helper('productivity/order')->isProductsInCart()): ?>
+        <li>
+          <a title="<?php echo $this->__('Sold products in cart'); ?>" id="productivity-sold-products" href="<?php echo $this->getSoldUrl();?>"><?php echo $this->__('Sold') ?></a>
+        </li>
+      <?php endif; ?>
+
       <li>
         <a title="<?php echo $this->__('About this extension'); ?>" href="<?php echo $this->_getHelpUrl(); ?>" target="_blank"><?php echo $this->__('Help') ?></a>
       </li>
