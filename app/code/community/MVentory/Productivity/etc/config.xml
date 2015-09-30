@@ -232,7 +232,7 @@
         <model>productivity/payment</model>
         <active>1</active>
         <order_status>pending</order_status>
-        <title>mVentory Productivity Payment</title>
+        <title>mVentory Toolbar</title>
       </productivity>
     </payment>
 
@@ -240,7 +240,7 @@
       <productivity>
         <model>productivity/shipping</model>
         <active>1</active>
-        <name>Productivity Shipping</name>
+        <name>mVentory Toolbar</name>
         <title>mVentory</title>
       </productivity>
     </carriers>

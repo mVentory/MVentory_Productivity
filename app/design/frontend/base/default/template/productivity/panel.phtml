@@ -19,6 +19,7 @@
 /* @var $this MVentory_Productivity_Block_Panel */
 $_helper = Mage::helper('productivity');
 $_type = $this->_getType();
+$_onClickAction = ' onclick="alert(this.title); return false;"';
 
 if ($_type == 'product') {
   $__uploadTitle = $this->__('Upload a product image');
@@ -27,7 +28,16 @@ if ($_type == 'product') {
   $__uploadTitle = $this->__('Select a product and click on Upload again to add more product images');
   $__editTitle = $this->__('Select a product and click on Edit again to edit product details');
 
-  $_onClick = ' onclick="alert(this.title); return false;"';
+  $_onClick = true;
+}
+
+if ($countQuote = Mage::helper('productivity/order')->isProductsInCart()) {
+  $_orderTitle = $this->__('Create an express order for products in the shopping cart.');
+  $_onClickOrderName = $this->__('Express order') . ' (' . $countQuote . ')';
+} else {
+  $_orderTitle = $this->__('You can generate an express order with you as the buyer for items you sold elsewhere and didn\'t check out at the time. Add those items to cart and press on Express order button again.');
+  $_onClickOrder = true;
+  $_onClickOrderName = $this->__('Express order');
 }
 
 ?>
@@ -83,18 +93,16 @@ if ($_type == 'product') {
       </li>
 
       <li>
-        <a title="<?php echo $__uploadTitle; ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClick; ?>><?php echo $this->__('Upload') ?></a>
+        <a title="<?php echo $__uploadTitle; ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClickAction; ?>><?php echo $this->__('Upload') ?></a>
       </li>
 
       <li>
-        <a title="<?php echo $__editTitle; ?>" id="productivity-task-edit-form" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClick; ?>><?php echo $this->__('Edit') ?></a>
+        <a title="<?php echo $__editTitle; ?>" id="productivity-task-edit-form" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClickAction; ?>><?php echo $this->__('Edit') ?></a>
       </li>
 
-      <?php if (Mage::helper('productivity/order')->isProductsInCart()): ?>
-        <li>
-          <a title="<?php echo $this->__('Sold products in cart'); ?>" id="productivity-sold-products" href="<?php echo $this->getSoldUrl();?>"><?php echo $this->__('Sold') ?></a>
-        </li>
-      <?php endif; ?>
+      <li>
+        <a title="<?php echo $_orderTitle; ?>" id="productivity-sold-products" href="<?php echo $this->getSoldUrl();?>"<?php if (isset($_onClickOrder)) echo $_onClickAction; ?>><?php echo $_onClickOrderName  ?></a>
+      </li>
 
       <li>
         <a title="<?php echo $this->__('About this extension'); ?>" href="<?php echo $this->_getHelpUrl(); ?>" target="_blank"><?php echo $this->__('Help') ?></a>

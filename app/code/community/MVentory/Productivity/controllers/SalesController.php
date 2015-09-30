@@ -27,8 +27,9 @@ class MVentory_Productivity_SalesController extends Mage_Core_Controller_Front_A
     public function soldAction () {
         $helper = Mage::helper('productivity/order');
 
+        //TODO: This IF is a bit too deep. I would check the preconditions and exit with an error message before proceeding. Leave as is, but just a note for future development.
         if (!$helper->isReviewerLogged()) {
-            Mage::getSingleton('core/session')->addError($helper->__('You don\'t have permission for this operation.'));
+            Mage::getSingleton('core/session')->addError($helper->__('Log in as a Customer with Reviewer rights to complete this operation.'));
             $this->_redirectReferer();
         } else {
             $customer = Mage::getSingleton('customer/session')->getCustomer();
@@ -43,7 +44,7 @@ class MVentory_Productivity_SalesController extends Mage_Core_Controller_Front_A
                     $this->_redirectReferer();
                 }
             } else {
-                Mage::getSingleton('core/session')->addNotice($helper->__('Please set default billing address before sold!'));
+                Mage::getSingleton('core/session')->addNotice($helper->__('Please, enter your default address for this type of orders and try to process the sale again. Once the address is set it will be used for all subsequent sales. You can change it any time in your Customer Profile.'));
                 $this->_redirect('customer/address');
             }
         }
