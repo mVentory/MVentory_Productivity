@@ -101,7 +101,7 @@ if ($countQuote = Mage::helper('productivity/order')->isProductsInCart()) {
       </li>
 
       <li>
-        <a title="<?php echo $_orderTitle; ?>" id="productivity-sold-products" href="<?php echo $this->getSoldUrl();?>"<?php if (isset($_onClickOrder)) echo $_onClickAction; ?>><?php echo $_onClickOrderName  ?></a>
+        <a title="<?php echo $_orderTitle; ?>" id="productivity-task-express-order" href="<?php echo $this->getExpressOrderUrl();?>"<?php if (isset($_onClickOrder)) echo $_onClickAction; ?>><?php echo $_onClickOrderName  ?></a>
       </li>
 
       <li>

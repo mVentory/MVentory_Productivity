@@ -87,11 +87,11 @@ class MVentory_Productivity_Block_Panel
   }
 
   /**
-   * Get sold url
+   * Get Express Order url
    * @return string
    */
-  public function getSoldUrl () {
-    return Mage::getUrl('productivity/sales/sold');
+  public function getExpressOrderUrl () {
+    return Mage::getUrl('productivity/sales/expressOrder');
   }
 
   /**
