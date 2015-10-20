@@ -442,3 +442,11 @@
 @-o-keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 @-ms-keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
+/* Productivity toolbar logo styles  */
+#productivity_about_toolbar {
+  padding: 0px;
+}
+#productivity_about_toolbar:hover {
+  opacity: 0.9;
+}
