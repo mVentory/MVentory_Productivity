@@ -57,6 +57,7 @@ class MVentory_Productivity_Block_Product_Latest
       Mage::getDesign()->getPackageName(),
       Mage::getDesign()->getTheme('template'),
       Mage::getSingleton('customer/session')->getCustomerGroupId(),
+      ($cat_id = $this->getData('cat_id')) ? $cat_id : null,
       'template' => $this->getTemplate(),
       $this->getProductsCount()
     );
