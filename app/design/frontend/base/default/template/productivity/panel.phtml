@@ -50,7 +50,7 @@ if ($countQuote = Mage::helper('productivity/order')->isProductsInCart()) {
     <?php if ($_type == 'product'): ?>
     <ul id="productivity-context" class="productivity-set">
       <li id="productivity-uploader-notice">
-        <a title="<?php echo $this->__('Refresh the page to see changes'); ?>" href="<?php echo $this->_getCurrentUrl(); ?>"><?php echo $this->__('<span>Refresh</span> the page to see changes'); ?></a>
+        <a title="<?php echo $this->__('Refresh the page to see changes'); ?>" href="#" onclick="location.reload(true);"><?php echo $this->__('<span>Refresh</span> the page to see changes'); ?></a>
       </li>
     </ul>
     <?php endif; ?>
