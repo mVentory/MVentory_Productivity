@@ -156,8 +156,8 @@ class MVentory_Productivity_Helper_Attribute
          || isset($this->_blacklist[$code]))
       return false;
 
-    return ($attr->getIsVisible() && $attr->getIsUserDefined())
-           || isset($this->_whitelist[$code]);
+    return (($attr->getIsVisible())
+           || isset($this->_whitelist[$code]));
   }
 
   /**

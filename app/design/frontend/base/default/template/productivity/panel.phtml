@@ -56,6 +56,11 @@ if ($countQuote = Mage::helper('productivity/order')->isProductsInCart()) {
     <?php endif; ?>
 
     <ul id="productivity-tasks" class="productivity-set">
+      <li>
+        <a id="productivity_about_toolbar" title="<?php echo $this->__('About this toolbar'); ?>" href="http://mventory.com/?p=2861" target="_blank">
+          <img src="<?php echo $this->getSkinUrl('productivity/images/logo-thumbnail.jpg')?>" alt="<?php echo $this->__('About this toolbar'); ?>" />
+        </a>
+      </li>
 
       <?php if ($url = $this->_getAnalyticsUrl()): ?>
       <li>

@@ -119,6 +119,10 @@ class MVentory_Productivity_Block_Panel
       'multiselect' => true
     );
 
+    $notallowedInputs = array(
+        'date' => true,
+    );
+
     $product['qty'] = $isConfigurable
                         ? $this->__('Edit individual sub-products')
                           : (int) $product->getStockItem()->getQty();
@@ -136,6 +140,8 @@ class MVentory_Productivity_Block_Panel
     /* @var $attribute Mage_Catalog_Model_Resource_Eav_Attribute */
     foreach ($helper->getEditables($product) as $code => $attribute) {
       $input = $attribute->getFrontendInput();
+      if (isset($notallowedInputs[$input]))
+        continue;
 
       $form->addField(
         $code,
