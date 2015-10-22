@@ -40,9 +40,24 @@ class MVentory_Productivity_Block_Product_Latest
 
     $this
       ->addData(array(
-        'cache_lifetime' => 86400,
         'cache_tags' => array(Mage_Catalog_Model_Product::CACHE_TAG),
       ));
+  }
+
+  /**
+   * Get block cache life time
+   *
+   * @return int
+   */
+  public function getCacheLifetime()
+  {
+    /**
+     *  Set default cache lifetime 24 hours
+     */
+    if (!$this->hasData('cache_lifetime')) {
+      return 86400;
+    }
+    return parent::getCacheLifetime();
   }
 
   /**
