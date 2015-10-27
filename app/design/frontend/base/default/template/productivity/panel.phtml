@@ -58,7 +58,7 @@ if ($countQuote = Mage::helper('productivity/order')->isProductsInCart()) {
     <ul id="productivity-tasks" class="productivity-set">
       <li>
         <a id="productivity_about_toolbar" title="<?php echo $this->__('About this toolbar'); ?>" href="http://mventory.com/?p=2861" target="_blank">
-          <img src="<?php echo $this->getSkinUrl('productivity/images/logo-thumbnail.jpg')?>" alt="<?php echo $this->__('About this toolbar'); ?>" />
+          <img src="<?php echo $this->getSkinUrl('productivity/images/mventory-swingtag.png')?>" alt="<?php echo $this->__('About this toolbar'); ?>" />
         </a>
       </li>
 
@@ -89,13 +89,17 @@ if ($countQuote = Mage::helper('productivity/order')->isProductsInCart()) {
 
       <?php endif; ?>
 
+      <?php /*
       <li>
         <a title="<?php echo $this->__('Generate and print unique product codes'); ?>" id="productivity-task-qr" class="productivity-panel-task" href="#"><?php echo $this->__('QR tags')?></a>
       </li>
+      */?>
 
+      <?php /*
       <li>
         <a title="<?php echo $this->__('View products with no images'); ?>" href="<?php echo $this->_getWithoutImagesLink() ?>"><?php echo $this->__('No-image products'); ?></a>
       </li>
+      */?>
 
       <li>
         <a title="<?php echo $__uploadTitle; ?>" id="productivity-task-upload" class="productivity-panel-task" href="#"<?php if (isset($_onClick)) echo $_onClickAction; ?>><?php echo $this->__('Images') ?></a>
