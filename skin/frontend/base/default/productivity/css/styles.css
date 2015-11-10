@@ -57,6 +57,7 @@
 
 #productivity-panel-menu {
   background: linear-gradient(to top, #373737 0px, #464646 5px) repeat scroll 0 0 #464646;
+  height:30px !important;
 }
 
 #productivity-panel-menu * {
@@ -92,7 +93,7 @@
 
 .productivity-set a {
   display: block;
-  padding: 0 12px;
+  padding: 1px 12px;
   text-decoration: none;
 }
 
@@ -444,7 +445,7 @@
 
 /* Productivity toolbar logo styles  */
 #productivity_about_toolbar {
-  padding: 0px;
+  padding: 0 5px;
 }
 #productivity_about_toolbar:hover {
   opacity: 0.9;
