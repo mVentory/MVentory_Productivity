@@ -22,27 +22,24 @@
 class MVentory_Productivity_Helper_Attribute
   extends MVentory_Productivity_Helper_Data
 {
-  protected $_whitelist = array(
-    //Selecting category is not implemented on frontend
-    //'category_ids' => true,
+  protected $_blacklist = array(
+    //This attributes requires custom frontend renderer and are not supported
+    //now
+    'tier_price' => true,
+    'group_price' => true,
+    'is_recurring' => true,
+    'recurring_profile' => true,
 
-    'name' => true,
-    'description' => true,
-    'short_description' => true,
-    'sku' => true,
-    'price' => true,
-    'special_price' => true,
+    //This attribute has additional control (Create Permanent Redirect
+    //for old URL checkbox) which we don't render. It means we can't provide
+    //expected functionality and result (as in the admin interface)
+    'url_key' => true,
 
-    //Setting date via calendar component is not implemented on frontend
-    //'special_from_date' => true,
-    //'special_to_date' => true,
-
-    'weight' => true,
-    'tax_class_id' => true
+    //These attributes has a separate editor in our panel
+    'image' => true,
+    'small_image' => true,
+    'thumbnail' => true,
   );
-
-  //!!!TODO: do we need to ignore following attributes in the front-end editor
-  protected $_blacklist = array('cost' => true);
 
   protected $_configurableBlacklist = array(
   );
@@ -156,8 +153,7 @@ class MVentory_Productivity_Helper_Attribute
          || isset($this->_blacklist[$code]))
       return false;
 
-    return (($attr->getIsVisible())
-           || isset($this->_whitelist[$code]));
+    return $attr->getIsVisible();
   }
 
   /**

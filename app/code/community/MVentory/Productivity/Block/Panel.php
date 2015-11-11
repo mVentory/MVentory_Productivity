@@ -114,9 +114,17 @@ class MVentory_Productivity_Block_Panel
       'label' => true,
       'text' => true,
       'textarea' => true,
-      'date' => true,
+
+      //We ignore date attributes because we don't load caledar component
+      //on frontend. Without it editing dates is error-prone
+      'date' => false,
+
       'select' => true,
-      'multiselect' => true
+      'multiselect' => true,
+
+      //We don't support gallery attributes. Also we have separate editor for
+      //product images
+      'gallery' => false,
     );
 
     $notallowedInputs = array(
@@ -143,6 +151,10 @@ class MVentory_Productivity_Block_Panel
       if (isset($notallowedInputs[$input]))
         continue;
 
+      //Check if input is ignored
+      if (isset($allowedInputs[$input]) && !$allowedInputs[$input])
+        continue;
+
       $form->addField(
         $code,
         isset($allowedInputs[$input]) ? $input : 'text',
@@ -154,7 +166,13 @@ class MVentory_Productivity_Block_Panel
                           : null,
 
           //In case it's a textarea, make it taller
-          'rows' => 5
+          'rows' => 5,
+
+          ////Set date format for date-type attributes. Format should be taken
+          ////from the locale of current store
+          //'format' => ($input === 'date')
+          //  ? Varien_Date::DATE_INTERNAL_FORMAT
+          //  : null
         ),
         ($after = $attribute['_insert_after']) ? $after : false
       );
