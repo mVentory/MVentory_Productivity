@@ -103,6 +103,11 @@ class MVentory_Productivity_Block_Product_Latest
                     ->setPageSize($this->getProductsCount())
                     ->setCurPage(1);
 
+    Mage::dispatchEvent(
+      'catalog_block_product_list_collection',
+      ['collection' => $collection]
+    );
+
     $this->setData('product_collection', $collection);
 
     return $collection;
