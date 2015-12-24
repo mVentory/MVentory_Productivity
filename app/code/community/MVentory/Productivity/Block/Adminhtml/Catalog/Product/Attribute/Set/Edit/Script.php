@@ -9,7 +9,7 @@
  * http://opensource.org/licenses/osl-3.0.php
  *
  * @package MVentory/Productivity
- * @copyright Copyright (c) 2014 mVentory Ltd. (http://mventory.com)
+ * @copyright Copyright (c) 2014-2015 mVentory Ltd. (http://mventory.com)
  * @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 
@@ -20,16 +20,18 @@
  * @author <anemets1@gmail.com>
  */
 class MVentory_Productivity_Block_Adminhtml_Catalog_Product_Attribute_Set_Edit_Script
-  extends Mage_Core_Block_Template {
+  extends Mage_Adminhtml_Block_Template {
 
   public function getJson() {
-    $a = array();
-    $collection = Mage::getResourceModel('catalog/product_attribute_collection');
-    foreach($collection as $attribute) {
-      $a[$attribute->getData('attribute_code')] = $attribute->getData('attribute_id');;
-    }
+    $urls = [];
+    $attrs = Mage::getResourceModel('catalog/product_attribute_collection');
 
-    return Zend_Json::encode($a);
+    foreach ($attrs as $attr)
+      $urls[$attr->getAttributeCode()] = $this->getUrl(
+        'adminhtml/catalog_product_attribute/edit',
+        ['attribute_id' => $attr->getAttributeId()]
+      );
+
+    return Mage::helper('core')->jsonEncode($urls);
   }
-
 }
