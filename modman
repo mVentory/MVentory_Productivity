@@ -12,7 +12,6 @@ js/jquery/*                                                 js/jquery/
 js/productivity                                             js/productivity
 
 skin/adminhtml/default/default/*                            skin/adminhtml/default/default/
-skin/adminhtml/default/default/productivity                 skin/adminhtml/default/default/productivity
 skin/frontend/base/default/productivity                     skin/frontend/base/default/productivity
 
 build.xml                                                   var/connect/mVentory_Productivity.xml
