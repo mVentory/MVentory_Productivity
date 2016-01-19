@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+
+<!--
+/**
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE-OSL.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * @package MVentory/Productivity
+ * @copyright Copyright (c) 2014 mVentory Ltd. (http://mventory.com)
+ * @license http://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
+-->
+
+<layout version="0.1.0">
+  <productivity_rss_product_latest>
+    <block type="productivity/rss_product_latest" output="toHtml" name="rss.product.latest" />
+  </productivity_rss_product_latest>
+
+  <default>
+    <reference name="head">
+      <action method="addCss">
+        <stylesheet>productivity/css/styles.css</stylesheet>
+      </action>
+    </reference>
+
+    <reference name="after_body_start">
+      <block type="productivity/panel" name="admin_panel" after="-" template="productivity/panel.phtml" />
+    </reference>
+  </default>
+
+  <catalog_product_view>
+    <reference name="head">
+      <action method="addJs">        
+        <script>jquery/jquery-fineuploader-min.js</script>
+        <params><![CDATA[name="js001_jquery-fineuploader-min.js"]]></params>
+      </action>
+
+      <action method="addJs">
+        <script>productivity/image/edit.js</script>
+      </action>
+    </reference>
+
+    <reference name="before_body_end">
+      <block type="productivity/image_edit" name="productivity.image.edit" template="productivity/image/edit.phtml">
+
+        <action method="setImageSize">
+          <width>265</width>
+          <height></height>
+        </action>
+
+        <action method="setThumbSize">
+          <width>56</width>
+          <height></height>
+        </action>
+      </block>
+
+      <block type="core/template" name="productivity.panel.upload.js" template="productivity/panel/uploader/js.phtml" />
+    </reference>
+  </catalog_product_view>
+
+</layout>
