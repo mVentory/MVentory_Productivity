@@ -1,0 +1,4 @@
+#!/bin/bash
+# Write build information into build-info.phtml template
+buildInfoFile=app/design/adminhtml/default/default/template/productivity/config/build-info.phtml
+git show -s --format="Build version: %H<BR>%nBuild date:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;%cd" --date=short >> $buildInfoFile
