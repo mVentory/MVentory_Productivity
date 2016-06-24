@@ -235,6 +235,12 @@
         <!-- '.' - Don't copy any attributes -->
         <copy_attrs>.</copy_attrs>
       </product>
+
+      <frontend>
+
+        <!-- 1 = Yes -->
+        <jquery>1</jquery>
+      </frontend>
     </productivity>
 
     <payment>

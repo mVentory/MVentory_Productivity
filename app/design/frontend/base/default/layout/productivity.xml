@@ -21,11 +21,12 @@
   </productivity_rss_product_latest>
 
   <default>
-    <update handle="jquery" />
-
     <reference name="head">
       <action method="addCss">
         <stylesheet>productivity/css/styles.css</stylesheet>
+      </action>
+      <action method="addJs" ifconfig="productivity/frontend/jquery">
+        <script>jquery/jquery-min.js</script>
       </action>
     </reference>
 

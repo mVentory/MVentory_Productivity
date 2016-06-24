@@ -190,6 +190,31 @@
           </fields>
         </analytics>
 
+        <frontend>
+          <label>Frontend panel</label>
+
+          <show_in_default>1</show_in_default>
+          <show_in_website>1</show_in_website>
+          <show_in_store>0</show_in_store>
+
+          <sort_order>4</sort_order>
+
+          <fields>
+            <jquery translate="label comment">
+              <label>Load own copy of jQuery</label>
+              <comment>Disable loading own copy of jQuery library if it conflicts with the one from current theme.</comment>
+              <frontend_type>select</frontend_type>
+              <source_model>adminhtml/system_config_source_yesno</source_model>
+
+              <show_in_default>1</show_in_default>
+              <show_in_website>1</show_in_website>
+              <show_in_store>0</show_in_store>
+
+              <sort_order>0</sort_order>
+            </jquery>
+          </fields>
+        </frontend>
+
         <build_info>
           <frontend_model>productivity/config_buildinfo</frontend_model>
 
